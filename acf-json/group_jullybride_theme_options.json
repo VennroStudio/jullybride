@@ -1,0 +1,233 @@
+{
+  "key": "group_jullybride_theme_options",
+  "title": "JullyBride: глобальные настройки",
+  "fields": [
+    {
+      "key": "field_jb_options_header_tab",
+      "label": "Шапка",
+      "name": "",
+      "type": "tab",
+      "placement": "top"
+    },
+    {
+      "key": "field_jb_current_city",
+      "label": "Текущий город",
+      "name": "current_city",
+      "type": "text",
+      "default_value": "Санкт-Петербург"
+    },
+    {
+      "key": "field_jb_header_logo",
+      "label": "Логотип",
+      "name": "header_logo",
+      "type": "image",
+      "return_format": "array",
+      "preview_size": "medium"
+    },
+    {
+      "key": "field_jb_header_phone",
+      "label": "Телефон в шапке",
+      "name": "header_phone",
+      "type": "text",
+      "default_value": "+7 (812) 929-16-99"
+    },
+    {
+      "key": "field_jb_header_address",
+      "label": "Адрес в шапке",
+      "name": "header_address",
+      "type": "textarea",
+      "rows": 2
+    },
+    {
+      "key": "field_jb_booking_text",
+      "label": "Текст кнопки записи",
+      "name": "booking_text",
+      "type": "text",
+      "default_value": "Записаться"
+    },
+    {
+      "key": "field_jb_booking_url",
+      "label": "Ссылка кнопки записи",
+      "name": "booking_url",
+      "type": "url"
+    },
+    {
+      "key": "field_jb_top_banner_text",
+      "label": "Текст верхнего баннера",
+      "name": "top_banner_text",
+      "type": "text"
+    },
+    {
+      "key": "field_jb_top_banner_url",
+      "label": "Ссылка верхнего баннера",
+      "name": "top_banner_url",
+      "type": "url"
+    },
+    {
+      "key": "field_jb_options_footer_tab",
+      "label": "Футер",
+      "name": "",
+      "type": "tab",
+      "placement": "top"
+    },
+    {
+      "key": "field_jb_footer_phone",
+      "label": "Телефон в футере",
+      "name": "footer_phone",
+      "type": "text"
+    },
+    {
+      "key": "field_jb_footer_email",
+      "label": "Email",
+      "name": "footer_email",
+      "type": "email"
+    },
+    {
+      "key": "field_jb_footer_addresses",
+      "label": "Адреса",
+      "name": "footer_addresses",
+      "type": "repeater",
+      "layout": "row",
+      "button_label": "Добавить адрес",
+      "sub_fields": [
+        {
+          "key": "field_jb_footer_addresses_address",
+          "label": "Адрес",
+          "name": "address",
+          "type": "textarea",
+          "rows": 2
+        }
+      ]
+    },
+    {
+      "key": "field_jb_footer_cta_title",
+      "label": "CTA заголовок",
+      "name": "footer_cta_title",
+      "type": "text"
+    },
+    {
+      "key": "field_jb_footer_cta_text",
+      "label": "CTA текст",
+      "name": "footer_cta_text",
+      "type": "textarea",
+      "rows": 3
+    },
+    {
+      "key": "field_jb_options_socials_tab",
+      "label": "Соцсети",
+      "name": "",
+      "type": "tab",
+      "placement": "top"
+    },
+    {
+      "key": "field_jb_social_links",
+      "label": "Соцсети",
+      "name": "social_links",
+      "type": "repeater",
+      "layout": "table",
+      "button_label": "Добавить ссылку",
+      "sub_fields": [
+        {
+          "key": "field_jb_social_link_label",
+          "label": "Название",
+          "name": "label",
+          "type": "text"
+        },
+        {
+          "key": "field_jb_social_link_url",
+          "label": "Ссылка",
+          "name": "url",
+          "type": "url"
+        }
+      ]
+    },
+    {
+      "key": "field_jb_options_home_tab",
+      "label": "Главная",
+      "name": "",
+      "type": "tab",
+      "placement": "top"
+    },
+    {
+      "key": "field_jb_home_hero_title",
+      "label": "Hero заголовок",
+      "name": "home_hero_title",
+      "type": "text"
+    },
+    {
+      "key": "field_jb_home_hero_subtitle",
+      "label": "Hero подпись",
+      "name": "home_hero_subtitle",
+      "type": "text"
+    },
+    {
+      "key": "field_jb_home_hero_image",
+      "label": "Hero изображение",
+      "name": "home_hero_image",
+      "type": "image",
+      "return_format": "array",
+      "preview_size": "medium"
+    },
+    {
+      "key": "field_jb_home_about_text",
+      "label": "Текст о салоне",
+      "name": "home_about_text",
+      "type": "wysiwyg",
+      "tabs": "all",
+      "toolbar": "basic"
+    },
+    {
+      "key": "field_jb_home_cta_title",
+      "label": "CTA на главной",
+      "name": "home_cta_title",
+      "type": "text"
+    }
+  ],
+  "location": [
+    [
+      {
+        "param": "options_page",
+        "operator": "==",
+        "value": "jullybride-options"
+      }
+    ],
+    [
+      {
+        "param": "options_page",
+        "operator": "==",
+        "value": "jullybride-options-header"
+      }
+    ],
+    [
+      {
+        "param": "options_page",
+        "operator": "==",
+        "value": "jullybride-options-footer"
+      }
+    ],
+    [
+      {
+        "param": "options_page",
+        "operator": "==",
+        "value": "jullybride-options-socials"
+      }
+    ],
+    [
+      {
+        "param": "options_page",
+        "operator": "==",
+        "value": "jullybride-options-contacts"
+      }
+    ]
+  ],
+  "menu_order": 0,
+  "position": "normal",
+  "style": "default",
+  "label_placement": "top",
+  "instruction_placement": "label",
+  "active": true,
+  "description": "Глобальные данные для переноса текущей шапки, футера, контактов и главной страницы.",
+  "show_in_rest": 0,
+  "modified": 1770000000
+}
+
