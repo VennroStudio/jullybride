@@ -39,11 +39,20 @@ if (!function_exists('jullybride_franchise_image_url')) {
     }
 }
 
+if (!function_exists('jullybride_franchise_video_url')) {
+    function jullybride_franchise_video_url(int $video_id): string
+    {
+        $url = wp_get_attachment_url($video_id);
+
+        return (string) ($url ?: '');
+    }
+}
+
 if (!function_exists('jullybride_franchise_cta')) {
     function jullybride_franchise_cta(string $label = 'Получить предложение', string $class = ''): void
     {
         printf(
-            '<a class="franchise-button %s" href="#conditions">%s</a>',
+            '<a class="franchise-button %s" href="#franchise-feedback-modal" data-jb-franchise-feedback>%s</a>',
             esc_attr($class),
             esc_html($label)
         );

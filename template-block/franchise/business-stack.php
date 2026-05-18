@@ -21,9 +21,9 @@ $items = [
                 <div class="franchise-pill-card"><?php echo esc_html($item); ?></div>
             <?php endforeach; ?>
         </div>
-        <div class="franchise-video-card">
+        <button class="franchise-video-card" type="button" data-jb-franchise-video="<?php echo esc_url(jullybride_franchise_video_url(59033)); ?>" aria-label="Открыть видео Юлии Заборской">
             <img src="<?php echo esc_url(jullybride_franchise_image_url(51772)); ?>" alt="Видео Юлии Заборской" loading="lazy">
             <span class="franchise-video-card__play" aria-hidden="true"></span>
-        </div>
+        </button>
     </div>
 </section>

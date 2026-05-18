@@ -229,6 +229,124 @@
     }, true);
   };
 
+  const setupFranchiseFeedbackModal = () => {
+    const modal = document.querySelector('[data-jb-franchise-modal]');
+    if (!modal) return;
+
+    const openModal = () => {
+      modal.hidden = false;
+      document.body.classList.add('franchise-feedback-open');
+      modal.querySelector('[data-jb-franchise-close]')?.focus({ preventScroll: true });
+    };
+
+    const closeModal = () => {
+      modal.hidden = true;
+      document.body.classList.remove('franchise-feedback-open');
+    };
+
+    document.addEventListener('click', (event) => {
+      const trigger = event.target.closest('[data-jb-franchise-feedback]');
+      const close = event.target.closest('[data-jb-franchise-close]');
+
+      if (trigger) {
+        event.preventDefault();
+        openModal();
+        return;
+      }
+
+      if (close) {
+        event.preventDefault();
+        closeModal();
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !modal.hidden) {
+        closeModal();
+      }
+    });
+  };
+
+  const setupFranchiseVideoModal = () => {
+    const modal = document.querySelector('[data-jb-franchise-video-modal]');
+    const player = modal?.querySelector('[data-jb-franchise-video-player]');
+    if (!modal || !player) return;
+
+    const openVideo = (src) => {
+      if (!src) return;
+
+      player.pause();
+      player.src = src;
+      player.currentTime = 0;
+      modal.hidden = false;
+      document.body.classList.add('franchise-video-open');
+      player.focus({ preventScroll: true });
+      player.play().catch(() => {});
+    };
+
+    const closeVideo = () => {
+      player.pause();
+      player.removeAttribute('src');
+      player.load();
+      modal.hidden = true;
+      document.body.classList.remove('franchise-video-open');
+    };
+
+    document.addEventListener('click', (event) => {
+      const trigger = event.target.closest('[data-jb-franchise-video]');
+      const close = event.target.closest('[data-jb-franchise-video-close]');
+
+      if (trigger) {
+        event.preventDefault();
+        openVideo(trigger.dataset.jbFranchiseVideo);
+        return;
+      }
+
+      if (close) {
+        event.preventDefault();
+        closeVideo();
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !modal.hidden) {
+        closeVideo();
+      }
+    });
+  };
+
+  const setupFranchiseImageCarousel = () => {
+    const viewport = document.querySelector('[data-jb-franchise-carousel]');
+    if (!viewport) return;
+
+    const scrollCarousel = (direction) => {
+      const slide = viewport.querySelector('.franchise-image-carousel__slide');
+      const track = viewport.querySelector('.franchise-image-carousel__track');
+      const gap = track ? parseFloat(window.getComputedStyle(track).columnGap) || 0 : 0;
+      const step = slide ? slide.getBoundingClientRect().width + gap : viewport.clientWidth * 0.8;
+      viewport.scrollBy({ left: direction * step, behavior: 'smooth' });
+    };
+
+    document.querySelector('[data-jb-franchise-carousel-prev]')?.addEventListener('click', () => scrollCarousel(-1));
+    document.querySelector('[data-jb-franchise-carousel-next]')?.addEventListener('click', () => scrollCarousel(1));
+  };
+
+  const setupFranchiseMerchCarousel = () => {
+    const viewport = document.querySelector('[data-jb-merch-carousel]');
+    if (!viewport) return;
+
+    const scrollCarousel = (direction) => {
+      const slide = viewport.querySelector('.franchise-merch-polaroid');
+      const track = viewport.querySelector('.franchise-merch-carousel__track');
+      const gap = track ? parseFloat(window.getComputedStyle(track).columnGap) || 0 : 0;
+      const step = slide ? slide.getBoundingClientRect().width + gap : viewport.clientWidth * 0.8;
+      viewport.scrollBy({ left: direction * step, behavior: 'smooth' });
+    };
+
+    document.querySelector('[data-jb-merch-prev]')?.addEventListener('click', () => scrollCarousel(-1));
+    document.querySelector('[data-jb-merch-next]')?.addEventListener('click', () => scrollCarousel(1));
+  };
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       setupStickyHeader();
@@ -237,6 +355,10 @@
       setupAtmosphereCarousel();
       setupCampCountdown();
       setupCampPriceLinks();
+      setupFranchiseFeedbackModal();
+      setupFranchiseVideoModal();
+      setupFranchiseImageCarousel();
+      setupFranchiseMerchCarousel();
     });
   } else {
     setupStickyHeader();
@@ -245,5 +367,9 @@
     setupAtmosphereCarousel();
     setupCampCountdown();
     setupCampPriceLinks();
+    setupFranchiseFeedbackModal();
+    setupFranchiseVideoModal();
+    setupFranchiseImageCarousel();
+    setupFranchiseMerchCarousel();
   }
 })();

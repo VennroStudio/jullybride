@@ -3,31 +3,25 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-$steps = [
-    ['title' => 'Заявка', 'text' => 'Вы оставляете заявку, а мы знакомимся с вашим городом и задачами.'],
-    ['title' => 'Созвон', 'text' => 'Разбираем модель, инвестиции, сроки запуска и формат поддержки.'],
-    ['title' => 'Договор', 'text' => 'Фиксируем эксклюзив на город и готовим дорожную карту открытия.'],
-    ['title' => 'Открытие', 'text' => 'Подключаем команду запуска, маркетинг, обучение и стандарты сервиса.'],
-];
+$opening_video = jullybride_franchise_video_url(59025);
 ?>
-<section id="franchise-steps" class="franchise-steps franchise-section">
+<section id="franchise-steps" class="franchise-launch franchise-section">
     <div class="franchise-container">
-        <div class="franchise-section-heading">
-            <p class="franchise-eyebrow">Путь к запуску</p>
-            <h2>4 шага к открытию салона Jully Bride</h2>
+        <div class="franchise-launch__heading">
+            <p>4 шага к открытию</p>
+            <h2>Салона Jully Bride</h2>
         </div>
-        <div class="franchise-steps__grid">
-            <?php foreach ($steps as $index => $step) : ?>
-                <article class="franchise-step">
-                    <span><?php echo esc_html(str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT)); ?></span>
-                    <h3><?php echo esc_html($step['title']); ?></h3>
-                    <p><?php echo esc_html($step['text']); ?></p>
-                </article>
-            <?php endforeach; ?>
+        <div class="franchise-launch__steps">
+            <?php jullybride_franchise_image(53298, 'franchise-launch__steps-image franchise-launch__steps-image--desktop', '4 шага к открытию салона Jully Bride'); ?>
+            <?php jullybride_franchise_image(53299, 'franchise-launch__steps-image franchise-launch__steps-image--mobile', '4 шага к открытию салона Jully Bride'); ?>
         </div>
-        <div class="franchise-steps__media">
-            <?php jullybride_franchise_image(53298, 'franchise-steps__scheme franchise-steps__scheme--desktop', '4 шага к открытию'); ?>
-            <?php jullybride_franchise_image(53299, 'franchise-steps__scheme franchise-steps__scheme--mobile', '4 шага к открытию'); ?>
+        <div class="franchise-launch__video">
+            <?php jullybride_franchise_image(53301, 'franchise-launch__video-cover', 'Торжественное открытие салона Jully Bride'); ?>
+            <?php if ($opening_video) : ?>
+                <button class="franchise-launch__video-button" type="button" data-jb-franchise-video="<?php echo esc_url($opening_video); ?>" aria-label="Смотреть видео с торжественного открытия">
+                    <?php jullybride_franchise_image(53302, '', 'Смотреть видео с торжественного открытия'); ?>
+                </button>
+            <?php endif; ?>
         </div>
     </div>
 </section>

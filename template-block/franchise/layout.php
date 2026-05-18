@@ -14,6 +14,7 @@ jullybride_template_part('franchise/helpers');
     jullybride_template_part('franchise/visibility');
     jullybride_template_part('franchise/social-gallery');
     jullybride_template_part('franchise/brand-now');
+    jullybride_template_part('franchise/image-carousel');
     jullybride_template_part('franchise/conditions');
     jullybride_template_part('franchise/steps');
     jullybride_template_part('franchise/team');
@@ -22,7 +23,9 @@ jullybride_template_part('franchise/helpers');
     jullybride_template_part('franchise/merch');
     jullybride_template_part('franchise/guarantee');
     ?>
-    <a class="franchise-floating-stamp" href="#conditions" aria-label="Узнать условия франшизы">
+    <a class="franchise-floating-stamp" href="#franchise-feedback-modal" aria-label="Узнать условия франшизы" data-jb-franchise-feedback>
         <span>узнать условия франшизы</span>
     </a>
+    <?php jullybride_template_part('franchise/video-modal'); ?>
+    <?php jullybride_template_part('franchise/feedback-modal'); ?>
 </main>

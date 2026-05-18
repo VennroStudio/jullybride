@@ -15,10 +15,10 @@ $metrics = [
 $fee_items = [
     'Создание сайта',
     'Доступ к базе знаний из более 300 инструкций и регламентов',
-    'Создание профилей на интернет-сервисах',
+    'Создание профилей на интернет-сервисах: Instagram, VK, Яндекс карты, 2ГИС, Google карты, Weddywood, gorko.ru',
     'Фирменный стиль',
-    'Полное сопровождение на этапе запуска',
-    'План активностей перед открытием',
+    'Полное сопровождение во время ремонта и открытия',
+    'План активностей в сетях до открытия',
 ];
 
 $royalty_items = [
@@ -27,41 +27,46 @@ $royalty_items = [
     'Техническая поддержка',
 ];
 ?>
-<section id="conditions" class="franchise-conditions franchise-section">
+<section id="conditions" class="franchise-conditions franchise-conditions--original franchise-section">
     <div class="franchise-container">
-        <div class="franchise-section-heading">
-            <p class="franchise-eyebrow">Финансовая модель</p>
+        <div class="franchise-conditions__head">
             <h2>Условия франшизы</h2>
+            <?php jullybride_franchise_image(53261, 'franchise-conditions__logo', 'Салон Jully Bride'); ?>
         </div>
-        <div class="franchise-condition-metrics">
+        <div class="franchise-conditions__metrics">
             <?php foreach ($metrics as $metric) : ?>
-                <article>
+                <article class="franchise-conditions__metric">
                     <strong><?php echo esc_html($metric['value']); ?></strong>
                     <span><?php echo esc_html($metric['label']); ?></span>
                 </article>
             <?php endforeach; ?>
         </div>
-        <div class="franchise-condition-lists">
-            <div>
-                <h3>В паушальный взнос входит:</h3>
-                <ul>
-                    <?php foreach ($fee_items as $item) : ?>
-                        <li><?php echo esc_html($item); ?></li>
-                    <?php endforeach; ?>
-                </ul>
+    </div>
+
+    <div class="franchise-conditions__arch">
+        <div class="franchise-container franchise-conditions__body">
+            <?php jullybride_franchise_image(53292, 'franchise-conditions__girl franchise-conditions__girl--left', ''); ?>
+            <div class="franchise-conditions__panel">
+                <div class="franchise-conditions__list">
+                    <h3>В паушальный взнос входит:</h3>
+                    <ul>
+                        <?php foreach ($fee_items as $item) : ?>
+                            <li><?php echo esc_html($item); ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+                <hr>
+                <div class="franchise-conditions__list">
+                    <h3>В роялти входит:</h3>
+                    <ul>
+                        <?php foreach ($royalty_items as $item) : ?>
+                            <li><?php echo esc_html($item); ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+                <?php jullybride_franchise_cta('Получить расчет для вашего города', 'franchise-conditions__button'); ?>
             </div>
-            <div>
-                <h3>В роялти входит:</h3>
-                <ul>
-                    <?php foreach ($royalty_items as $item) : ?>
-                        <li><?php echo esc_html($item); ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        </div>
-        <div class="franchise-condition-visuals" aria-hidden="true">
-            <?php jullybride_franchise_image(53292, 'franchise-condition-visuals__girl', ''); ?>
-            <?php jullybride_franchise_image(53293, 'franchise-condition-visuals__girl', ''); ?>
+            <?php jullybride_franchise_image(53293, 'franchise-conditions__girl franchise-conditions__girl--right', ''); ?>
         </div>
     </div>
 </section>
