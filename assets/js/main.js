@@ -167,6 +167,15 @@
     });
   };
 
+  const setupAtmosphereCarousel = () => {
+    document.querySelectorAll('#carousel-pint video[data-src]').forEach((video) => {
+      const source = video.getAttribute('data-src');
+      if (source && !video.getAttribute('src')) {
+        video.setAttribute('src', source);
+      }
+    });
+  };
+
   const setupCampCountdown = () => {
     document.querySelectorAll('[data-camp-countdown]').forEach((counter) => {
       const targetDate = new Date(counter.getAttribute('data-camp-countdown')).getTime();
@@ -218,6 +227,7 @@
       setupStickyHeader();
       setupMegaMenu();
       setupCatalogLoadMore();
+      setupAtmosphereCarousel();
       setupCampCountdown();
       setupCampPriceLinks();
     });
@@ -225,6 +235,7 @@
     setupStickyHeader();
     setupMegaMenu();
     setupCatalogLoadMore();
+    setupAtmosphereCarousel();
     setupCampCountdown();
     setupCampPriceLinks();
   }

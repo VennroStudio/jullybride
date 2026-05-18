@@ -21,9 +21,12 @@ if (!defined('ABSPATH')) {
                                 <ul class="carousel-pint owl-list owl-carousel owl-theme autoheight" id="carousel-pint">
                                     <? while (have_rows('carusel_atmosfera')): the_row(); 
                                         $video = get_sub_field('video');
+                                        if (!$video) {
+                                            continue;
+                                        }
                                     ?>
                                         <li>
-                                            <video data-src="<?=$video?>" poster="<?php echo get_stylesheet_directory_uri(); ?>/assets/images/galereya1.webp" muted playsinline class="lazy-video">Ваш браузер не поддерживает видео.</video>
+                                            <video src="<?php echo esc_url($video); ?>" data-src="<?php echo esc_url($video); ?>" muted playsinline preload="metadata" class="lazy-video">Ваш браузер не поддерживает видео.</video>
                                         </li> 
                                     <?endwhile?>                                                       
                                 </ul>

@@ -135,6 +135,14 @@ a {
   display: grid !important;
 }
 
+.overflow-hidden {
+  overflow: hidden !important;
+}
+
+.m-auto {
+  margin: auto !important;
+}
+
 .align-items-center {
   align-items: center !important;
 }
@@ -169,6 +177,10 @@ a {
 
 .position-relative {
   position: relative !important;
+}
+
+.position-absolute {
+  position: absolute !important;
 }
 
 .z-index-0 {
@@ -250,6 +262,37 @@ a {
   .col-lg-3 {
     flex: 0 0 auto;
     width: 25%;
+  }
+
+  .d-lg-block {
+    display: block !important;
+  }
+
+  .d-lg-flex {
+    display: flex !important;
+  }
+
+  .d-lg-none {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .col-xl-6 {
+    flex: 0 0 auto;
+    width: 50%;
+  }
+
+  .d-xl-block {
+    display: block !important;
+  }
+
+  .d-xl-flex {
+    display: flex !important;
+  }
+
+  .d-xl-none {
+    display: none !important;
   }
 }
 
