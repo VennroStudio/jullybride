@@ -1,5 +1,4 @@
 <?php
 get_header();
-get_template_part('template_404');
+jullybride_template_part('404/content');
 get_footer();
-

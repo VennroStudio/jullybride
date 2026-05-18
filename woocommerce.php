@@ -1,9 +1,8 @@
 <?php
 get_header();
 if (is_product()) {
-    get_template_part('template_product');
+    jullybride_template_part('product/layout');
 } else {
-    get_template_part('template_catalog');
+    jullybride_template_part('catalog/layout');
 }
 get_footer();
-

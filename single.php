@@ -2,12 +2,33 @@
 get_header();
 
 if (get_post_type() === 'promo') {
-    get_template_part('template_stock');
+    ?>
+    <main class="jb-main jb-editorial-page jb-stock">
+        <div class="container">
+            <?php jullybride_breadcrumbs(); ?>
+            <?php jullybride_template_part('stock/single'); ?>
+        </div>
+    </main>
+    <?php
 } elseif (get_post_type() === 'post') {
-    get_template_part('template_blog');
+    ?>
+    <main class="jb-main jb-editorial-page jb-blog">
+        <div class="container">
+            <?php jullybride_breadcrumbs(); ?>
+            <?php jullybride_template_part('blog/single'); ?>
+        </div>
+    </main>
+    <?php
 } else {
-    get_template_part('template_page');
+    ?>
+    <main class="jb-main jb-page">
+        <div class="container">
+            <?php jullybride_breadcrumbs(); ?>
+            <?php jullybride_template_part('page/hero'); ?>
+            <?php jullybride_template_part('page/content'); ?>
+        </div>
+    </main>
+    <?php
 }
 
 get_footer();
-

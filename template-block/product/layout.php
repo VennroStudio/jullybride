@@ -23,4 +23,3 @@ if (!defined('ABSPATH')) {
         <?php jullybride_template_part('common/important-cta'); ?>
     </main>
 <?php endwhile; ?>
-

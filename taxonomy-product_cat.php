@@ -1,5 +1,4 @@
 <?php
 get_header();
-get_template_part('template_catalog');
+jullybride_template_part('catalog/layout');
 get_footer();
-

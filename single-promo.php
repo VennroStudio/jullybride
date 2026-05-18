@@ -1,5 +1,11 @@
 <?php
 get_header();
-get_template_part('template_stock');
+?>
+<main class="jb-main jb-editorial-page jb-stock">
+    <div class="container">
+        <?php jullybride_breadcrumbs(); ?>
+        <?php jullybride_template_part('stock/single'); ?>
+    </div>
+</main>
+<?php
 get_footer();
-

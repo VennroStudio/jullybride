@@ -1,5 +1,11 @@
 <?php
 get_header();
-get_template_part('template_blog');
+?>
+<main class="jb-main jb-editorial-page jb-blog">
+    <div class="container">
+        <?php jullybride_breadcrumbs(); ?>
+        <?php jullybride_template_part('blog/archive'); ?>
+    </div>
+</main>
+<?php
 get_footer();
-

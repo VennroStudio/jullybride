@@ -1,3 +1,2 @@
 <?php
-get_template_part('template_product');
-
+jullybride_template_part('product/layout');
