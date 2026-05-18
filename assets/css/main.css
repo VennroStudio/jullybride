@@ -131,6 +131,10 @@ a {
   display: flex !important;
 }
 
+.flex-column {
+  flex-direction: column !important;
+}
+
 .d-grid {
   display: grid !important;
 }
@@ -2931,5 +2935,76 @@ body.admin-bar .jb-site-header {
 
   .jb-site-footer__brand .jb-logo img {
     width: 250px;
+  }
+}
+
+/* Legacy home blocks: keep migrated sections aligned with the original layout. */
+.main-slide_img-wrap img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.calendar-box_content {
+  overflow: hidden;
+  text-align: center;
+}
+
+.calendar-box_content-title {
+  width: 310px;
+  max-width: 310px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.calendar-box_content .theme-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 364px;
+  min-width: 0;
+  max-width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding: 22px 24px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+@media (max-width: 1600px) {
+  .calendar-box_content .theme-button {
+    width: 320px;
+    padding: 20px 22px;
+  }
+}
+
+@media (max-width: 1300px) {
+  .calendar-box_content-title {
+    width: 296px;
+    max-width: 100%;
+  }
+
+  .calendar-box_content .theme-button {
+    width: 296px;
+  }
+}
+
+@media (max-width: 768px) {
+  .calendar-box_content-title,
+  .calendar-box_content .theme-button {
+    width: 200px;
+  }
+}
+
+@media (max-width: 767px) {
+  .calendar-box_content-title,
+  .calendar-box_content .theme-button {
+    width: 284px;
+    max-width: calc(100% - 40px);
+  }
+
+  .calendar-box_content .theme-button {
+    padding: 14px 16px;
+    white-space: normal;
   }
 }

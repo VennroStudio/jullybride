@@ -19,6 +19,11 @@ if (!defined('ABSPATH')) {
                                         $index = 0; // Счётчик итераций
                                         while (have_rows('banners')): the_row(); 
                                             $image = get_sub_field('image');
+                                            if (is_array($image)) {
+                                                $image = $image['url'] ?? '';
+                                            } elseif (is_numeric($image)) {
+                                                $image = wp_get_attachment_image_url((int) $image, 'full') ?: '';
+                                            }
                                             $title = get_sub_field('title');
                                             $subtitle = get_sub_field('subtitle');
                                             $text_left = get_sub_field('text_left');
@@ -40,16 +45,16 @@ if (!defined('ABSPATH')) {
                                                         <span class="main-slide_img-text d-block d-md-none"><?=$text_left?></span>
                                                         <a href="<?=$link?>" class="main-slide_img-btn d-block d-md-none">Вау! Можно к вам?</a>
                                                         
-                                                        <?php if ($index === 0): ?>
-                                                            <img src="<?=$image?>" 
-     alt="<?=$title?>" 
-     fetchpriority="high"
-     width="295" 
-     height="439"
-     data-critical="true"
-     decoding="async" />
-                                                        <?php else: ?>
-                                                            <img data-src="<?=$image?>" alt="<?=$title?>" />
+                                                        <?php if ($image): ?>
+                                                            <img
+                                                                src="<?= esc_url($image) ?>"
+                                                                alt="<?= esc_attr(wp_strip_all_tags((string) $title)) ?>"
+                                                                width="295"
+                                                                height="439"
+                                                                decoding="async"
+                                                                loading="eager"
+                                                                <?= $index === 0 ? 'fetchpriority="high" data-critical="true"' : '' ?>
+                                                            />
                                                         <?php endif; ?>
                                                         
                                                     </div>
