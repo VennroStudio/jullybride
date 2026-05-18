@@ -76,6 +76,10 @@ function jullybride_enqueue_assets(): void
         }
     }
 
+    if (wp_script_is('jullybride-legacy-app', 'enqueued')) {
+        wp_add_inline_script('jullybride-legacy-app', 'window.Fancybox=window.Fancybox||{bind:function(){}};', 'before');
+    }
+
     wp_localize_script('jullybride-main', 'jullybrideTheme', [
         'ajaxUrl' => admin_url('admin-ajax.php'),
         'homeUrl' => home_url('/'),

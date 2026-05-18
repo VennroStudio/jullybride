@@ -167,15 +167,65 @@
     });
   };
 
+  const setupCampCountdown = () => {
+    document.querySelectorAll('[data-camp-countdown]').forEach((counter) => {
+      const targetDate = new Date(counter.getAttribute('data-camp-countdown')).getTime();
+      if (!targetDate) return;
+
+      const updateCounter = () => {
+        const diff = targetDate - Date.now();
+
+        if (diff <= 0) {
+          counter.innerHTML = '<span class="counter-unit">00:<small>дней</small></span><span class="counter-unit">00:<small>часов</small></span><span class="counter-unit">00:<small>минут</small></span><span class="counter-unit">00<small>секунд</small></span>';
+          return;
+        }
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        counter.innerHTML = [
+          `<span class="counter-unit">${String(days).padStart(2, '0')}:<small>дней</small></span>`,
+          `<span class="counter-unit">${String(hours).padStart(2, '0')}:<small>часов</small></span>`,
+          `<span class="counter-unit">${String(minutes).padStart(2, '0')}:<small>минут</small></span>`,
+          `<span class="counter-unit">${String(seconds).padStart(2, '0')}<small>секунд</small></span>`
+        ].join('');
+      };
+
+      updateCounter();
+      window.setInterval(updateCounter, 1000);
+    });
+  };
+
+  const setupCampPriceLinks = () => {
+    document.addEventListener('click', (event) => {
+      const link = event.target.closest('.want_link');
+      const priceBlock = document.getElementById('box_price');
+      if (!link || !priceBlock) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      const headerHeight = document.querySelector('[data-jb-header]')?.getBoundingClientRect().height || 0;
+      const top = priceBlock.getBoundingClientRect().top + window.scrollY - headerHeight - 20;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }, true);
+  };
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       setupStickyHeader();
       setupMegaMenu();
       setupCatalogLoadMore();
+      setupCampCountdown();
+      setupCampPriceLinks();
     });
   } else {
     setupStickyHeader();
     setupMegaMenu();
     setupCatalogLoadMore();
+    setupCampCountdown();
+    setupCampPriceLinks();
   }
 })();
