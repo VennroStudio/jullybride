@@ -54,10 +54,17 @@
 
     const updateHeader = () => {
       header.classList.toggle('is-compact', window.scrollY > 24);
+      const updateOffset = () => {
+        const bottom = Math.max(0, Math.round(header.getBoundingClientRect().bottom));
+        document.documentElement.style.setProperty('--jb-sticky-header-bottom', `${bottom}px`);
+      };
+      updateOffset();
+      window.requestAnimationFrame(updateOffset);
     };
 
     updateHeader();
     window.addEventListener('scroll', updateHeader, { passive: true });
+    window.addEventListener('resize', updateHeader, { passive: true });
     document.addEventListener('scroll', updateHeader, { passive: true, capture: true });
     window.setInterval(updateHeader, 250);
   };

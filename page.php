@@ -14,6 +14,8 @@ if (is_page('c')) {
     <?php
 } elseif (is_page('pinkcamp')) {
     jullybride_template_part('camp/layout');
+} elseif (is_page(['franshiza', 'franshiza-2'])) {
+    jullybride_template_part('franchise/layout');
 } else {
     $is_contacts_page = is_page('contacts');
     $is_service_page = is_page(['cart', 'checkout', 'wishlist']);
