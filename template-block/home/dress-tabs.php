@@ -4,8 +4,10 @@ if (!defined('ABSPATH')) {
 }
 
 $taxonomy_filter = static function (string $taxonomy, string $name, ?string $slug = null): array {
+    $attribute_taxonomy = str_starts_with($taxonomy, 'pa_') ? $taxonomy : 'pa_' . $taxonomy;
+
     return [
-        'taxonomy' => $taxonomy,
+        'taxonomy' => $attribute_taxonomy,
         'name' => $name,
         'slug' => $slug ?: sanitize_title($name),
     ];
@@ -14,7 +16,6 @@ $taxonomy_filter = static function (string $taxonomy, string $name, ?string $slu
 $groups = [
     [
         'label' => 'Силуэт',
-        'catalog_url' => '/c/wedding/?_f=1&_silhouette=a-line%2Cempire%2Csuit%2Cprincess%2Cstraight%2Clush%2Cmermaid%2Ctransformer%2Csheath',
         'main_category' => 'wedding',
         'items' => [
             ['id' => 1, 'label' => 'Рыбка', 'category' => 'mermaid', 'filter' => $taxonomy_filter('silhouette', 'Рыбка', 'mermaid')],
@@ -29,7 +30,6 @@ $groups = [
     ],
     [
         'label' => 'Длина',
-        'catalog_url' => '/c/wedding/?_length=dlinnoe%2Cmidi%2Cmini&_f=1',
         'main_category' => 'wedding',
         'items' => [
             ['id' => 10, 'label' => 'Длинные', 'category' => 'long', 'filter' => $taxonomy_filter('length', 'Длинное', 'dlinnoe')],
@@ -39,7 +39,6 @@ $groups = [
     ],
     [
         'label' => 'Стиль',
-        'catalog_url' => '/c/wedding/?_style=boho%2Cvintage%2Clace%2Csparkle%2Cminimalism%2Csimple&_f=1',
         'main_category' => 'wedding',
         'items' => [
             ['id' => 13, 'label' => 'Бохо', 'category' => 'boho', 'filter' => $taxonomy_filter('style', 'Бохо', 'boho')],
@@ -52,7 +51,6 @@ $groups = [
     ],
     [
         'label' => 'Особенности',
-        'catalog_url' => '/c/wedding/open-back/?_backdress=closed%2Copen&_f=1&_decollete=s-v-vyrezom%2Clow-necked&_corset=corset&_slit=slit',
         'main_category' => 'wedding',
         'items' => [
             ['id' => 19, 'label' => 'С открытой спиной', 'category' => 'open-back', 'filter' => $taxonomy_filter('backdress', 'С открытой спиной', 'open')],
@@ -65,7 +63,6 @@ $groups = [
     ],
     [
         'label' => 'Вечерние',
-        'catalog_url' => '/c/evening/?_silhouette=a-line%2Cempire%2Csuit%2Cstraight%2Clush%2Cmermaid&_f=1',
         'main_category' => 'evening',
         'sidebar_class' => 'col-12 col-md-2',
         'items' => [
@@ -79,16 +76,63 @@ $groups = [
 ];
 
 $resolve_taxonomy = static function (string $taxonomy): string {
-    $attribute_taxonomy = 'pa_' . $taxonomy;
-
-    if (taxonomy_exists($attribute_taxonomy)) {
-        return $attribute_taxonomy;
+    if (taxonomy_exists($taxonomy)) {
+        return $taxonomy;
     }
 
-    return taxonomy_exists($taxonomy) ? $taxonomy : '';
+    $attribute_taxonomy = str_starts_with($taxonomy, 'pa_') ? $taxonomy : 'pa_' . $taxonomy;
+
+    return taxonomy_exists($attribute_taxonomy) ? $attribute_taxonomy : '';
 };
 
-$query_args = static function (array $item, string $main_category) use ($resolve_taxonomy): array {
+$resolve_filter_term = static function (array $filter) use ($resolve_taxonomy): ?WP_Term {
+    $taxonomy = $resolve_taxonomy((string) ($filter['taxonomy'] ?? ''));
+
+    if (!$taxonomy) {
+        return null;
+    }
+
+    $term = null;
+
+    if (!empty($filter['slug'])) {
+        $term = get_term_by('slug', (string) $filter['slug'], $taxonomy);
+    }
+
+    if (!$term && !empty($filter['name'])) {
+        $term = get_term_by('name', (string) $filter['name'], $taxonomy);
+    }
+
+    return $term instanceof WP_Term ? $term : null;
+};
+
+$group_catalog_url = static function (array $group) use ($resolve_filter_term): string {
+    $base = home_url('/c/' . trim((string) ($group['main_category'] ?? 'wedding'), '/') . '/');
+    $params = ['_f' => 1];
+
+    foreach ((array) ($group['items'] ?? []) as $item) {
+        if (empty($item['filter']) || !is_array($item['filter'])) {
+            continue;
+        }
+
+        $term = $resolve_filter_term($item['filter']);
+
+        if (!$term) {
+            continue;
+        }
+
+        $params[$term->taxonomy][] = rawurldecode($term->slug);
+    }
+
+    foreach ($params as $key => $value) {
+        if (is_array($value)) {
+            $params[$key] = implode(',', array_values(array_unique($value)));
+        }
+    }
+
+    return add_query_arg($params, $base);
+};
+
+$query_args = static function (array $item, string $main_category) use ($resolve_filter_term): array {
     $args = [
         'post_type' => 'product',
         'posts_per_page' => 10,
@@ -96,12 +140,6 @@ $query_args = static function (array $item, string $main_category) use ($resolve
         'order' => 'DESC',
         'post_status' => 'publish',
     ];
-
-    $legacy_category = $item['category'] ?? '';
-    if ($legacy_category && get_term_by('slug', $legacy_category, 'product_cat')) {
-        $args['product_cat'] = $legacy_category;
-        return $args;
-    }
 
     $tax_query = ['relation' => 'AND'];
 
@@ -114,14 +152,16 @@ $query_args = static function (array $item, string $main_category) use ($resolve
     }
 
     if (!empty($item['filter'])) {
-        $taxonomy = $resolve_taxonomy($item['filter']['taxonomy']);
+        $term = $resolve_filter_term($item['filter']);
 
-        if ($taxonomy) {
+        if ($term) {
             $tax_query[] = [
-                'taxonomy' => $taxonomy,
-                'field' => 'name',
-                'terms' => [$item['filter']['name']],
+                'taxonomy' => $term->taxonomy,
+                'field' => 'term_id',
+                'terms' => [$term->term_id],
             ];
+        } else {
+            $args['post__in'] = [0];
         }
     }
 
@@ -155,6 +195,7 @@ $query_args = static function (array $item, string $main_category) use ($resolve
     </div>
     <div class="slides-tabs">
         <?php foreach ($groups as $group_index => $group) : ?>
+            <?php $catalog_url = $group_catalog_url($group); ?>
             <span class="d-md-none d-block mobile-tab-wrap<?php echo $group_index === 0 ? ' active' : ''; ?>">
                 <span class="mobile-tab"><?php echo esc_html($group['label']); ?></span>
             </span>
@@ -197,9 +238,9 @@ $query_args = static function (array $item, string $main_category) use ($resolve
                             <?php foreach ($group['items'] as $item_index => $item) : ?>
                                 <li class="<?php echo $item_index === 0 ? 'active ' : ''; ?>tab-trigger"><a href="javascript:void(0)"><?php echo esc_html($item['label']); ?></a></li>
                             <?php endforeach; ?>
-                            <li class="d-md-none d-block"><a href="<?php echo esc_url($group['catalog_url']); ?>">Смотреть все</a></li>
+                            <li class="d-md-none d-block"><a href="<?php echo esc_url($catalog_url); ?>">Смотреть все</a></li>
                         </ul>
-                        <a href="<?php echo esc_url($group['catalog_url']); ?>" class="button-main-main-bg theme-button d-md-block d-none text-center custom-btn">Перейти в каталог</a>
+                        <a href="<?php echo esc_url($catalog_url); ?>" class="button-main-main-bg theme-button d-md-block d-none text-center custom-btn">Перейти в каталог</a>
                     </div>
                 </div>
             </div>

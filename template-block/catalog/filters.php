@@ -49,18 +49,20 @@ $stock_count = count(array_intersect($stock_base_ids, $stock_ids));
                             <?php foreach ($filters as $filter) : ?>
                                 <?php
                                 $param = (string) $filter['param'];
-                                $selected = jullybride_catalog_request_values($param);
-
-                                if ($param === 'pa_razmer' && !$selected) {
-                                    $selected = jullybride_catalog_request_values('filter_pa_razmer');
-                                }
+                                $selected = jullybride_catalog_expanded_request_values_for_definition($filter);
 
                                 $terms = jullybride_catalog_filter_terms($filter, jullybride_catalog_count_base_product_ids($param));
+                                $terms = array_values(array_filter($terms, static function (array $term) use ($selected): bool {
+                                    $term_slugs = (array) ($term['slugs'] ?? [$term['slug']]);
+
+                                    return (int) ($term['count'] ?? 0) > 0 || (bool) array_intersect($selected, $term_slugs);
+                                }));
+
                                 if (!$terms) {
                                     continue;
                                 }
 
-                                $is_open = $selected || in_array($param, ['pa_razmer', '_silhouette', '_length'], true);
+                                $is_open = $selected || in_array($param, ['pa_razmer', 'pa_silhouette', 'pa_length'], true);
                                 ?>
                                 <fieldset class="jb-filter <?php echo $is_open ? 'is-open' : ''; ?>">
                                     <legend class="jb-filter__legend">

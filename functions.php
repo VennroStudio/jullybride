@@ -63,6 +63,7 @@ function jullybride_enqueue_assets(): void
 
     $scripts = [
         'jullybride-legacy-owl' => '/assets/js/legacy/owl.carousel.min.js',
+        'jullybride-similar-products' => '/assets/js/legacy/similar-products.js',
         'jullybride-legacy-swiper' => '/assets/js/legacy/swiper-bundle.min.js',
         'jullybride-legacy-wow' => '/assets/js/legacy/wow.min.js',
         'jullybride-legacy-app' => '/assets/js/legacy/app.min.js',
@@ -322,6 +323,30 @@ function jullybride_get_main_product_category(int $product_id): ?WP_Term
         return null;
     }
 
+    $priority = [
+        'wedding',
+        'evening',
+        'shoes',
+        'veils',
+        'jewelry',
+        'outerwear',
+        'morning',
+        'pink-merch',
+        'accessories',
+        'cosmetics',
+        'uncategorized',
+        'sale',
+        'tariffs',
+    ];
+
+    foreach ($priority as $slug) {
+        foreach ($terms as $term) {
+            if ($term instanceof WP_Term && $term->slug === $slug) {
+                return $term;
+            }
+        }
+    }
+
     usort($terms, static fn (WP_Term $a, WP_Term $b): int => $a->parent <=> $b->parent ?: $a->name <=> $b->name);
 
     return $terms[0] ?? null;
@@ -452,27 +477,38 @@ function jullybride_attribute_taxonomy_table_exists(): bool
 function jullybride_catalog_filter_definitions(): array
 {
     return [
-        ['param' => '_silhouette', 'taxonomies' => ['silhouette'], 'label' => 'Силуэт'],
-        ['param' => '_designer', 'taxonomies' => ['designer'], 'label' => 'Дизайнер / бренд'],
-        ['param' => '_style', 'taxonomies' => ['style'], 'label' => 'Стиль'],
-        ['param' => '_color', 'taxonomies' => ['pa_czvet', 'color'], 'label' => 'Цвет'],
-        ['param' => '_material', 'taxonomies' => ['material'], 'label' => 'Материал'],
-        ['param' => '_sleeves', 'taxonomies' => ['sleeves'], 'label' => 'Рукава'],
-        ['param' => '_length', 'taxonomies' => ['length'], 'label' => 'Длина'],
-        ['param' => '_shoulders', 'taxonomies' => ['shoulders'], 'label' => 'Плечи'],
-        ['param' => '_decollete', 'taxonomies' => ['decollete'], 'label' => 'Декольте'],
-        ['param' => '_backdress', 'taxonomies' => ['backdress'], 'label' => 'Спина'],
-        ['param' => '_corset', 'taxonomies' => ['corset'], 'label' => 'Корсет'],
-        ['param' => '_collection', 'taxonomies' => ['collection'], 'label' => 'Коллекция'],
-        ['param' => '_season', 'taxonomies' => ['season'], 'label' => 'Сезон'],
-        ['param' => '_slit', 'taxonomies' => ['slit'], 'label' => 'Разрез'],
-        ['param' => '_where', 'taxonomies' => ['where'], 'label' => 'Предназначение'],
-        ['param' => '_train', 'taxonomies' => ['train'], 'label' => 'Шлейф'],
-        ['param' => '_straps', 'taxonomies' => ['straps'], 'label' => 'Бретельки'],
-        ['param' => '_details', 'taxonomies' => ['details'], 'label' => 'Детали'],
-        ['param' => '_heel', 'taxonomies' => ['heel'], 'label' => 'Каблук'],
-        ['param' => 'pa_razmer', 'taxonomies' => ['pa_razmer'], 'label' => 'Размер'],
+        ['param' => 'pa_razmer', 'taxonomies' => ['pa_razmer'], 'label' => 'Размер', 'aliases' => ['filter_pa_razmer']],
+        ['param' => 'pa_silhouette', 'taxonomies' => ['pa_silhouette', 'silhouette'], 'label' => 'Силуэт', 'aliases' => ['_silhouette', 'filter_pa_silhouette']],
+        ['param' => 'pa_style', 'taxonomies' => ['pa_style', 'style'], 'label' => 'Стиль', 'aliases' => ['_style', 'filter_pa_style']],
+        ['param' => 'pa_length', 'taxonomies' => ['pa_length', 'length'], 'label' => 'Длина', 'aliases' => ['_length', 'filter_pa_length']],
+        ['param' => 'pa_designer', 'taxonomies' => ['pa_designer', 'designer'], 'label' => 'Дизайнер / бренд', 'aliases' => ['_designer', 'filter_pa_designer']],
+        ['param' => 'pa_shoulders', 'taxonomies' => ['pa_shoulders', 'shoulders'], 'label' => 'Плечи', 'aliases' => ['_shoulders', 'filter_pa_shoulders']],
+        ['param' => 'pa_sleeves', 'taxonomies' => ['pa_sleeves', 'sleeves'], 'label' => 'Рукава', 'aliases' => ['_sleeves', 'filter_pa_sleeves']],
+        ['param' => 'pa_backdress', 'taxonomies' => ['pa_backdress', 'backdress'], 'label' => 'Спина', 'aliases' => ['_backdress', 'filter_pa_backdress']],
+        ['param' => 'pa_decollete', 'taxonomies' => ['pa_decollete', 'decollete'], 'label' => 'Декольте', 'aliases' => ['_decollete', 'filter_pa_decollete']],
+        ['param' => 'pa_material', 'taxonomies' => ['pa_material', 'material'], 'label' => 'Материал', 'aliases' => ['_material', 'filter_pa_material']],
+        ['param' => 'pa_season', 'taxonomies' => ['pa_season', 'season'], 'label' => 'Сезон', 'aliases' => ['_season', 'filter_pa_season']],
+        ['param' => 'pa_corset', 'taxonomies' => ['pa_corset', 'corset'], 'label' => 'Корсет', 'aliases' => ['_corset', 'filter_pa_corset']],
+        ['param' => 'pa_collection', 'taxonomies' => ['pa_collection', 'collection'], 'label' => 'Коллекция', 'aliases' => ['_collection', 'filter_pa_collection']],
+        ['param' => 'pa_slit', 'taxonomies' => ['pa_slit', 'slit'], 'label' => 'Разрез', 'aliases' => ['_slit', 'filter_pa_slit']],
+        ['param' => 'pa_where', 'taxonomies' => ['pa_where', 'where'], 'label' => 'Куда', 'aliases' => ['_where', 'filter_pa_where']],
+        ['param' => 'pa_color', 'taxonomies' => ['pa_color', 'pa_czvet', 'color'], 'label' => 'Цвет', 'aliases' => ['_color', 'filter_pa_color', 'filter_pa_czvet']],
+        ['param' => 'pa_train', 'taxonomies' => ['pa_train', 'train'], 'label' => 'Шлейф', 'aliases' => ['_train', 'filter_pa_train']],
+        ['param' => 'pa_straps', 'taxonomies' => ['pa_straps', 'straps'], 'label' => 'Бретельки', 'aliases' => ['_straps', 'filter_pa_straps']],
+        ['param' => 'pa_details', 'taxonomies' => ['pa_details', 'details'], 'label' => 'Детали', 'aliases' => ['_details', 'filter_pa_details']],
+        ['param' => 'pa_heel', 'taxonomies' => ['pa_heel', 'heel'], 'label' => 'Каблук', 'aliases' => ['_heel', 'filter_pa_heel']],
     ];
+}
+
+function jullybride_catalog_definition_params(array $definition): array
+{
+    $params = [(string) ($definition['param'] ?? '')];
+
+    foreach ((array) ($definition['aliases'] ?? []) as $alias) {
+        $params[] = (string) $alias;
+    }
+
+    return array_values(array_unique(array_filter($params)));
 }
 
 function jullybride_catalog_filter_param_names(): array
@@ -490,7 +526,7 @@ function jullybride_catalog_filter_param_names(): array
     ];
 
     foreach (jullybride_catalog_filter_definitions() as $definition) {
-        $params[] = (string) $definition['param'];
+        $params = array_merge($params, jullybride_catalog_definition_params($definition));
     }
 
     $params = array_values(array_unique(array_filter($params)));
@@ -551,10 +587,68 @@ function jullybride_catalog_request_values(string $param): array
 
     $value = wp_unslash($_GET[$param]);
     $values = is_array($value) ? $value : explode(',', (string) $value);
-    $values = array_map('sanitize_title', $values);
+    $values = array_map('jullybride_catalog_sanitize_slug_value', $values);
     $values = array_filter($values);
 
     return array_values(array_unique($values));
+}
+
+function jullybride_catalog_sanitize_slug_value($value): string
+{
+    if (is_array($value)) {
+        $value = reset($value);
+    }
+
+    $value = trim(wp_strip_all_tags((string) $value));
+    if ($value === '') {
+        return '';
+    }
+
+    return sanitize_title_with_dashes(rawurldecode($value), '', 'save');
+}
+
+function jullybride_catalog_request_values_for_definition(array $definition): array
+{
+    $values = [];
+
+    foreach (jullybride_catalog_definition_params($definition) as $param) {
+        $values = array_merge($values, jullybride_catalog_request_values($param));
+    }
+
+    return array_values(array_unique(array_filter($values)));
+}
+
+function jullybride_catalog_sanitize_filter_value(string $param, $value): string
+{
+    if ($param === 'orderby') {
+        return sanitize_key(is_array($value) ? reset($value) : (string) $value);
+    }
+
+    if ($param === 'jb_in_stock') {
+        return empty($value) ? '' : '1';
+    }
+
+    if ($param === '_price') {
+        return sanitize_text_field(is_array($value) ? reset($value) : (string) $value);
+    }
+
+    $values = is_array($value) ? $value : explode(',', (string) $value);
+    $values = array_map('jullybride_catalog_sanitize_slug_value', $values);
+    $values = array_filter($values);
+
+    return implode(',', array_values(array_unique($values)));
+}
+
+function jullybride_catalog_expanded_request_values_for_definition(array $definition): array
+{
+    $values = jullybride_catalog_request_values_for_definition($definition);
+    $expanded = jullybride_catalog_expand_slugs_by_taxonomy((array) ($definition['taxonomies'] ?? []), $values);
+
+    foreach ($expanded as $taxonomy_values) {
+        $values = array_merge($values, (array) $taxonomy_values);
+    }
+
+    return array_values(array_unique(array_filter($values)));
 }
 
 function jullybride_catalog_selected_size_values(string $excluded_param = ''): array
@@ -572,7 +666,7 @@ function jullybride_catalog_stock_product_ids(array $size_slugs = []): array
 {
     global $wpdb;
 
-    $size_slugs = array_values(array_unique(array_filter(array_map('sanitize_title', $size_slugs))));
+    $size_slugs = array_values(array_unique(array_filter(array_map('jullybride_catalog_sanitize_slug_value', $size_slugs))));
     $cache_key = implode(',', $size_slugs) ?: '__all__';
     static $cache = [];
 
@@ -696,7 +790,7 @@ function jullybride_catalog_product_ids_for_tax_filter(array $taxonomies, array 
 {
     global $wpdb;
 
-    $slugs = array_values(array_unique(array_filter(array_map('sanitize_title', $slugs))));
+    $slugs = array_values(array_unique(array_filter(array_map('jullybride_catalog_sanitize_slug_value', $slugs))));
     $taxonomies = array_values(array_unique(array_filter($taxonomies)));
     $cache_key = md5(wp_json_encode([$taxonomies, $slugs]));
     static $cache = [];
@@ -800,14 +894,11 @@ function jullybride_catalog_count_base_product_ids(string $excluded_param): arra
 
     foreach (jullybride_catalog_filter_definitions() as $definition) {
         $param = (string) ($definition['param'] ?? '');
-        if ($param === $excluded_param) {
+        if (in_array($excluded_param, jullybride_catalog_definition_params($definition), true)) {
             continue;
         }
 
-        $selected = jullybride_catalog_request_values($param);
-        if ($param === 'pa_razmer' && !$selected) {
-            $selected = jullybride_catalog_request_values('filter_pa_razmer');
-        }
+        $selected = jullybride_catalog_request_values_for_definition($definition);
 
         if ($selected) {
             $sets[] = jullybride_catalog_product_ids_for_tax_filter((array) $definition['taxonomies'], $selected);
@@ -819,13 +910,17 @@ function jullybride_catalog_count_base_product_ids(string $excluded_param): arra
             continue;
         }
 
-        $attribute_name = sanitize_title(substr((string) $key, strlen('filter_')));
+        if (in_array((string) $key, jullybride_catalog_filter_param_names(), true)) {
+            continue;
+        }
+
+        $attribute_name = jullybride_catalog_sanitize_slug_value(substr((string) $key, strlen('filter_')));
         if ($attribute_name === 'pa_razmer' || $attribute_name === $excluded_param) {
             continue;
         }
 
         $taxonomy = wc_attribute_taxonomy_name(str_replace('pa_', '', $attribute_name));
-        $slugs = array_filter(array_map('sanitize_title', explode(',', (string) wp_unslash($value))));
+        $slugs = array_filter(array_map('jullybride_catalog_sanitize_slug_value', explode(',', (string) wp_unslash($value))));
 
         if (taxonomy_exists($taxonomy) && $slugs) {
             $sets[] = jullybride_catalog_product_ids_for_tax_filter([$taxonomy], $slugs);
@@ -1081,7 +1176,7 @@ function jullybride_catalog_query_args(array $options = []): array
     $args = [
         'post_type' => 'product',
         'post_status' => 'publish',
-        'posts_per_page' => (int) apply_filters('jullybride_catalog_per_page', 24),
+        'posts_per_page' => (int) apply_filters('jullybride_catalog_per_page', 23),
         'paged' => $paged,
         'tax_query' => [],
         'meta_query' => [],
@@ -1097,15 +1192,11 @@ function jullybride_catalog_query_args(array $options = []): array
     }
 
     foreach (jullybride_catalog_filter_definitions() as $definition) {
-        if (($definition['param'] ?? '') === $excluded_param) {
+        if (in_array($excluded_param, jullybride_catalog_definition_params($definition), true)) {
             continue;
         }
 
-        $selected = jullybride_catalog_request_values((string) $definition['param']);
-
-        if ($definition['param'] === 'pa_razmer' && !$selected) {
-            $selected = jullybride_catalog_request_values('filter_pa_razmer');
-        }
+        $selected = jullybride_catalog_request_values_for_definition($definition);
 
         if ($selected) {
             jullybride_catalog_add_tax_filter($args, (array) $definition['taxonomies'], $selected);
@@ -1117,13 +1208,17 @@ function jullybride_catalog_query_args(array $options = []): array
             continue;
         }
 
-        $attribute_name = sanitize_title(substr((string) $key, strlen('filter_')));
+        if (in_array((string) $key, jullybride_catalog_filter_param_names(), true)) {
+            continue;
+        }
+
+        $attribute_name = jullybride_catalog_sanitize_slug_value(substr((string) $key, strlen('filter_')));
         if ($attribute_name === 'pa_razmer' || $attribute_name === $excluded_param) {
             continue;
         }
 
         $taxonomy = wc_attribute_taxonomy_name(str_replace('pa_', '', $attribute_name));
-        $slugs = array_filter(array_map('sanitize_title', explode(',', (string) wp_unslash($value))));
+        $slugs = array_filter(array_map('jullybride_catalog_sanitize_slug_value', explode(',', (string) wp_unslash($value))));
 
         if (taxonomy_exists($taxonomy) && $slugs) {
             $args['tax_query'][] = [
@@ -1185,7 +1280,7 @@ function jullybride_ajax_catalog_filter_counts(): void
     ];
 
     foreach (jullybride_catalog_filter_definitions() as $definition) {
-        $allowed_params[] = (string) $definition['param'];
+        $allowed_params = array_merge($allowed_params, jullybride_catalog_definition_params($definition));
     }
 
     $next_get = [];
@@ -1195,11 +1290,7 @@ function jullybride_ajax_catalog_filter_counts(): void
         }
 
         $value = wp_unslash($_POST[$param]);
-        if (is_array($value)) {
-            $value = implode(',', array_map('sanitize_text_field', $value));
-        } else {
-            $value = sanitize_text_field((string) $value);
-        }
+        $value = jullybride_catalog_sanitize_filter_value((string) $param, $value);
 
         if ($value !== '') {
             $next_get[$param] = $value;
@@ -1221,7 +1312,7 @@ function jullybride_ajax_catalog_filter_counts(): void
             $slug = (string) $term['slug'];
             $counts[$param][$slug] = [
                 'count' => (int) $term['count'],
-                'slugs' => array_values(array_map('sanitize_title', (array) ($term['slugs'] ?? [$slug]))),
+                'slugs' => array_values(array_map('jullybride_catalog_sanitize_slug_value', (array) ($term['slugs'] ?? [$slug]))),
             ];
         }
     }

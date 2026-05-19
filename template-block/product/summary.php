@@ -9,12 +9,49 @@ if (!$product instanceof WC_Product) {
 }
 
 $product_id = $product->get_id();
+$category_slug = 'wedding';
+$main_category = function_exists('jullybride_get_main_product_category') ? jullybride_get_main_product_category($product_id) : null;
+
+if ($main_category instanceof WP_Term) {
+    $category_slug = $main_category->slug;
+} else {
+    $category_terms = wp_get_post_terms($product_id, 'product_cat', ['fields' => 'slugs']);
+    if ($category_terms) {
+        $category_slug = reset($category_terms);
+    }
+}
+
+$catalog_base_url = home_url('/c/' . $category_slug . '/');
 $designer_links = [];
-foreach (['designer', 'collection'] as $taxonomy) {
-    $terms = get_the_terms($product_id, $taxonomy);
-    if ($terms && !is_wp_error($terms)) {
-        $term = reset($terms);
-        $designer_links[] = '<a href="' . esc_url(get_term_link($term)) . '">' . esc_html($term->name) . '</a>';
+
+foreach ([
+    ['param' => 'pa_designer', 'taxonomies' => ['pa_designer', 'designer']],
+    ['param' => 'pa_collection', 'taxonomies' => ['pa_collection', 'collection']],
+] as $group) {
+    $links_before = count($designer_links);
+
+    foreach ($group['taxonomies'] as $taxonomy) {
+        if (!taxonomy_exists($taxonomy)) {
+            continue;
+        }
+
+        $terms = wc_get_product_terms($product_id, $taxonomy);
+        if (!$terms || is_wp_error($terms)) {
+            continue;
+        }
+
+        foreach ($terms as $term) {
+            if (!$term instanceof WP_Term) {
+                continue;
+            }
+
+            $url = add_query_arg(['_f' => '1', $group['param'] => $term->slug], $catalog_base_url);
+            $designer_links[$taxonomy . ':' . $term->slug] = '<a href="' . esc_url($url) . '">' . esc_html($term->name) . '</a>';
+        }
+
+        if (count($designer_links) > $links_before) {
+            break;
+        }
     }
 }
 

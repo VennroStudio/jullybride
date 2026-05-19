@@ -480,6 +480,26 @@
     document.querySelector('[data-jb-merch-next]')?.addEventListener('click', () => scrollCarousel(1));
   };
 
+  const setupRelatedPostsCarousel = () => {
+    document.querySelectorAll('[data-jb-related-carousel]').forEach((carousel) => {
+      const track = carousel.querySelector('[data-jb-related-track]');
+      const prev = carousel.querySelector('[data-jb-related-prev]');
+      const next = carousel.querySelector('[data-jb-related-next]');
+
+      if (!track || !prev || !next) return;
+
+      const scrollCarousel = (direction) => {
+        const slide = track.querySelector('.jb-related-card');
+        const gap = parseFloat(window.getComputedStyle(track).columnGap) || 0;
+        const step = slide ? slide.getBoundingClientRect().width + gap : track.clientWidth;
+        track.scrollBy({ left: direction * step, behavior: 'smooth' });
+      };
+
+      prev.addEventListener('click', () => scrollCarousel(-1));
+      next.addEventListener('click', () => scrollCarousel(1));
+    });
+  };
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       setupStickyHeader();
@@ -492,6 +512,7 @@
       setupFranchiseVideoModal();
       setupFranchiseImageCarousel();
       setupFranchiseMerchCarousel();
+      setupRelatedPostsCarousel();
     });
   } else {
     setupStickyHeader();
@@ -504,5 +525,6 @@
     setupFranchiseVideoModal();
     setupFranchiseImageCarousel();
     setupFranchiseMerchCarousel();
+    setupRelatedPostsCarousel();
   }
 })();
