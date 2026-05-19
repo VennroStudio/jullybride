@@ -13,10 +13,91 @@
     }
   };
 
+  const syncFilterTop = (filterBox) => {
+    if (!filterBox) return;
+
+    const header = document.querySelector('[data-jb-header]');
+    const headerBottom = header ? Math.max(0, Math.round(header.getBoundingClientRect().bottom)) : 0;
+    filterBox.style.setProperty('--jb-filter-top', `${headerBottom}px`);
+  };
+
+  const updateCatalogFilterCounts = (form, payload) => {
+    const counts = payload?.counts || {};
+
+    form.querySelectorAll('[data-jb-filter-option]').forEach((option) => {
+      const param = option.getAttribute('data-jb-filter-param');
+      const slug = option.getAttribute('data-jb-filter-slug');
+      const item = param && slug && counts[param] ? counts[param][slug] : null;
+
+      if (!item) return;
+
+      const count = Number(item.count || 0);
+      const input = option.querySelector('input');
+      const countNode = option.querySelector('[data-jb-filter-count]');
+
+      if (countNode) {
+        countNode.textContent = String(count);
+      }
+
+      if (input) {
+        const disabled = count <= 0 && !input.checked;
+        input.disabled = disabled;
+        option.classList.toggle('is-disabled', disabled);
+      }
+    });
+  };
+
+  const refreshCatalogFilterCounts = (() => {
+    let controller = null;
+    let timer = null;
+
+    return (form) => {
+      if (!form) return;
+
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        if (controller) {
+          controller.abort();
+        }
+
+        controller = new AbortController();
+        const requestController = controller;
+        const body = new FormData(form);
+        body.set('action', 'jullybride_catalog_filter_counts');
+        body.set('category_id', form.getAttribute('data-jb-catalog-category') || '0');
+        form.classList.add('is-refreshing');
+
+        fetch(window.jullybrideTheme?.ajaxUrl || '/wp-admin/admin-ajax.php', {
+          method: 'POST',
+          body,
+          credentials: 'same-origin',
+          signal: requestController.signal
+        })
+          .then((response) => (response.ok ? response.json() : Promise.reject(response)))
+          .then((response) => {
+            if (response?.success) {
+              updateCatalogFilterCounts(form, response.data);
+            }
+          })
+          .catch((error) => {
+            if (error?.name !== 'AbortError') {
+              console.warn('Не удалось обновить счетчики фильтра.', error);
+            }
+          })
+          .finally(() => {
+            if (!requestController.signal.aborted && controller === requestController) {
+              form.classList.remove('is-refreshing');
+            }
+          });
+      }, 120);
+    };
+  })();
+
   document.addEventListener('click', (event) => {
     const openMobile = event.target.closest('[data-jb-mobile-open]');
     const closeMobile = event.target.closest('[data-jb-mobile-close]');
     const mobileMenu = document.querySelector('[data-jb-mobile-menu]');
+    const filterBox = document.querySelector('.filter-box');
 
     if (openMobile) {
       show(mobileMenu);
@@ -24,6 +105,24 @@
 
     if (closeMobile || event.target === mobileMenu) {
       hide(mobileMenu);
+    }
+
+    if (event.target.closest('.left-filter-btn')) {
+      event.preventDefault();
+      syncFilterTop(filterBox);
+      show(filterBox);
+      document.body.classList.add('jb-filter-open');
+    }
+
+    if (event.target.closest('.w-filter-list-closer') || event.target === filterBox) {
+      hide(filterBox);
+      document.body.classList.remove('jb-filter-open');
+    }
+
+    const filterToggle = event.target.closest('[data-jb-filter-toggle]');
+    if (filterToggle) {
+      event.preventDefault();
+      filterToggle.closest('.jb-filter')?.classList.toggle('is-open');
     }
 
     if (event.target.closest('[data-jb-filters-open]')) {
@@ -37,15 +136,41 @@
 
   document.addEventListener('change', (event) => {
     const checkbox = event.target.closest('[data-jb-filter-term]');
-    if (!checkbox) return;
+    const form = event.target.closest('[data-jb-filters]');
 
-    const fieldName = checkbox.getAttribute('data-jb-filter-term');
-    const form = checkbox.closest('form');
-    const hidden = form ? form.querySelector(`input[type="hidden"][name="${fieldName}"]`) : null;
-    if (!hidden || !form) return;
+    if (checkbox) {
+      const fieldName = checkbox.getAttribute('data-jb-filter-term');
+      const hidden = form ? form.querySelector(`input[type="hidden"][name="${fieldName}"]`) : null;
 
-    const checked = Array.from(form.querySelectorAll(`[data-jb-filter-term="${fieldName}"]:checked`)).map((item) => item.value);
-    hidden.value = checked.join(',');
+      if (hidden && form) {
+        const checked = Array.from(form.querySelectorAll(`[data-jb-filter-term="${fieldName}"]:checked`)).map((item) => item.value);
+        hidden.value = checked.join(',');
+      }
+    }
+
+    if (form && (checkbox || event.target.matches('input[name="jb_in_stock"]'))) {
+      refreshCatalogFilterCounts(form);
+    }
+  });
+
+  document.addEventListener('submit', (event) => {
+    const form = event.target.closest('[data-jb-filters], .jb-catalog-sort-form');
+    if (!form) return;
+
+    const disabled = [];
+    form.querySelectorAll('input[type="hidden"]').forEach((input) => {
+      if (input.value !== '') return;
+      input.disabled = true;
+      disabled.push(input);
+    });
+
+    if (disabled.length) {
+      window.setTimeout(() => {
+        disabled.forEach((input) => {
+          input.disabled = false;
+        });
+      }, 0);
+    }
   });
 
   const setupStickyHeader = () => {
@@ -57,6 +182,7 @@
       const updateOffset = () => {
         const bottom = Math.max(0, Math.round(header.getBoundingClientRect().bottom));
         document.documentElement.style.setProperty('--jb-sticky-header-bottom', `${bottom}px`);
+        document.querySelector('.filter-box.is-open')?.style.setProperty('--jb-filter-top', `${bottom}px`);
       };
       updateOffset();
       window.requestAnimationFrame(updateOffset);
@@ -175,6 +301,13 @@
   };
 
   const setupAtmosphereCarousel = () => {
+    document.querySelectorAll('img[data-src]').forEach((image) => {
+      const source = image.getAttribute('data-src');
+      if (source && !image.getAttribute('src')) {
+        image.setAttribute('src', source);
+      }
+    });
+
     document.querySelectorAll('#carousel-pint video[data-src]').forEach((video) => {
       const source = video.getAttribute('data-src');
       if (source && !video.getAttribute('src')) {

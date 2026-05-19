@@ -748,6 +748,298 @@ a {
   font-size: 14px;
 }
 
+.top-filters {
+  padding: 22px 0 18px;
+}
+
+.left-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 0 30px;
+  border: 1px solid var(--jb-burgundy);
+  border-radius: 999px;
+  color: var(--jb-burgundy);
+  font-weight: 600;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.left-filter-btn:hover {
+  background: var(--jb-burgundy);
+  color: var(--jb-pink);
+}
+
+.filter-box {
+  position: fixed;
+  top: var(--jb-filter-top, var(--jb-sticky-header-bottom, 0px));
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  display: none;
+  background: rgba(24, 24, 24, .34);
+}
+
+.admin-bar .filter-box {
+  top: var(--jb-filter-top, var(--jb-sticky-header-bottom, 32px));
+}
+
+.filter-box.is-open {
+  display: block;
+}
+
+.filter-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(500px, 92vw);
+  height: 100%;
+  padding: 28px 0 0;
+  overflow: hidden;
+  background-color: #f9e5e9;
+  box-shadow: 20px 0 40px rgba(24, 24, 24, .12);
+}
+
+.filter-wrap::before {
+  content: "";
+  position: absolute;
+  inset: 84px 0 104px;
+  pointer-events: none;
+  background: url("../images/bukvennyy-pattern.png") center 40px / 1180px auto repeat;
+  opacity: .1;
+}
+
+.filter-wrap > * {
+  position: relative;
+  z-index: 1;
+}
+
+.filter-box_title {
+  flex: 0 0 auto;
+  margin: 0 76px 24px 24px;
+  font-family: "Arsenica Trial", serif;
+  font-size: 36px;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.w-filter-list-closer {
+  position: absolute;
+  top: 24px;
+  left: min(434px, calc(92vw - 66px));
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--jb-burgundy);
+  cursor: pointer;
+}
+
+.w-filter-list-closer::before,
+.w-filter-list-closer::after {
+  content: "";
+  position: absolute;
+  top: 18px;
+  left: 10px;
+  width: 18px;
+  height: 2px;
+  background: var(--jb-pink);
+}
+
+.w-filter-list-closer::before {
+  transform: rotate(45deg);
+}
+
+.w-filter-list-closer::after {
+  transform: rotate(-45deg);
+}
+
+.jb-catalog-filter-form {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.jb-catalog-filter-form.is-refreshing [data-jb-filter-count] {
+  opacity: .45;
+}
+
+.jb-filter-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0 24px 24px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: rgba(111, 38, 61, .3) transparent;
+  scrollbar-width: thin;
+}
+
+.jb-filter-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.jb-filter-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.jb-filter-scroll::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(111, 38, 61, .28);
+}
+
+.jb-filter {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.jb-filter__legend {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.jb-filter__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 58px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--jb-text);
+  font: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: left;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.jb-filter.is-open .jb-filter__toggle {
+  color: var(--jb-burgundy);
+}
+
+.jb-filter__mark::before {
+  content: "+";
+  display: block;
+  min-width: 18px;
+  color: currentColor;
+  font-weight: 500;
+  text-align: center;
+}
+
+.jb-filter.is-open .jb-filter__mark::before {
+  content: "-";
+}
+
+.jb-filter__terms {
+  display: none;
+  padding: 0 0 18px;
+}
+
+.jb-filter.is-open .jb-filter__terms {
+  display: grid;
+}
+
+.jb-filter label {
+  align-items: center;
+  min-height: 38px;
+  gap: 12px;
+  margin: 6px 0;
+  font-size: 17px;
+  line-height: 1.35;
+  cursor: pointer;
+}
+
+.jb-filter input[type="checkbox"] {
+  appearance: none;
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  border: 1.5px solid var(--jb-burgundy);
+  border-radius: 0;
+  background: rgba(255, 255, 255, .24);
+  cursor: pointer;
+}
+
+.jb-filter input[type="checkbox"]:checked {
+  border-color: var(--jb-burgundy);
+  background-color: var(--jb-burgundy);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='none' stroke='%23fff8fa' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' d='M4.5 10.5 8.2 14 15.5 6'/%3E%3C/svg%3E");
+  background-position: center;
+  background-size: 18px 18px;
+  background-repeat: no-repeat;
+}
+
+.jb-filter input[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--jb-burgundy);
+  outline-offset: 3px;
+}
+
+.jb-filter label small {
+  margin-left: auto;
+  color: var(--jb-muted);
+  font-size: 14px;
+}
+
+.jb-filter label.is-disabled {
+  color: rgba(24, 24, 24, .35);
+}
+
+.jb-filter label.is-disabled input {
+  opacity: .5;
+}
+
+.jb-filter-actions {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0;
+  padding: 20px 24px 26px;
+  background: #f5cdcb;
+  box-shadow: 0 -12px 28px rgba(111, 38, 61, .08);
+}
+
+.jb-filter-actions .theme-button {
+  flex: 1 1 0;
+  min-height: 58px;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.jb-filter-reset {
+  display: inline-flex;
+  flex: 1 1 0;
+  align-items: center;
+  justify-content: center;
+  min-height: 58px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--jb-ink);
+  font-weight: 600;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.jb-sort-select {
+  min-width: 220px;
+  min-height: 42px;
+  padding: 0 42px 0 18px;
+  border: 1px solid var(--jb-line);
+  border-radius: 999px;
+  background: var(--jb-surface);
+  color: var(--jb-ink);
+  font-weight: 600;
+}
+
 .jb-product__layout {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(320px, .8fr);
@@ -3955,7 +4247,8 @@ body.admin-bar .jb-site-header {
   background: #f8e7ee;
   color: #0d0b0c;
   letter-spacing: 0;
-  overflow: visible;
+  overflow-x: clip;
+  overflow-y: visible;
 }
 
 .franchise-page .franchise-container {

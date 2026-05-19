@@ -10,7 +10,7 @@ if ($term instanceof WP_Term && function_exists('get_field')) {
 }
 if (!$text && !is_product_category()) {
     $page_id = jullybride_catalog_page_id();
-    $text = $page_id ? get_post_field('post_content', $page_id) : '';
+    $text = $page_id ? jullybride_clean_builder_content((string) get_post_field('post_content', $page_id)) : '';
 }
 if (!$text && is_product_category()) {
     $text = category_description();
