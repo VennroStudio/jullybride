@@ -84,3 +84,17 @@ $cities = [
         <?php endforeach; ?>
     </div>
 </section>
+
+<section class="jb-contact-accordion" data-jb-contact-accordion aria-label="Контакты по городам">
+    <?php foreach ($cities as $index => $city) : ?>
+        <details class="jb-contact-accordion__item" <?php echo $index === 0 ? 'open' : ''; ?>>
+            <summary class="jb-contact-accordion__summary">
+                <span><?php echo esc_html($city['title']); ?></span>
+                <span class="jb-contact-accordion__chevron" aria-hidden="true"></span>
+            </summary>
+            <div class="jb-contact-accordion__body">
+                <?php jullybride_template_part('page/contact-panel', ['city' => $city, 'active' => true, 'mode' => 'accordion']); ?>
+            </div>
+        </details>
+    <?php endforeach; ?>
+</section>

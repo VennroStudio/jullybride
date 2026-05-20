@@ -544,6 +544,22 @@
     });
   };
 
+  const setupContactAccordion = () => {
+    document.querySelectorAll('[data-jb-contact-accordion]').forEach((accordion) => {
+      accordion.querySelectorAll('details').forEach((details) => {
+        details.addEventListener('toggle', () => {
+          if (!details.open) return;
+
+          accordion.querySelectorAll('details[open]').forEach((other) => {
+            if (other !== details) {
+              other.open = false;
+            }
+          });
+        });
+      });
+    });
+  };
+
   const setupContactGalleries = () => {
     document.querySelectorAll('[data-jb-contact-gallery]').forEach((gallery) => {
       const track = gallery.querySelector('[data-jb-contact-gallery-track]');
@@ -655,6 +671,7 @@
       setupRelatedPostsCarousel();
       setupAboutGallery();
       setupContactTabs();
+      setupContactAccordion();
       setupContactGalleries();
       setupStockPromoCarousel();
       setupPromoCountdowns();
@@ -674,6 +691,7 @@
     setupRelatedPostsCarousel();
     setupAboutGallery();
     setupContactTabs();
+    setupContactAccordion();
     setupContactGalleries();
     setupStockPromoCarousel();
     setupPromoCountdowns();

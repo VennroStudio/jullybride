@@ -5,15 +5,17 @@ if (!defined('ABSPATH')) {
 
 $city = $args['city'] ?? [];
 $active = !empty($args['active']);
+$mode = $args['mode'] ?? 'tabs';
+$is_tabs_mode = $mode === 'tabs';
 
 if (!$city) {
     return;
 }
 ?>
 <section
-    class="jb-contact-panel jb-contact-panel--<?php echo esc_attr($city['slug']); ?>"
-    data-jb-contact-panel="<?php echo esc_attr($city['slug']); ?>"
-    <?php echo $active ? '' : 'hidden'; ?>
+    class="jb-contact-panel jb-contact-panel--<?php echo esc_attr($city['slug']); ?> jb-contact-panel--<?php echo esc_attr($mode); ?>"
+    <?php echo $is_tabs_mode ? 'data-jb-contact-panel="' . esc_attr($city['slug']) . '"' : ''; ?>
+    <?php echo ($is_tabs_mode && !$active) ? 'hidden' : ''; ?>
 >
     <div class="jb-contact-panel__grid">
         <div class="jb-contact-info">
