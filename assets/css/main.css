@@ -4249,9 +4249,9 @@ body.admin-bar .jb-site-header {
 
 .jb-main-menu__mega-visual img {
   position: absolute;
-  right: -118px;
+  right: -60px;
   bottom: -10px;
-  width: 470px;
+  width: 430px;
   max-width: none;
   height: auto;
   pointer-events: none;
