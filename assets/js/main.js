@@ -94,10 +94,25 @@
   })();
 
   document.addEventListener('click', (event) => {
+    const citySwitcher = event.target.closest('[data-jb-city-switcher]');
     const openMobile = event.target.closest('[data-jb-mobile-open]');
     const closeMobile = event.target.closest('[data-jb-mobile-close]');
     const mobileMenu = document.querySelector('[data-jb-mobile-menu]');
     const filterBox = document.querySelector('.filter-box');
+
+    document.querySelectorAll('.jb-header-city.is-open').forEach((city) => {
+      if (!city.contains(event.target)) {
+        city.classList.remove('is-open');
+        city.querySelector('[data-jb-city-switcher]')?.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    if (citySwitcher) {
+      const city = citySwitcher.closest('.jb-header-city');
+      const isOpen = !city?.classList.contains('is-open');
+      city?.classList.toggle('is-open', isOpen);
+      citySwitcher.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    }
 
     if (openMobile) {
       show(mobileMenu);

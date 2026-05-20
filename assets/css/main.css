@@ -358,14 +358,6 @@ a {
   width: 100%;
 }
 
-.jb-top-banner {
-  background: var(--jb-ink);
-  color: var(--jb-pink);
-  text-align: center;
-  padding: 8px 16px;
-  font-size: 14px;
-}
-
 .jb-header {
   position: sticky;
   top: 0;
@@ -3875,19 +3867,25 @@ body.admin-bar .jb-site-header {
 
 .jb-site-header__top-inner {
   display: grid;
-  grid-template-columns: 220px minmax(0, 1fr);
+  grid-template-columns: 220px minmax(0, 1fr) auto;
   align-items: center;
   min-height: 30px;
+  gap: 20px;
+}
+
+.jb-header-city {
+  position: relative;
+  justify-self: start;
 }
 
 .jb-site-header .jb-city-switcher {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  justify-self: start;
   color: inherit;
   font-size: 16px;
   font-weight: 400;
+  text-decoration: underline;
 }
 
 .jb-city-switcher__arrow,
@@ -3899,24 +3897,74 @@ body.admin-bar .jb-site-header {
   transform: rotate(45deg) translateY(-2px);
 }
 
-.jb-site-header__top .jb-header-contacts {
+.jb-header-city__dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 50;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  min-width: 220px;
+  margin: 0;
+  padding: 12px 14px;
+  list-style: none;
+  background: #000;
+  border-top: 1px solid rgba(255, 255, 255, .25);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition: opacity .16s ease, transform .16s ease, visibility .16s ease;
+}
+
+.jb-header-city:hover .jb-header-city__dropdown,
+.jb-header-city:focus-within .jb-header-city__dropdown,
+.jb-header-city.is-open .jb-header-city__dropdown {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.jb-header-city__dropdown a {
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+.jb-header-address,
+.jb-header-phone {
+  display: inline-flex;
   align-items: center;
-  gap: 24px;
+  gap: 7px;
   color: inherit;
   font-size: 15px;
 }
 
-.jb-site-header__top .jb-header-contacts__address {
+.jb-header-address {
   justify-self: center;
-  max-width: none;
-  color: inherit;
+  min-width: 0;
 }
 
-.jb-site-header__top .jb-header-contacts__phone {
+.jb-header-address svg,
+.jb-header-phone svg {
+  flex: 0 0 auto;
+  width: 17px;
+  height: 17px;
+  fill: currentColor;
+}
+
+.jb-header-address span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.jb-header-phone {
+  justify-self: end;
   color: inherit;
   font-weight: 600;
+  text-decoration: underline;
   white-space: nowrap;
 }
 
@@ -4101,6 +4149,25 @@ body.admin-bar .jb-site-header {
   gap: 12px;
 }
 
+.jb-header-sale {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 0 14px;
+  color: #000;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.jb-header-sale:hover,
+.jb-header-sale:focus-visible {
+  color: #d34f9a;
+}
+
 .jb-header-icon {
   display: inline-flex;
   align-items: center;
@@ -4213,8 +4280,16 @@ body.admin-bar .jb-site-header {
   margin: 24px 0;
 }
 
-.jb-mobile-menu .jb-button--booking {
-  width: 100%;
+.jb-mobile-menu__actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.jb-mobile-menu__actions .jb-header-sale,
+.jb-mobile-menu__actions .jb-header-icon {
+  min-height: 44px;
 }
 
 .jb-site-footer {
@@ -4377,14 +4452,12 @@ body.admin-bar .jb-site-header {
     padding: 7px 0;
   }
 
-  .jb-site-header__top .jb-header-contacts {
-    grid-template-columns: 1fr;
-    gap: 6px;
+  .jb-header-address {
     text-align: center;
     font-size: 13px;
   }
 
-  .jb-site-header__top .jb-header-contacts__phone {
+  .jb-header-phone {
     display: none;
   }
 
@@ -4430,7 +4503,7 @@ body.admin-bar .jb-site-header {
 }
 
 @media (max-width: 620px) {
-  .jb-site-header__top .jb-header-contacts__address {
+  .jb-header-address {
     max-width: 310px;
     font-size: 12px;
     line-height: 1.25;
