@@ -3,10 +3,12 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+require_once JULLYBRIDE_THEME_DIR . '/template-block/stock/helpers.php';
+
 $promos = new WP_Query([
     'post_type' => 'promo',
     'post_status' => 'publish',
-    'posts_per_page' => 4,
+    'posts_per_page' => 13,
     'orderby' => 'date',
     'order' => 'DESC',
 ]);
@@ -17,7 +19,7 @@ if (!$promos->have_posts()) {
 }
 ?>
 <section class="jb-stock-promos">
-    <div class="jb-stock-promos__grid">
+    <div class="jb-stock-promos__slider owl-carousel owl-theme" data-jb-stock-promos>
         <?php $index = 0; ?>
         <?php while ($promos->have_posts()) : $promos->the_post(); ?>
             <?php

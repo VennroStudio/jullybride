@@ -11,6 +11,8 @@ define('JULLYBRIDE_THEME_VERSION', '0.1.0');
 define('JULLYBRIDE_THEME_DIR', get_template_directory());
 define('JULLYBRIDE_THEME_URI', get_template_directory_uri());
 
+require_once JULLYBRIDE_THEME_DIR . '/inc/post-types.php';
+
 add_action('after_setup_theme', 'jullybride_setup');
 function jullybride_setup(): void
 {

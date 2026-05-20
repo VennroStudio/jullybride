@@ -1,0 +1,210 @@
+{
+    "key": "group_jullybride_promo_blocks",
+    "title": "Дополнительные блоки акции",
+    "fields": [
+        {
+            "key": "field_jb_promo_video_title",
+            "label": "Заголовок блока видео",
+            "name": "sale_video_title",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Оh, girls! Смотрите, как это весело!",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_jb_promo_video_urls",
+            "label": "Видео акции",
+            "name": "sale_video_urls",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "Каждое видео с новой строки. Если поле пустое, используются старые видео из шаблона.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "rows": 5,
+            "placeholder": "",
+            "new_lines": ""
+        },
+        {
+            "key": "field_jb_promo_products_title",
+            "label": "Заголовок блока товаров",
+            "name": "sale_products_title",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Те самые платья",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_jb_promo_gift_enabled",
+            "label": "Показывать блок подарка",
+            "name": "sale_gift_enabled",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 1,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
+            "key": "field_jb_promo_gift_marquee",
+            "label": "Бегущая строка подарка",
+            "name": "sale_gift_marquee",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "WOW! ПОДАРОК!",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_jb_promo_gift_image",
+            "label": "Картинка подарка",
+            "name": "sale_gift_image",
+            "aria-label": "",
+            "type": "image",
+            "instructions": "Если поле пустое, используется старая картинка из шаблона.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "url",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": "",
+            "preview_size": "medium"
+        },
+        {
+            "key": "field_jb_promo_gift_title",
+            "label": "Заголовок подарка",
+            "name": "sale_gift_title",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "ЗАБЕРИ СВОЙ ПОДАРОК!",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_jb_promo_gift_description",
+            "label": "Описание подарка",
+            "name": "sale_gift_description",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Дорогая, это WOW! Мы запустили бота, где ты можешь выиграть более 20 wedy призов: скидки на платья, сертификаты на свадебных специалистов, наш фирменный мерч и главный приз — потрясающее вечернее платье из коллекции Diamond! Поторопись, подарков ограниченное количество!",
+            "maxlength": "",
+            "rows": 4,
+            "placeholder": "",
+            "new_lines": ""
+        },
+        {
+            "key": "field_jb_promo_gift_button",
+            "label": "Надпись кнопки подарка",
+            "name": "sale_gift_button",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "ЗАБРАТЬ ПОДАРОК",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "promo"
+            }
+        ]
+    ],
+    "menu_order": 1,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "Поля дополнительных секций одиночной акции для новой темы JullyBride.",
+    "show_in_rest": 0,
+    "modified": 1779250000
+}

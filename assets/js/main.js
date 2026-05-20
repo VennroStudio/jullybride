@@ -500,6 +500,146 @@
     });
   };
 
+  const setupAboutGallery = () => {
+    const viewport = document.querySelector('[data-jb-about-gallery]');
+    if (!viewport) return;
+
+    const scrollGallery = (direction) => {
+      const slide = viewport.querySelector('.jb-about-gallery__slide');
+      const track = viewport.querySelector('.jb-about-gallery__track');
+      const gap = track ? parseFloat(window.getComputedStyle(track).columnGap) || 0 : 0;
+      const step = slide ? slide.getBoundingClientRect().width + gap : viewport.clientWidth;
+      viewport.scrollBy({ left: direction * step, behavior: 'smooth' });
+    };
+
+    document.querySelector('[data-jb-about-gallery-prev]')?.addEventListener('click', () => scrollGallery(-1));
+    document.querySelector('[data-jb-about-gallery-next]')?.addEventListener('click', () => scrollGallery(1));
+  };
+
+  const setupContactTabs = () => {
+    document.querySelectorAll('[data-jb-contact-tabs]').forEach((tabs) => {
+      const radios = tabs.querySelectorAll('.jb-contact-tabs__radio');
+      const labels = tabs.querySelectorAll('.jb-contact-tabs__label');
+      const panels = tabs.querySelectorAll('[data-jb-contact-panel]');
+
+      const updateActiveCity = () => {
+        const activeRadio = [...radios].find((radio) => radio.checked);
+        if (!activeRadio) return;
+
+        const activeSlug = activeRadio.id.replace('jb-contact-city-', '');
+
+        labels.forEach((label) => {
+          const isActive = label.getAttribute('for') === activeRadio.id;
+          label.classList.toggle('is-active', isActive);
+          label.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+
+        panels.forEach((panel) => {
+          panel.hidden = panel.dataset.jbContactPanel !== activeSlug;
+        });
+      };
+
+      radios.forEach((radio) => radio.addEventListener('change', updateActiveCity));
+      updateActiveCity();
+    });
+  };
+
+  const setupContactGalleries = () => {
+    document.querySelectorAll('[data-jb-contact-gallery]').forEach((gallery) => {
+      const track = gallery.querySelector('[data-jb-contact-gallery-track]');
+      const prev = gallery.querySelector('[data-jb-contact-gallery-prev]');
+      const next = gallery.querySelector('[data-jb-contact-gallery-next]');
+      if (!track) return;
+
+      const scrollGallery = (direction) => {
+        const slide = track.querySelector('.jb-contact-gallery__item');
+        const gap = parseFloat(window.getComputedStyle(track).columnGap) || 0;
+        const step = slide ? slide.getBoundingClientRect().width + gap : track.clientWidth;
+        track.scrollBy({ left: direction * step, behavior: 'smooth' });
+      };
+
+      prev?.addEventListener('click', () => scrollGallery(-1));
+      next?.addEventListener('click', () => scrollGallery(1));
+    });
+  };
+
+  const setupStockPromoCarousel = () => {
+    if (!window.jQuery || !window.jQuery.fn || !window.jQuery.fn.owlCarousel) return;
+
+    window.jQuery('[data-jb-stock-promos]').each(function () {
+      const $carousel = window.jQuery(this);
+      if ($carousel.hasClass('owl-loaded')) return;
+
+      $carousel.owlCarousel({
+        loop: true,
+        center: true,
+        items: 3,
+        margin: 64,
+        nav: true,
+        dots: false,
+        autoplay: true,
+        autoplayTimeout: 5200,
+        autoplayHoverPause: true,
+        navText: ['‹', '›'],
+        responsive: {
+          0: {
+            items: 1,
+            center: false,
+            margin: 20
+          },
+          760: {
+            items: 2,
+            center: false,
+            margin: 32
+          },
+          1100: {
+            items: 3,
+            center: true,
+            margin: 64
+          }
+        }
+      });
+    });
+  };
+
+  const setupPromoCountdowns = () => {
+    document.querySelectorAll('[data-jb-countdown]').forEach((counter) => {
+      const target = new Date(counter.dataset.jbCountdown).getTime();
+      if (!target) return;
+
+      const updateCounter = () => {
+        const diff = Math.max(0, target - Date.now());
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+        counter.innerHTML = [
+          `<span><b>${String(days).padStart(2, '0')}</b><small>дней</small></span>`,
+          `<span><b>${String(hours).padStart(2, '0')}</b><small>часов</small></span>`,
+          `<span><b>${String(minutes).padStart(2, '0')}</b><small>минут</small></span>`
+        ].join('');
+      };
+
+      updateCounter();
+      window.setInterval(updateCounter, 30000);
+    });
+  };
+
+  const setupPromoVideoCarousel = () => {
+    document.querySelectorAll('[data-jb-promo-video-carousel]').forEach((carousel) => {
+      const track = carousel.querySelector('[data-jb-promo-video-track]');
+      const next = carousel.querySelector('[data-jb-promo-video-next]');
+      if (!track || !next) return;
+
+      next.addEventListener('click', () => {
+        const slide = track.querySelector('.jb-promo-video-card');
+        const gap = parseFloat(window.getComputedStyle(track).columnGap) || 0;
+        const step = slide ? slide.getBoundingClientRect().width + gap : track.clientWidth;
+        track.scrollBy({ left: step, behavior: 'smooth' });
+      });
+    });
+  };
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       setupStickyHeader();
@@ -513,6 +653,12 @@
       setupFranchiseImageCarousel();
       setupFranchiseMerchCarousel();
       setupRelatedPostsCarousel();
+      setupAboutGallery();
+      setupContactTabs();
+      setupContactGalleries();
+      setupStockPromoCarousel();
+      setupPromoCountdowns();
+      setupPromoVideoCarousel();
     });
   } else {
     setupStickyHeader();
@@ -526,5 +672,11 @@
     setupFranchiseImageCarousel();
     setupFranchiseMerchCarousel();
     setupRelatedPostsCarousel();
+    setupAboutGallery();
+    setupContactTabs();
+    setupContactGalleries();
+    setupStockPromoCarousel();
+    setupPromoCountdowns();
+    setupPromoVideoCarousel();
   }
 })();

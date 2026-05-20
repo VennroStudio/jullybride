@@ -4,12 +4,17 @@ if (!defined('ABSPATH')) {
 }
 
 $city = $args['city'] ?? [];
+$active = !empty($args['active']);
 
 if (!$city) {
     return;
 }
 ?>
-<section class="jb-contact-panel jb-contact-panel--<?php echo esc_attr($city['slug']); ?>">
+<section
+    class="jb-contact-panel jb-contact-panel--<?php echo esc_attr($city['slug']); ?>"
+    data-jb-contact-panel="<?php echo esc_attr($city['slug']); ?>"
+    <?php echo $active ? '' : 'hidden'; ?>
+>
     <div class="jb-contact-panel__grid">
         <div class="jb-contact-info">
             <h2>Адрес</h2>
@@ -33,6 +38,27 @@ if (!$city) {
             <p><?php echo wp_kses_post($city['details']); ?></p>
         </div>
     </div>
+
+    <?php if (!empty($city['gallery_ids'])) : ?>
+        <?php $gallery_count = count($city['gallery_ids']); ?>
+        <div class="jb-contact-gallery-wrap jb-contact-gallery-wrap--count-<?php echo esc_attr(min($gallery_count, 3)); ?>" data-jb-contact-gallery aria-label="Фотографии салона <?php echo esc_attr($city['title']); ?>">
+            <?php if ($gallery_count > 1) : ?>
+                <button class="jb-contact-gallery__arrow jb-contact-gallery__arrow--prev" type="button" data-jb-contact-gallery-prev aria-label="Предыдущая фотография">‹</button>
+            <?php endif; ?>
+            <div class="jb-contact-gallery">
+                <div class="jb-contact-gallery__track" data-jb-contact-gallery-track>
+                    <?php foreach ($city['gallery_ids'] as $image_id) : ?>
+                        <figure class="jb-contact-gallery__item">
+                            <?php echo wp_get_attachment_image((int) $image_id, 'large', false, ['loading' => 'lazy']); ?>
+                        </figure>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <?php if ($gallery_count > 1) : ?>
+                <button class="jb-contact-gallery__arrow jb-contact-gallery__arrow--next" type="button" data-jb-contact-gallery-next aria-label="Следующая фотография">›</button>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
 
     <div class="jb-contact-map">
         <?php if (!empty($city['map'])) : ?>
