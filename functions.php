@@ -378,6 +378,38 @@ function jullybride_logo_url(string $variant = 'dark'): string
     return jullybride_asset_uri('images/' . $file);
 }
 
+function jullybride_url(string $url, string $fallback = ''): string
+{
+    $url = trim($url);
+
+    if ($url === '') {
+        return $fallback;
+    }
+
+    if (str_starts_with($url, '/')) {
+        return home_url($url);
+    }
+
+    return $url;
+}
+
+function jullybride_header_logo(): array
+{
+    $logo = jullybride_option('header_logo');
+
+    if (is_array($logo) && !empty($logo['url'])) {
+        return [
+            'url' => (string) $logo['url'],
+            'alt' => (string) ($logo['alt'] ?? get_bloginfo('name')),
+        ];
+    }
+
+    return [
+        'url' => jullybride_logo_url('dark'),
+        'alt' => get_bloginfo('name'),
+    ];
+}
+
 function jullybride_primary_nav_items(): array
 {
     $items = require JULLYBRIDE_THEME_DIR . '/template-block/header/menu-data.php';
