@@ -13,6 +13,174 @@ define('JULLYBRIDE_THEME_URI', get_template_directory_uri());
 
 require_once JULLYBRIDE_THEME_DIR . '/inc/post-types.php';
 
+add_action('init', 'jullybride_register_catalog_rewrite_rules');
+function jullybride_register_catalog_rewrite_rules(): void
+{
+    add_rewrite_rule(
+        '^c/([^/]+)/([^/]+)/?$',
+        'index.php?product_cat=$matches[1]&pa_silhouette=$matches[2]',
+        'top'
+    );
+}
+
+add_filter('query_vars', 'jullybride_register_catalog_filter_query_vars');
+function jullybride_register_catalog_filter_query_vars(array $vars): array
+{
+    foreach (jullybride_catalog_filter_definitions() as $definition) {
+        foreach (jullybride_catalog_definition_params($definition) as $param) {
+            $vars[] = $param;
+        }
+    }
+
+    return array_values(array_unique($vars));
+}
+
+add_action('wp', 'jullybride_sync_catalog_filter_query_vars_to_get');
+function jullybride_sync_catalog_filter_query_vars_to_get(): void
+{
+    if (is_admin() || !jullybride_catalog_is_catalog_request_path()) {
+        return;
+    }
+
+    foreach (jullybride_catalog_filter_param_names() as $param) {
+        if (isset($_GET[$param]) && $_GET[$param] !== '') {
+            continue;
+        }
+
+        $value = get_query_var($param);
+        if ($value !== '') {
+            $_GET[$param] = $value;
+        }
+    }
+}
+
+add_filter('wpseo_breadcrumb_links', 'jullybride_add_catalog_filters_to_yoast_breadcrumbs');
+function jullybride_add_catalog_filters_to_yoast_breadcrumbs(array $links): array
+{
+    foreach (jullybride_catalog_active_filter_breadcrumb_items() as $item) {
+        $links[] = [
+            'text' => $item['label'],
+        ];
+    }
+
+    return $links;
+}
+
+add_filter('woocommerce_get_breadcrumb', 'jullybride_add_catalog_filters_to_woocommerce_breadcrumbs');
+function jullybride_add_catalog_filters_to_woocommerce_breadcrumbs(array $crumbs): array
+{
+    foreach (jullybride_catalog_active_filter_breadcrumb_items() as $item) {
+        $crumbs[] = [$item['label'], ''];
+    }
+
+    return $crumbs;
+}
+
+add_filter('wpseo_title', 'jullybride_catalog_filter_yoast_title');
+function jullybride_catalog_filter_yoast_title(string $title): string
+{
+    $term = jullybride_catalog_primary_active_filter_term();
+    if (!$term instanceof WP_Term) {
+        return $title;
+    }
+
+    $term_title = jullybride_catalog_filter_term_yoast_value($term, 'title');
+    if ($term_title === '') {
+        return $title;
+    }
+
+    return function_exists('wpseo_replace_vars') ? wpseo_replace_vars($term_title, $term) : $term_title;
+}
+
+add_filter('wpseo_metadesc', 'jullybride_catalog_filter_yoast_description');
+function jullybride_catalog_filter_yoast_description(string $description): string
+{
+    $term = jullybride_catalog_primary_active_filter_term();
+    if (!$term instanceof WP_Term) {
+        return $description;
+    }
+
+    $term_description = jullybride_catalog_filter_term_yoast_value($term, 'desc');
+    if ($term_description === '') {
+        return $description;
+    }
+
+    return function_exists('wpseo_replace_vars') ? wpseo_replace_vars($term_description, $term) : $term_description;
+}
+
+add_filter('wpseo_opengraph_title', 'jullybride_catalog_filter_yoast_og_title');
+function jullybride_catalog_filter_yoast_og_title(string $title): string
+{
+    $term = jullybride_catalog_primary_active_filter_term();
+    if (!$term instanceof WP_Term) {
+        return $title;
+    }
+
+    $term_title = jullybride_catalog_filter_term_yoast_value($term, 'opengraph-title');
+    if ($term_title === '') {
+        $term_title = jullybride_catalog_filter_term_yoast_value($term, 'title');
+    }
+
+    if ($term_title === '') {
+        return $title;
+    }
+
+    return function_exists('wpseo_replace_vars') ? wpseo_replace_vars($term_title, $term) : $term_title;
+}
+
+add_filter('wpseo_opengraph_desc', 'jullybride_catalog_filter_yoast_og_description');
+function jullybride_catalog_filter_yoast_og_description(string $description): string
+{
+    $term = jullybride_catalog_primary_active_filter_term();
+    if (!$term instanceof WP_Term) {
+        return $description;
+    }
+
+    $term_description = jullybride_catalog_filter_term_yoast_value($term, 'opengraph-description');
+    if ($term_description === '') {
+        $term_description = jullybride_catalog_filter_term_yoast_value($term, 'desc');
+    }
+
+    if ($term_description === '') {
+        return $description;
+    }
+
+    return function_exists('wpseo_replace_vars') ? wpseo_replace_vars($term_description, $term) : $term_description;
+}
+
+add_filter('wpseo_opengraph_url', 'jullybride_catalog_filter_yoast_og_url');
+function jullybride_catalog_filter_yoast_og_url(string $url): string
+{
+    if (!(jullybride_catalog_primary_active_filter_term() instanceof WP_Term)) {
+        return $url;
+    }
+
+    return jullybride_catalog_current_url();
+}
+
+add_filter('wpseo_opengraph_image', 'jullybride_catalog_filter_yoast_og_image');
+function jullybride_catalog_filter_yoast_og_image(string $image): string
+{
+    $term = jullybride_catalog_primary_active_filter_term();
+    if (!$term instanceof WP_Term) {
+        return $image;
+    }
+
+    $term_image = jullybride_catalog_filter_term_yoast_value($term, 'opengraph-image');
+
+    return $term_image !== '' ? $term_image : $image;
+}
+
+add_filter('wpseo_canonical', 'jullybride_catalog_filter_yoast_canonical');
+function jullybride_catalog_filter_yoast_canonical(string $canonical): string
+{
+    if (!(jullybride_catalog_primary_active_filter_term() instanceof WP_Term)) {
+        return $canonical;
+    }
+
+    return jullybride_catalog_current_url();
+}
+
 add_action('after_setup_theme', 'jullybride_setup');
 function jullybride_setup(): void
 {
@@ -651,6 +819,115 @@ function jullybride_catalog_expanded_request_values_for_definition(array $defini
     }
 
     return array_values(array_unique(array_filter($values)));
+}
+
+function jullybride_catalog_active_filter_breadcrumb_items(): array
+{
+    if (is_admin() || !jullybride_catalog_is_catalog_request_path()) {
+        return [];
+    }
+
+    $items = [];
+    $seen = [];
+
+    foreach (jullybride_catalog_filter_definitions() as $definition) {
+        $selected = jullybride_catalog_request_values_for_definition($definition);
+
+        if (!$selected) {
+            continue;
+        }
+
+        $slugs_by_taxonomy = jullybride_catalog_expand_slugs_by_taxonomy((array) ($definition['taxonomies'] ?? []), $selected);
+
+        foreach ($slugs_by_taxonomy as $taxonomy => $slugs) {
+            if (!taxonomy_exists($taxonomy)) {
+                continue;
+            }
+
+            foreach ($slugs as $slug) {
+                $term = get_term_by('slug', $slug, $taxonomy);
+
+                if (!$term instanceof WP_Term) {
+                    continue;
+                }
+
+                $key = $taxonomy . ':' . $term->term_id;
+                if (isset($seen[$key])) {
+                    continue;
+                }
+
+                $seen[$key] = true;
+                $items[] = [
+                    'label' => $term->name,
+                    'taxonomy' => $taxonomy,
+                    'term_id' => (int) $term->term_id,
+                    'slug' => $term->slug,
+                ];
+            }
+        }
+    }
+
+    return $items;
+}
+
+function jullybride_catalog_primary_active_filter_term(): ?WP_Term
+{
+    if (is_admin() || !jullybride_catalog_is_catalog_request_path()) {
+        return null;
+    }
+
+    foreach (jullybride_catalog_filter_definitions() as $definition) {
+        $selected = jullybride_catalog_request_values_for_definition($definition);
+
+        if (!$selected) {
+            continue;
+        }
+
+        $slugs_by_taxonomy = jullybride_catalog_expand_slugs_by_taxonomy((array) ($definition['taxonomies'] ?? []), $selected);
+
+        foreach ($slugs_by_taxonomy as $taxonomy => $slugs) {
+            if (!taxonomy_exists($taxonomy)) {
+                continue;
+            }
+
+            foreach ($slugs as $slug) {
+                $term = get_term_by('slug', $slug, $taxonomy);
+
+                if ($term instanceof WP_Term) {
+                    return $term;
+                }
+            }
+        }
+    }
+
+    return null;
+}
+
+function jullybride_catalog_filter_term_yoast_value(WP_Term $term, string $field): string
+{
+    $value = '';
+
+    if (class_exists('WPSEO_Taxonomy_Meta')) {
+        $value = WPSEO_Taxonomy_Meta::get_term_meta($term, $term->taxonomy, $field);
+        $value = is_string($value) ? $value : '';
+    }
+
+    if ($value === '') {
+        $meta_key = 'wpseo_' . $field;
+        $value = (string) get_term_meta($term->term_id, $meta_key, true);
+    }
+
+    return $value;
+}
+
+function jullybride_catalog_current_url(): string
+{
+    $request_uri = (string) wp_unslash($_SERVER['REQUEST_URI'] ?? '/');
+    $parts = wp_parse_url($request_uri);
+    $path = (string) ($parts['path'] ?? '/');
+    $query = !empty($parts['query']) ? '?' . $parts['query'] : '';
+
+    return home_url($path . $query);
 }
 
 function jullybride_catalog_selected_size_values(string $excluded_param = ''): array
