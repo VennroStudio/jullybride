@@ -432,60 +432,204 @@ function jullybride_nav_item_groups(array $item): array
 
 function jullybride_footer_columns(): array
 {
+    $columns = [];
+
+    foreach (jullybride_footer_menu_definitions() as $definition) {
+        $items = jullybride_footer_menu_items($definition['field']);
+
+        if (!$items) {
+            continue;
+        }
+
+        $columns[] = [
+            'title' => $definition['title'],
+            'field' => $definition['field'],
+            'items' => $items,
+        ];
+    }
+
+    return $columns;
+}
+
+function jullybride_footer_menu_definitions(): array
+{
     return [
-        [
-            'title' => 'Свадебные платья',
-            'items' => [
-                ['label' => 'Пышные', 'url' => home_url('/c/wedding/lush/')],
-                ['label' => 'Костюмы и комбинезоны', 'url' => home_url('/c/wedding/suits/')],
-                ['label' => 'Длинные', 'url' => home_url('/c/wedding/long/')],
-                ['label' => 'А-силуэт', 'url' => home_url('/c/wedding/a-line/')],
-                ['label' => 'Короткие', 'url' => home_url('/c/wedding/mini/')],
-                ['label' => 'В стиле бохо', 'url' => home_url('/c/wedding/boho/')],
-                ['label' => 'Кружевные', 'url' => home_url('/c/wedding/lace/')],
-                ['label' => 'Простые', 'url' => home_url('/c/wedding/simple/')],
-                ['label' => 'Миди', 'url' => home_url('/c/wedding/midi/')],
-                ['label' => 'С корсетом', 'url' => home_url('/c/wedding/corset/')],
-                ['label' => 'Закрытые', 'url' => home_url('/c/wedding/shoulders-closed/')],
-                ['label' => 'Трансформеры', 'url' => home_url('/c/wedding/transformers/')],
-            ],
-        ],
-        [
-            'title' => 'Вечерние платья',
-            'items' => [
-                ['label' => 'Коктейльные', 'url' => home_url('/c/evening/cocktail_/')],
-                ['label' => 'Недорогие', 'url' => home_url('/c/evening/?_price%7Cbetween=0-39000&_f=1')],
-                ['label' => 'Красные', 'url' => home_url('/c/evening/red_/')],
-                ['label' => 'Черные', 'url' => home_url('/c/evening/black_/')],
-                ['label' => 'Миди', 'url' => home_url('/c/evening/midi_/')],
-                ['label' => 'В пол', 'url' => home_url('/c/evening/long_/')],
-                ['label' => 'Мини', 'url' => home_url('/c/evening/mini_/')],
-                ['label' => 'Пышные', 'url' => home_url('/c/evening/lush_/')],
-            ],
-        ],
-        [
-            'title' => 'О салоне',
-            'items' => [
-                ['label' => 'Контакты', 'url' => home_url('/contacts/')],
-                ['label' => 'О компании', 'url' => home_url('/o-kompanii/')],
-                ['label' => 'Секретная папка', 'url' => home_url('/blog/')],
-                ['label' => 'Избранное', 'url' => home_url('/wishlist/')],
-                ['label' => 'Акции и скидки', 'url' => home_url('/promo/')],
-            ],
-        ],
+        ['title' => 'Свадебные тренды 2026', 'field' => 'footer_menu_trends'],
+        ['title' => 'Материал', 'field' => 'footer_menu_material'],
+        ['title' => 'Силуэт', 'field' => 'footer_menu_silhouette'],
+        ['title' => 'Стиль', 'field' => 'footer_menu_style'],
+        ['title' => 'Дизайнеры и бренды', 'field' => 'footer_menu_designers'],
+        ['title' => '', 'field' => 'footer_menu_info'],
     ];
 }
 
-function jullybride_legal_links(): array
+function jullybride_footer_menu_items(string $field): array
+{
+    return jullybride_nav_menu_items_from_value(jullybride_option($field));
+}
+
+function jullybride_nav_menu_items_from_value(mixed $menu_value): array
+{
+    $menu = jullybride_get_nav_menu_object($menu_value);
+
+    if (!$menu) {
+        return [];
+    }
+
+    $items = wp_get_nav_menu_items($menu->term_id, [
+        'update_post_term_cache' => false,
+    ]);
+
+    if (!$items || is_wp_error($items)) {
+        return [];
+    }
+
+    $children_by_parent = [];
+    foreach ($items as $item) {
+        $children_by_parent[(int) $item->menu_item_parent][] = $item;
+    }
+
+    $format_items = static function (array $menu_items) use (&$format_items, $children_by_parent): array {
+        $formatted = [];
+
+        foreach ($menu_items as $item) {
+            $menu_item = jullybride_format_nav_menu_item($item);
+            $children = $children_by_parent[(int) $item->ID] ?? [];
+
+            if ($children) {
+                $menu_item['children'] = $format_items($children);
+            }
+
+            $formatted[] = $menu_item;
+        }
+
+        return $formatted;
+    };
+
+    return $format_items($children_by_parent[0] ?? []);
+}
+
+function jullybride_get_nav_menu_object(mixed $menu_value): ?WP_Term
+{
+    if ($menu_value instanceof WP_Term) {
+        return $menu_value;
+    }
+
+    if (is_array($menu_value)) {
+        $menu_value = $menu_value['term_id'] ?? $menu_value['ID'] ?? $menu_value['slug'] ?? '';
+    }
+
+    if ($menu_value === '' || $menu_value === null) {
+        return null;
+    }
+
+    $menu = wp_get_nav_menu_object($menu_value);
+
+    return $menu instanceof WP_Term ? $menu : null;
+}
+
+function jullybride_format_nav_menu_item(WP_Post $item): array
 {
     return [
-        ['label' => 'Политика конфиденциальности и документы', 'url' => home_url('/policy/')],
-        ['label' => 'Политика обработки файлов cookie', 'url' => home_url('/cookie/')],
-        ['label' => 'Публичная оферта', 'url' => home_url('/oferta/')],
-        ['label' => 'Политика обработки данных', 'url' => home_url('/obrabotka/')],
-        ['label' => 'Согласие на обработку персональных данных', 'url' => home_url('/soglasie/')],
-        ['label' => 'Согласие на получение информационной и рекламной рассылки', 'url' => home_url('/rassylka/')],
+        'label' => html_entity_decode($item->title, ENT_QUOTES, get_bloginfo('charset')),
+        'url' => jullybride_url((string) $item->url, '#'),
     ];
+}
+
+function jullybride_footer_products(): array
+{
+    $selected_products = jullybride_option('footer_products', []);
+
+    if (!$selected_products) {
+        return [];
+    }
+
+    if (!is_array($selected_products)) {
+        $selected_products = [$selected_products];
+    }
+
+    $products = [];
+
+    foreach ($selected_products as $selected_product) {
+        $product_id = $selected_product instanceof WP_Post ? (int) $selected_product->ID : (int) $selected_product;
+
+        if (!$product_id || !function_exists('wc_get_product')) {
+            continue;
+        }
+
+        $product = wc_get_product($product_id);
+
+        if (!$product) {
+            continue;
+        }
+
+        $image_id = (int) $product->get_image_id();
+        $image_url = $image_id ? wp_get_attachment_image_url($image_id, 'medium_large') : '';
+
+        if (!$image_url && function_exists('wc_placeholder_img_src')) {
+            $image_url = wc_placeholder_img_src('medium_large');
+        }
+
+        $products[] = [
+            'id' => $product_id,
+            'title' => $product->get_name(),
+            'url' => get_permalink($product_id),
+            'image' => $image_url,
+            'price' => jullybride_format_price($product->get_price()),
+            'type' => jullybride_product_type_label($product_id),
+        ];
+
+        if (count($products) === 3) {
+            break;
+        }
+    }
+
+    return $products;
+}
+
+function jullybride_legal_links(string $group = ''): array
+{
+    if ($group === 'left') {
+        return jullybride_format_footer_legal_links(jullybride_option('footer_legal_links_left', []));
+    }
+
+    if ($group === 'right') {
+        return jullybride_format_footer_legal_links(jullybride_option('footer_legal_links_right', []));
+    }
+
+    $left_links = jullybride_legal_links('left');
+    $right_links = jullybride_legal_links('right');
+
+    if ($left_links || $right_links) {
+        return array_merge($left_links, $right_links);
+    }
+
+    return jullybride_format_footer_legal_links(jullybride_option('footer_legal_links', []));
+}
+
+function jullybride_format_footer_legal_links(mixed $links): array
+{
+    if (!is_array($links)) {
+        return [];
+    }
+
+    return array_values(array_filter(array_map(static function (mixed $link): ?array {
+        if (!is_array($link)) {
+            return null;
+        }
+
+        $label = trim((string) ($link['label'] ?? ''));
+        $url = trim((string) ($link['url'] ?? ''));
+
+        if ($label === '' || $url === '') {
+            return null;
+        }
+
+        return [
+            'label' => $label,
+            'url' => jullybride_url($url, '#'),
+        ];
+    }, $links)));
 }
 
 function jullybride_social_links(): array

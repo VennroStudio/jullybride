@@ -1,0 +1,389 @@
+{
+    "key": "group_jullybride_footer",
+    "title": "JullyBride: футер",
+    "fields": [
+        {
+            "key": "field_jullybride_footer_tab",
+            "label": "Футер",
+            "name": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_jullybride_footer_products",
+            "label": "Товары для показа",
+            "name": "footer_products",
+            "type": "relationship",
+            "instructions": "Выберите до 3 товаров для вывода в футере.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "product"
+            ],
+            "post_status": "",
+            "taxonomy": "",
+            "filters": [
+                "search",
+                "taxonomy"
+            ],
+            "return_format": "id",
+            "min": "",
+            "max": 3,
+            "elements": [
+                "featured_image"
+            ],
+            "bidirectional": 0
+        },
+        {
+            "key": "field_jullybride_footer_menu_trends",
+            "label": "Меню для Свадебные тренды",
+            "name": "footer_menu_trends",
+            "type": "taxonomy",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "taxonomy": "nav_menu",
+            "add_term": 0,
+            "save_terms": 0,
+            "load_terms": 0,
+            "return_format": "id",
+            "field_type": "select",
+            "allow_null": 1,
+            "bidirectional": 0,
+            "multiple": 0
+        },
+        {
+            "key": "field_jullybride_footer_menu_material",
+            "label": "Меню для Материал",
+            "name": "footer_menu_material",
+            "type": "taxonomy",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "taxonomy": "nav_menu",
+            "add_term": 0,
+            "save_terms": 0,
+            "load_terms": 0,
+            "return_format": "id",
+            "field_type": "select",
+            "allow_null": 1,
+            "bidirectional": 0,
+            "multiple": 0
+        },
+        {
+            "key": "field_jullybride_footer_menu_silhouette",
+            "label": "Меню для Силуэт",
+            "name": "footer_menu_silhouette",
+            "type": "taxonomy",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "taxonomy": "nav_menu",
+            "add_term": 0,
+            "save_terms": 0,
+            "load_terms": 0,
+            "return_format": "id",
+            "field_type": "select",
+            "allow_null": 1,
+            "bidirectional": 0,
+            "multiple": 0
+        },
+        {
+            "key": "field_jullybride_footer_menu_style",
+            "label": "Меню для Стиль",
+            "name": "footer_menu_style",
+            "type": "taxonomy",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "taxonomy": "nav_menu",
+            "add_term": 0,
+            "save_terms": 0,
+            "load_terms": 0,
+            "return_format": "id",
+            "field_type": "select",
+            "allow_null": 1,
+            "bidirectional": 0,
+            "multiple": 0
+        },
+        {
+            "key": "field_jullybride_footer_menu_designers",
+            "label": "Меню для Дизайнеры и бренды",
+            "name": "footer_menu_designers",
+            "type": "taxonomy",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "taxonomy": "nav_menu",
+            "add_term": 0,
+            "save_terms": 0,
+            "load_terms": 0,
+            "return_format": "id",
+            "field_type": "select",
+            "allow_null": 1,
+            "bidirectional": 0,
+            "multiple": 0
+        },
+        {
+            "key": "field_jullybride_footer_menu_info",
+            "label": "Основное меню футера",
+            "name": "footer_menu_info",
+            "type": "taxonomy",
+            "instructions": "Меню со ссылками вроде контактов, акций, страницы о салоне и блога.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "taxonomy": "nav_menu",
+            "add_term": 0,
+            "save_terms": 0,
+            "load_terms": 0,
+            "return_format": "id",
+            "field_type": "select",
+            "allow_null": 1,
+            "bidirectional": 0,
+            "multiple": 0
+        },
+        {
+            "key": "field_jullybride_footer_copyright_tab",
+            "label": "Копирайт",
+            "name": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_jullybride_footer_legal_links_left",
+            "label": "Ссылки слева",
+            "name": "footer_legal_links_left",
+            "type": "repeater",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "pagination": 0,
+            "min": 0,
+            "max": 0,
+            "collapsed": "field_jullybride_footer_legal_link_left_label",
+            "button_label": "Добавить ссылку",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_jullybride_footer_legal_link_left_label",
+                    "label": "Текст",
+                    "name": "label",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_jullybride_footer_legal_links_left"
+                },
+                {
+                    "key": "field_jullybride_footer_legal_link_left_url",
+                    "label": "Ссылка",
+                    "name": "url",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_jullybride_footer_legal_links_left"
+                }
+            ]
+        },
+        {
+            "key": "field_jullybride_footer_legal_links_right",
+            "label": "Ссылки справа",
+            "name": "footer_legal_links_right",
+            "type": "repeater",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "pagination": 0,
+            "min": 0,
+            "max": 0,
+            "collapsed": "field_jullybride_footer_legal_link_right_label",
+            "button_label": "Добавить ссылку",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_jullybride_footer_legal_link_right_label",
+                    "label": "Текст",
+                    "name": "label",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_jullybride_footer_legal_links_right"
+                },
+                {
+                    "key": "field_jullybride_footer_legal_link_right_url",
+                    "label": "Ссылка",
+                    "name": "url",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_jullybride_footer_legal_links_right"
+                }
+            ]
+        },
+        {
+            "key": "field_jullybride_footer_copyright_text",
+            "label": "Текст копирайта",
+            "name": "footer_copyright_text",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "© 2026 Свадебный салон «Jully Bride»",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        },
+        {
+            "key": "field_jullybride_footer_copyright_subtitle",
+            "label": "Подпись",
+            "name": "footer_copyright_subtitle",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "Самый большой свадебный салон Санкт-Петербурга",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "jullybride-options-footer"
+            }
+        ]
+    ],
+    "menu_order": 1,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "Поля для управления футером сайта JullyBride.",
+    "show_in_rest": 0,
+    "modified": 1779321600
+}
