@@ -21,29 +21,45 @@ if ($phone && !$phone_url) {
 ?>
 <div class="jb-mobile-menu" data-jb-mobile-menu hidden>
     <div class="jb-mobile-menu__panel">
-        <button class="jb-mobile-menu__close" type="button" aria-label="Закрыть меню" data-jb-mobile-close>
-            <span></span><span></span>
-        </button>
-        <a class="jb-logo" href="<?php echo esc_url($logo_url); ?>" aria-label="<?php echo esc_attr(get_bloginfo('name')); ?>">
-            <img src="<?php echo esc_url($logo['url']); ?>" alt="<?php echo esc_attr($logo['alt']); ?>">
-        </a>
+        <div class="jb-mobile-menu__head">
+            <a class="jb-logo" href="<?php echo esc_url($logo_url); ?>" aria-label="<?php echo esc_attr(get_bloginfo('name')); ?>">
+                <img src="<?php echo esc_url($logo['url']); ?>" alt="<?php echo esc_attr($logo['alt']); ?>">
+            </a>
+            <button class="jb-mobile-menu__close" type="button" aria-label="Закрыть меню" data-jb-mobile-close>
+                <span></span><span></span>
+            </button>
+        </div>
         <nav aria-label="Мобильное меню">
             <ul class="jb-mobile-menu__list">
                 <?php foreach ($items as $item) : ?>
                     <?php $groups = jullybride_nav_item_groups($item); ?>
-                    <li>
-                        <a href="<?php echo esc_url($item['url']); ?>"><?php echo esc_html($item['label']); ?></a>
+                    <li class="<?php echo $groups ? 'has-children' : ''; ?>">
+                        <div class="jb-mobile-menu__top">
+                            <a class="jb-mobile-menu__top-link" href="<?php echo esc_url($item['url']); ?>"><?php echo esc_html($item['label']); ?></a>
+                            <?php if ($groups) : ?>
+                                <button class="jb-mobile-menu__top-toggle" type="button" aria-label="Открыть раздел <?php echo esc_attr($item['label']); ?>" aria-expanded="false">
+                                    <span></span>
+                                </button>
+                            <?php endif; ?>
+                        </div>
                         <?php if ($groups) : ?>
-                            <ul>
-                                <?php foreach ($groups as $group) : ?>
-                                    <?php if (!empty($group['title'])) : ?>
-                                        <li class="jb-mobile-menu__group-title"><?php echo esc_html($group['title']); ?></li>
-                                    <?php endif; ?>
-                                    <?php foreach (($group['items'] ?? []) as $child) : ?>
-                                        <li><a href="<?php echo esc_url($child['url']); ?>"><?php echo esc_html($child['label']); ?></a></li>
-                                    <?php endforeach; ?>
+                            <div class="jb-mobile-menu__groups">
+                                <?php foreach ($groups as $group_index => $group) : ?>
+                                    <div class="jb-mobile-menu__group<?php echo $group_index === 0 ? ' is-open' : ''; ?>">
+                                        <?php if (!empty($group['title'])) : ?>
+                                            <button class="jb-mobile-menu__group-button" type="button" aria-expanded="<?php echo $group_index === 0 ? 'true' : 'false'; ?>">
+                                                <span><?php echo esc_html($group['title']); ?></span>
+                                                <span class="jb-mobile-menu__group-marker" aria-hidden="true"></span>
+                                            </button>
+                                        <?php endif; ?>
+                                        <ul>
+                                            <?php foreach (($group['items'] ?? []) as $child) : ?>
+                                                <li><a href="<?php echo esc_url($child['url']); ?>"><?php echo esc_html($child['label']); ?></a></li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    </div>
                                 <?php endforeach; ?>
-                            </ul>
+                            </div>
                         <?php endif; ?>
                     </li>
                 <?php endforeach; ?>

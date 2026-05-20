@@ -240,6 +240,38 @@
     });
   };
 
+  const setupMobileMenuAccordion = () => {
+    document.querySelectorAll('.jb-mobile-menu__list > li.has-children').forEach((item) => {
+      const button = item.querySelector('.jb-mobile-menu__top-toggle');
+      if (!button) return;
+
+      button.addEventListener('click', () => {
+        const willOpen = !item.classList.contains('is-open');
+        item.classList.toggle('is-open', willOpen);
+        button.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+      });
+    });
+
+    document.querySelectorAll('.jb-mobile-menu__groups').forEach((groupsNode) => {
+      const groups = [...groupsNode.querySelectorAll('.jb-mobile-menu__group')];
+
+      groups.forEach((group) => {
+        const button = group.querySelector('.jb-mobile-menu__group-button');
+        if (!button) return;
+
+        button.addEventListener('click', () => {
+          const willOpen = !group.classList.contains('is-open');
+
+          groups.forEach((currentGroup) => {
+            const isCurrent = currentGroup === group && willOpen;
+            currentGroup.classList.toggle('is-open', isCurrent);
+            currentGroup.querySelector('.jb-mobile-menu__group-button')?.setAttribute('aria-expanded', isCurrent ? 'true' : 'false');
+          });
+        });
+      });
+    });
+  };
+
   const setupCatalogLoadMore = () => {
     if (!window.jQuery) return;
     const $ = window.jQuery;
@@ -692,6 +724,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       setupStickyHeader();
       setupMegaMenu();
+      setupMobileMenuAccordion();
       setupCatalogLoadMore();
       setupAtmosphereCarousel();
       setupCampCountdown();
@@ -712,6 +745,7 @@
   } else {
     setupStickyHeader();
     setupMegaMenu();
+    setupMobileMenuAccordion();
     setupCatalogLoadMore();
     setupAtmosphereCarousel();
     setupCampCountdown();
