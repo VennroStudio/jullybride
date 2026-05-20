@@ -7,9 +7,19 @@ $sale_label = (string) jullybride_option('header_sale_label');
 $sale_url = jullybride_url((string) jullybride_option('header_sale_url'));
 $favorites_url = jullybride_url((string) jullybride_option('header_favorites_url'));
 $search_enabled = (bool) jullybride_option('header_search_enabled', true);
+$logo = jullybride_header_logo();
+$logo_url = jullybride_url((string) jullybride_option('header_logo_url'), home_url('/'));
 ?>
 <div class="jb-site-header__nav-row">
     <div class="container jb-site-header__nav-inner">
+        <?php if ($search_enabled) : ?>
+            <a class="jb-header-icon jb-header-icon--mobile-search" href="<?php echo esc_url(home_url('/?s=')); ?>" aria-label="Поиск">
+                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m20.5 19.2-4.8-4.8a7 7 0 1 0-1.3 1.3l4.8 4.8 1.3-1.3ZM5.1 10.2a5.1 5.1 0 1 1 10.2 0 5.1 5.1 0 0 1-10.2 0Z"/></svg>
+            </a>
+        <?php endif; ?>
+        <a class="jb-logo jb-site-header__mobile-logo" href="<?php echo esc_url($logo_url); ?>" aria-label="<?php echo esc_attr(get_bloginfo('name')); ?>">
+            <img src="<?php echo esc_url($logo['url']); ?>" alt="<?php echo esc_attr($logo['alt']); ?>">
+        </a>
         <?php jullybride_template_part('header/main-menu'); ?>
         <div class="jb-site-header__actions">
             <?php if ($sale_label && $sale_url) : ?>
