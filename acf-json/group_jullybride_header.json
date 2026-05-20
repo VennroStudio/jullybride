@@ -139,7 +139,7 @@
             "label": "Ссылка телефона",
             "name": "header_phone_url",
             "type": "text",
-            "instructions": "",
+            "instructions": "tel:номер телефона без пробелов",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -265,6 +265,29 @@
             },
             "placement": "top",
             "endpoint": 0
+        },
+        {
+            "key": "field_jullybride_header_menu",
+            "label": "Меню шапки",
+            "name": "header_menu",
+            "type": "taxonomy",
+            "instructions": "Выберите меню, которое будет выводиться в шапке.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "taxonomy": "nav_menu",
+            "add_term": 0,
+            "save_terms": 0,
+            "load_terms": 0,
+            "return_format": "id",
+            "field_type": "select",
+            "allow_null": 1,
+            "bidirectional": 0,
+            "multiple": 0
         },
         {
             "key": "field_jullybride_header_sale_label",

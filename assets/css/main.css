@@ -4098,21 +4098,32 @@ body.admin-bar .jb-site-header {
 .jb-main-menu__mega {
   position: absolute;
   top: 100%;
-  left: 0;
-  right: 0;
+  left: 50%;
   z-index: 30;
-  display: grid;
-  grid-template-columns: repeat(6, minmax(120px, 1fr));
-  gap: 48px 54px;
+  width: min(1240px, calc(100vw - 40px));
+  height: 600px;
   margin: 0;
-  padding: 46px 64px 50px;
+  padding: 0;
+  overflow: hidden;
   background: #f9e5e9;
-  box-shadow: 0 14px 28px rgba(0, 0, 0, .1);
+  box-shadow: 0 14px 24px rgba(0, 0, 0, .16);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transform: translateY(10px);
+  transform: translate(-50%, 10px);
   transition: opacity .16s ease, transform .16s ease, visibility .16s ease;
+}
+
+.jb-main-menu__mega::before {
+  content: "";
+  position: absolute;
+  inset: 210px 0 0;
+  z-index: 0;
+  background-image: url("../images/bukvennyy-pattern.png");
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  background-size: 1240px auto;
+  opacity: .14;
 }
 
 .jb-main-menu__item:hover .jb-main-menu__mega,
@@ -4121,44 +4132,130 @@ body.admin-bar .jb-site-header {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transform: translateY(0);
+  transform: translate(-50%, 0);
+}
+
+.jb-main-menu__mega-content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 610px) minmax(360px, 1fr);
+  gap: 44px;
+  height: 100%;
+  padding: 56px 70px 46px 64px;
+}
+
+.jb-main-menu__mega-columns {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(180px, 1fr);
+  gap: 70px;
+  align-content: start;
+}
+
+.jb-main-menu__mega-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
 }
 
 .jb-main-menu__mega-column {
   display: grid;
   align-content: start;
-  gap: 14px;
+  gap: 10px;
   min-width: 0;
 }
 
 .jb-main-menu__mega-title {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 9px;
+  width: max-content;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
   color: #181818;
-  font-size: 17px;
+  font: inherit;
+  font-size: 15px;
   font-weight: 800;
-  line-height: 1.25;
-  text-decoration: underline;
+  line-height: 1.15;
+  cursor: pointer;
+  text-decoration: none;
   text-transform: uppercase;
 }
 
+.jb-main-menu__mega-title-text {
+  text-decoration: none;
+}
+
+.jb-main-menu__mega-title-marker::before {
+  content: "+";
+  display: inline-block;
+  color: #181818;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.jb-main-menu__mega-column.is-open .jb-main-menu__mega-title {
+  color: #681f2a;
+}
+
+.jb-main-menu__mega-column.is-open .jb-main-menu__mega-title-marker::before {
+  content: "-";
+  color: #681f2a;
+}
+
 .jb-main-menu__mega ul {
-  display: grid;
-  gap: 11px;
+  display: none;
+  gap: 7px;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.jb-main-menu__mega a:not(.jb-main-menu__mega-title) {
+.jb-main-menu__mega-column.is-open ul {
+  display: grid;
+}
+
+.jb-main-menu__mega a {
   display: block;
   color: #181818;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
-  line-height: 1.35;
-  text-decoration: underline;
+  line-height: 1.28;
+  text-decoration: none;
 }
 
 .jb-main-menu__mega a:hover {
   color: #681f2a;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.jb-main-menu__mega-visual {
+  position: absolute;
+  right: 76px;
+  bottom: 0;
+  z-index: 1;
+  width: 360px;
+  height: 520px;
+  overflow: hidden;
+  background: #681f2a;
+  border-radius: 230px 230px 0 0;
+}
+
+.jb-main-menu__mega-visual img {
+  position: absolute;
+  right: -118px;
+  bottom: -10px;
+  width: 470px;
+  max-width: none;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
 }
 
 .jb-site-header__actions {

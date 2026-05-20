@@ -3,7 +3,20 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-$menu = wp_get_nav_menu_object('glavnoe-menyu');
+$menu_value = jullybride_option('header_menu');
+$menu = null;
+
+if ($menu_value instanceof WP_Term) {
+    $menu = wp_get_nav_menu_object($menu_value->term_id);
+} elseif (is_numeric($menu_value)) {
+    $menu = wp_get_nav_menu_object((int) $menu_value);
+} elseif (is_string($menu_value) && $menu_value !== '') {
+    $menu = wp_get_nav_menu_object($menu_value);
+}
+
+if (!$menu) {
+    $menu = wp_get_nav_menu_object('glavnoe-menyu');
+}
 
 if (!$menu) {
     return [];

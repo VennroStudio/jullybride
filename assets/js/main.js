@@ -221,6 +221,23 @@
         }
       });
     });
+
+    document.querySelectorAll('.jb-main-menu__mega').forEach((mega) => {
+      const groups = [...mega.querySelectorAll('.jb-main-menu__mega-column')];
+
+      groups.forEach((group) => {
+        const button = group.querySelector('.jb-main-menu__mega-title');
+        if (!button) return;
+
+        button.addEventListener('click', () => {
+          groups.forEach((currentGroup) => {
+            const isCurrent = currentGroup === group;
+            currentGroup.classList.toggle('is-open', isCurrent);
+            currentGroup.querySelector('.jb-main-menu__mega-title')?.setAttribute('aria-expanded', isCurrent ? 'true' : 'false');
+          });
+        });
+      });
+    });
   };
 
   const setupCatalogLoadMore = () => {
