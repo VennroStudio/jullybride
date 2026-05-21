@@ -4798,9 +4798,10 @@ body.admin-bar .jb-site-header {
 .jb-footer-2__inner {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(280px, 420px) minmax(0, 1fr);
-  gap: 80px;
+  gap: 60px;
   align-items: start;
   padding-top: 122px;
+  padding-bottom: 40px;
 }
 
 .jb-footer-bow {
