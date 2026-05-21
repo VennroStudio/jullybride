@@ -3,17 +3,18 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-function jullybride_get_main_product_category(int $product_id): ?WP_Term
+function jullybride_product_primary_category(int $product_id): ?WP_Term
 {
-    $terms = get_the_terms($product_id, 'product_cat');
+    $terms = wp_get_post_terms($product_id, 'product_cat', [
+        'orderby' => 'term_order',
+        'order' => 'ASC',
+    ]);
 
     if (!$terms || is_wp_error($terms)) {
         return null;
     }
 
     $terms = array_values(array_filter($terms, static fn ($term): bool => $term instanceof WP_Term));
-
-    usort($terms, static fn (WP_Term $a, WP_Term $b): int => $a->parent <=> $b->parent ?: $a->name <=> $b->name);
 
     return $terms[0] ?? null;
 }

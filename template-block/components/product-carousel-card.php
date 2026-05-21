@@ -13,6 +13,7 @@ if (!$product instanceof WC_Product) {
 }
 
 $product_id = $product->get_id();
+$image_id = $product->get_image_id();
 ?>
 <li>
     <div class="tabs-carusel_image-wrap">
@@ -20,9 +21,13 @@ $product_id = $product->get_id();
             <?php if ($show_badge && $badge_class) : ?>
                 <div class="nameplate-sale <?php echo esc_attr($badge_class); ?>"></div>
             <?php endif; ?>
-            <?php echo wp_get_attachment_image($product->get_image_id(), [400, 600], false); ?>
+            <?php
+            echo $image_id
+                ? wp_get_attachment_image($image_id, [400, 600], false, ['class' => 'product-gallery-image', 'loading' => 'lazy'])
+                : '<img src="' . esc_url(wc_placeholder_img_src()) . '" alt="Нет изображения">';
+            ?>
             <div class="tabs-carusel_image-btn justify-content-around">
-                <a href="javascript:void(0)" class="add-favorite woosw-btn" data-id="<?php echo esc_attr($product_id); ?>" data-product_name="<?php echo esc_attr($product->get_name()); ?>" aria-label=" "></a>
+                <a href="javascript:void(0)" class="add-favorite woosw-btn" data-id="<?php echo esc_attr($product_id); ?>" data-product_name="<?php echo esc_attr($product->get_name()); ?>" aria-label="Добавить в избранное"></a>
                 <a href="<?php echo esc_url($product->get_permalink()); ?>" class="theme-button button-main">Хочу примерить</a>
             </div>
             <?php if ($product->is_in_stock()) : ?>

@@ -10,7 +10,7 @@ if (!$product instanceof WC_Product) {
 
 $product_id = $product->get_id();
 $category_slug = 'wedding';
-$main_category = function_exists('jullybride_get_main_product_category') ? jullybride_get_main_product_category($product_id) : null;
+$main_category = function_exists('jullybride_product_primary_category') ? jullybride_product_primary_category($product_id) : null;
 
 if ($main_category instanceof WP_Term) {
     $category_slug = $main_category->slug;

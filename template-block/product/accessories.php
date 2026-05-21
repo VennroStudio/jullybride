@@ -60,7 +60,7 @@ $text_stroke = function_exists('get_field') ? (string) get_field('text_stroke', 
                 <div class="new-in-salon-carusel">
                     <ul class="owl-carousel owl-theme owl-list" id="only-have-carusel">
                         <?php foreach ($products as $accessory_product) : ?>
-                            <?php jullybride_template_part('common/product-carousel-card-legacy', ['product' => $accessory_product]); ?>
+                            <?php jullybride_template_part('components/product-carousel-card', ['product' => $accessory_product]); ?>
                         <?php endforeach; ?>
                     </ul>
                     <div class="tabs-carusel_dot new-in-salon-carusel_dot d-md-table d-none">
