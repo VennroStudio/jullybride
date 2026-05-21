@@ -11,7 +11,8 @@ $before_button = jullybride_camp_field('ekran_1_-_tekst_pered_knopkoj');
 $event_date = jullybride_camp_field('ekran_1_-_tekst_daty_meropriyatiya');
 $button_text = jullybride_camp_field('ekran_1_-_tekst_knopki');
 $button_url = jullybride_camp_field('ekran_1_-_ssylka_knopki', '#');
-$text_stroke = function_exists('get_field') ? get_field('text_stroke', 59177) : '';
+$home_source_id = function_exists('jullybride_home_source_id') ? jullybride_home_source_id() : 0;
+$text_stroke = ($home_source_id && function_exists('get_field')) ? get_field('text_stroke', $home_source_id) : '';
 ?>
 <section class="hero-block position-relative">
     <div class="hero-block-title wow slideInRight">

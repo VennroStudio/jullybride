@@ -25,8 +25,8 @@ $catalog_base_url = home_url('/c/' . $category_slug . '/');
 $designer_links = [];
 
 foreach ([
-    ['param' => 'pa_designer', 'taxonomies' => ['pa_designer', 'designer']],
-    ['param' => 'pa_collection', 'taxonomies' => ['pa_collection', 'collection']],
+    ['param' => 'pa_designer', 'taxonomies' => ['pa_designer']],
+    ['param' => 'pa_collection', 'taxonomies' => ['pa_collection']],
 ] as $group) {
     $links_before = count($designer_links);
 

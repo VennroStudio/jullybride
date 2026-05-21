@@ -49,6 +49,25 @@
             "bidirectional": 0
         },
         {
+            "key": "field_jullybride_footer_title_trends",
+            "label": "Заголовок колонки: Свадебные тренды",
+            "name": "footer_title_trends",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Свадебные тренды 2026",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_jullybride_footer_menu_trends",
             "label": "Меню для Свадебные тренды",
             "name": "footer_menu_trends",
@@ -70,6 +89,25 @@
             "allow_null": 1,
             "bidirectional": 0,
             "multiple": 0
+        },
+        {
+            "key": "field_jullybride_footer_title_material",
+            "label": "Заголовок колонки: Материал",
+            "name": "footer_title_material",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Материал",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
         },
         {
             "key": "field_jullybride_footer_menu_material",
@@ -95,6 +133,25 @@
             "multiple": 0
         },
         {
+            "key": "field_jullybride_footer_title_silhouette",
+            "label": "Заголовок колонки: Силуэт",
+            "name": "footer_title_silhouette",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Силуэт",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_jullybride_footer_menu_silhouette",
             "label": "Меню для Силуэт",
             "name": "footer_menu_silhouette",
@@ -116,6 +173,25 @@
             "allow_null": 1,
             "bidirectional": 0,
             "multiple": 0
+        },
+        {
+            "key": "field_jullybride_footer_title_style",
+            "label": "Заголовок колонки: Стиль",
+            "name": "footer_title_style",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Стиль",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
         },
         {
             "key": "field_jullybride_footer_menu_style",
@@ -141,6 +217,25 @@
             "multiple": 0
         },
         {
+            "key": "field_jullybride_footer_title_designers",
+            "label": "Заголовок колонки: Дизайнеры и бренды",
+            "name": "footer_title_designers",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Дизайнеры и бренды",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_jullybride_footer_menu_designers",
             "label": "Меню для Дизайнеры и бренды",
             "name": "footer_menu_designers",
@@ -162,6 +257,25 @@
             "allow_null": 1,
             "bidirectional": 0,
             "multiple": 0
+        },
+        {
+            "key": "field_jullybride_footer_title_info",
+            "label": "Заголовок основного меню футера",
+            "name": "footer_title_info",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
         },
         {
             "key": "field_jullybride_footer_menu_info",

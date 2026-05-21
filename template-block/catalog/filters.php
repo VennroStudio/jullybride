@@ -6,6 +6,7 @@ if (!defined('ABSPATH')) {
 $filter_widget = '';
 $sort_widget = '';
 $filters = jullybride_catalog_filter_definitions();
+$default_open_filters = array_slice((array) JULLYBRIDE_CATALOG_FILTER_PRIORITY, 0, 3);
 $reset_url = jullybride_catalog_reset_url();
 $current_order = isset($_GET['orderby']) ? sanitize_key(wp_unslash($_GET['orderby'])) : '';
 $current_category = jullybride_catalog_current_product_category();
@@ -62,7 +63,7 @@ $stock_count = count(array_intersect($stock_base_ids, $stock_ids));
                                     continue;
                                 }
 
-                                $is_open = $selected || in_array($param, ['pa_razmer', 'pa_silhouette', 'pa_length'], true);
+                                $is_open = $selected || in_array($param, $default_open_filters, true);
                                 ?>
                                 <fieldset class="jb-filter <?php echo $is_open ? 'is-open' : ''; ?>">
                                     <legend class="jb-filter__legend">

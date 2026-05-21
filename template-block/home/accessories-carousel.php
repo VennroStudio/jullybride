@@ -10,7 +10,7 @@ if (!function_exists('have_rows') || !have_rows('only_have')) {
 <section class="only-have position-relative couture-only-have">
     <div class="container">
         <?php
-        jullybride_template_part('home/product-carousel', [
+        jullybride_template_part('components/product-carousel', [
             'field' => 'only_have',
             'carousel_id' => 'only-have-carusel',
             'desktop_prev_id' => 'only-have_prev',

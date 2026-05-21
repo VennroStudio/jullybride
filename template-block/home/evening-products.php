@@ -16,7 +16,7 @@ if (!function_exists('have_rows') || !have_rows('new_in_salon_two')) {
             </div>
         </div>
         <?php
-        jullybride_template_part('home/product-carousel', [
+        jullybride_template_part('components/product-carousel', [
             'field' => 'new_in_salon_two',
             'carousel_id' => 'new-in-salon-two',
             'desktop_prev_id' => 'new-in-salon-two-prev',

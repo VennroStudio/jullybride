@@ -2,43 +2,62 @@
 if (!defined('ABSPATH')) {
     exit;
 }
-?>
-        <a href="javascript:void(0)" class="app-overlay-close"></a>
-        <div class="app-overlay-overlay"></div>
 
-        <?php if (have_rows('carusel-added-owl')): ?>
+if (!function_exists('have_rows') || !have_rows('carusel-added-owl')) {
+    return;
+}
 
-            <?php while (have_rows('carusel-added-owl')): the_row(); ?>
+$home_story_media_url = static function (mixed $media, string $size = 'full'): string {
+    if (is_array($media)) {
+        if (!empty($media['id'])) {
+            $url = $size === 'full'
+                ? wp_get_attachment_url((int) $media['id'])
+                : wp_get_attachment_image_url((int) $media['id'], $size);
 
-                <div class="carusel-added-story" data-active="open-carusel-added-story_<?= esc_attr(get_row_index())?>">
-                    <ul class="owl-carusel-added-story owl-carousel owl-theme" id="owl-carusel-added-story_<?= esc_attr(get_row_index()) ?>">
-                        <?php if (have_rows('karusel')): ?>
-                            <?php while (have_rows('karusel')): the_row(); 
-                                // Проверяем, есть ли фото
-                                $foto = get_sub_field('foto');
-                                // Проверяем, есть ли видео
-                                $video = get_sub_field('video');
-                            ?>
-                                <li>
-                                    <?php if ($video): ?>
-                                        <video data-src="<?= esc_url($video) ?>" poster="<?php echo get_stylesheet_directory_uri(); ?>/assets/images/galereya1.webp" autoplay muted playsinline class="lazy-video">
-                                            Ваш браузер не поддерживает видео.
-                                        </video>
-                                    <?php elseif ($foto && !empty($foto['id'])): 
-                                        $image = wp_get_attachment_image_src($foto['id'], 'carousel-story');
-                                        $img_url = $image[0] ?? $foto['url'];
-                                    ?>
-                                        <img 
-                                             src="<?= esc_url($img_url) ?>" 
-                                            alt="<?= esc_attr($foto['alt'] ?? '') ?>"
-                                        />
-                                    <?php endif; ?>
-                                </li>
-                            <?php endwhile; ?>
+            return (string) ($url ?: ($media['url'] ?? ''));
+        }
+
+        return (string) ($media['url'] ?? '');
+    }
+
+    if (is_numeric($media)) {
+        $url = $size === 'full'
+            ? wp_get_attachment_url((int) $media)
+            : wp_get_attachment_image_url((int) $media, $size);
+
+        return (string) $url;
+    }
+
+    return is_string($media) ? $media : '';
+};
+
+while (have_rows('carusel-added-owl')) :
+    the_row();
+    $story_index = (string) get_row_index();
+    ?>
+    <div class="carusel-added-story" data-active="open-carusel-added-story_<?php echo esc_attr($story_index); ?>">
+        <ul class="owl-carusel-added-story owl-carousel owl-theme" id="owl-carusel-added-story_<?php echo esc_attr($story_index); ?>">
+            <?php if (have_rows('karusel')) : ?>
+                <?php
+                while (have_rows('karusel')) :
+                    the_row();
+                    $photo = get_sub_field('foto');
+                    $video = get_sub_field('video');
+                    $photo_url = $home_story_media_url($photo, 'carousel-story');
+                    $photo_alt = is_array($photo) ? (string) ($photo['alt'] ?? '') : '';
+                    $video_url = $home_story_media_url($video);
+                    ?>
+                    <li>
+                        <?php if ($video_url) : ?>
+                            <video data-src="<?php echo esc_url($video_url); ?>" poster="<?php echo esc_url(jullybride_asset_uri('images/galereya1.webp')); ?>" autoplay muted playsinline class="lazy-video">
+                                Ваш браузер не поддерживает видео.
+                            </video>
+                        <?php elseif ($photo_url) : ?>
+                            <img src="<?php echo esc_url($photo_url); ?>" alt="<?php echo esc_attr($photo_alt); ?>">
                         <?php endif; ?>
-                    </ul>
-                </div>
-
-            <?php endwhile; ?>
-
-        <?php endif; ?>
+                    </li>
+                <?php endwhile; ?>
+            <?php endif; ?>
+        </ul>
+    </div>
+<?php endwhile; ?>

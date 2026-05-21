@@ -16,7 +16,7 @@ if (!function_exists('have_rows') || !have_rows('bestsellers')) {
             </div>
         </div>
         <?php
-        jullybride_template_part('home/product-carousel', [
+        jullybride_template_part('components/product-carousel', [
             'field' => 'bestsellers',
             'carousel_id' => 'bestsellers',
             'desktop_prev_id' => 'bestsellers_prev',

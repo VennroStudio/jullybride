@@ -3,7 +3,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 ?>
-<?php jullybride_template_part('common/story-overlays'); ?>
 
 <?php while (have_posts()) : the_post(); ?>
     <?php
@@ -14,7 +13,6 @@ if (!defined('ABSPATH')) {
     }
     ?>
     <main class="main-page content">
-        <?php jullybride_template_part('common/story-carousel'); ?>
         <?php jullybride_template_part('product/breadcrumbs'); ?>
         <?php jullybride_template_part('product/header', ['product' => $product]); ?>
         <?php jullybride_template_part('product/accessories', ['product' => $product]); ?>

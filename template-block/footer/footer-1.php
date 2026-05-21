@@ -7,27 +7,27 @@ $products = jullybride_footer_products();
 
 $menu_groups = [
     'trends' => [
-        'title' => 'Свадебные тренды 2026',
+        'title' => (string) jullybride_option('footer_title_trends', 'Свадебные тренды 2026'),
         'items' => jullybride_footer_menu_items('footer_menu_trends'),
     ],
     'material' => [
-        'title' => 'Материал',
+        'title' => (string) jullybride_option('footer_title_material', 'Материал'),
         'items' => jullybride_footer_menu_items('footer_menu_material'),
     ],
     'silhouette' => [
-        'title' => 'Силуэт',
+        'title' => (string) jullybride_option('footer_title_silhouette', 'Силуэт'),
         'items' => jullybride_footer_menu_items('footer_menu_silhouette'),
     ],
     'style' => [
-        'title' => 'Стиль',
+        'title' => (string) jullybride_option('footer_title_style', 'Стиль'),
         'items' => jullybride_footer_menu_items('footer_menu_style'),
     ],
     'designers' => [
-        'title' => 'Дизайнеры и бренды',
+        'title' => (string) jullybride_option('footer_title_designers', 'Дизайнеры и бренды'),
         'items' => jullybride_footer_menu_items('footer_menu_designers'),
     ],
     'info' => [
-        'title' => '',
+        'title' => (string) jullybride_option('footer_title_info', ''),
         'items' => jullybride_footer_menu_items('footer_menu_info'),
     ],
 ];

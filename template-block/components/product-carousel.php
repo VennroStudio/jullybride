@@ -39,7 +39,7 @@ $card_args = [
                         continue;
                     }
 
-                    jullybride_template_part('home/product-carousel-card', array_merge($card_args, [
+                    jullybride_template_part('components/product-carousel-card', array_merge($card_args, [
                         'product' => $product,
                         'show_badge' => (bool) get_sub_field('shildik'),
                     ]));

@@ -218,7 +218,7 @@ $query_args = static function (array $item, string $main_category) use ($resolve
                                                 while ($products->have_posts()) :
                                                     $products->the_post();
                                                     $product = wc_get_product(get_the_ID());
-                                                    jullybride_template_part('home/dress-tab-product-card', ['product' => $product]);
+                                                    jullybride_template_part('header/components/dress-tab-product-card', ['product' => $product]);
                                                 endwhile;
                                                 wp_reset_postdata();
                                             endif;
