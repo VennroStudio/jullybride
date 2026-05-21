@@ -58,7 +58,7 @@ $media_class = trim((string) ($media['class'] ?? ''));
             <div class="col-md-4">
                 <div class="box-important_item2">
                     <?php if ($media_url !== '' && $media_type === 'video') : ?>
-                        <video data-src="<?php echo esc_url($media_url); ?>"<?php echo $media_poster !== '' ? ' poster="' . esc_url($media_poster) . '"' : ''; ?> autoplay muted playsinline loop class="<?php echo esc_attr(trim('bg-video lazy-video ' . $media_class)); ?>">
+                        <video src="<?php echo esc_url($media_url); ?>" data-src="<?php echo esc_url($media_url); ?>"<?php echo $media_poster !== '' ? ' poster="' . esc_url($media_poster) . '"' : ''; ?> autoplay muted playsinline loop preload="metadata" class="<?php echo esc_attr(trim('bg-video lazy-video ' . $media_class)); ?>">
                             Ваш браузер не поддерживает видео.
                         </video>
                     <?php elseif ($media_url !== '') : ?>
