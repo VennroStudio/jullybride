@@ -95,19 +95,14 @@ $home_media_url = static function (mixed $media, string $size = 'full'): string 
             </div>
         <?php endif; ?>
 
-        <div class="lenta-stroke">
-            <svg width="100%" height="180" viewBox="0 0 1920 180" preserveAspectRatio="none">
-                <rect x="0" y="60" width="1920" height="120" fill="#f9e5e9"></rect>
-                <path d="M0,40 C250,-20 500,100 750,40 C1000,-20 1250,100 1500,40 C1700,-20 1850,100 1920,40 L1920,80 C1850,140 1700,20 1500,80 C1250,140 1000,20 750,80 C500,140 250,20 0,80 Z" fill="rgba(24, 24, 24, 1)"></path>
-                <path id="text-path" d="M0,60 C250,0 500,120 750,60 C1000,0 1250,120 1500,60 C1700,0 1850,120 1920,60" stroke="none" fill="none"></path>
-                <text font-size="14" fill="#fde5ec" text-anchor="middle" letter-spacing="1" id="svg_text" dy="5">
-                    <textPath href="#text-path" startOffset="50%">
-                        <?php echo esc_html((string) get_field('text_stroke')); ?>
-                        <animate attributeName="startOffset" from="100%" to="-100%" dur="120s"></animate>
-                    </textPath>
-                </text>
-            </svg>
-        </div>
+        <?php
+        jullybride_template_part('components/floating-strip', [
+            'class' => 'lenta-stroke',
+            'text' => (string) get_field('text_stroke'),
+            'background_rect' => true,
+            'repeat' => false,
+        ]);
+        ?>
     </div>
 
     <?php if (function_exists('have_rows') && have_rows('carusel-added-owl')) : ?>

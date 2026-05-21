@@ -49,18 +49,15 @@ $text_stroke = ($home_source_id && function_exists('get_field')) ? get_field('te
     </div>
 
     <?php if ($text_stroke) : ?>
-        <div class="lenta-stroke wow bounceInUp">
-            <svg width="100%" height="110" viewBox="0 0 1920 110" preserveAspectRatio="none">
-                <path d="M0,40 C250,-20 500,100 750,40 C1000,-20 1250,100 1500,40 C1700,-20 1850,100 1920,40 L1920,80 C1850,140 1700,20 1500,80 C1250,140 1000,20 750,80 C500,140 250,20 0,80 Z" fill="rgba(24, 24, 24, 1)"></path>
-                <path id="camp-text-path" d="M0,60 C250,0 500,120 750,60 C1000,0 1250,120 1500,60 C1700,0 1850,120 1920,60" stroke="none" fill="none"></path>
-                <text font-size="14" fill="#fde5ec" text-anchor="middle" letter-spacing="1" id="svg_text" dy="5">
-                    <textPath href="#camp-text-path" startOffset="50%">
-                        <?php echo esc_html($text_stroke); ?>
-                        <animate attributeName="startOffset" from="100%" to="-100%" dur="120s"></animate>
-                    </textPath>
-                </text>
-            </svg>
-        </div>
+        <?php
+        jullybride_template_part('components/floating-strip', [
+            'class' => 'lenta-stroke wow bounceInUp',
+            'text' => (string) $text_stroke,
+            'height' => 110,
+            'viewbox_height' => 110,
+            'repeat' => false,
+        ]);
+        ?>
     <?php endif; ?>
 
     <img src="<?php echo esc_url(jullybride_camp_asset('oblaka.png')); ?>" alt="" class="clouds-pattern d-none d-lg-block" data-critical="true">
