@@ -88,34 +88,62 @@ function jullybride_footer_products(): array
         $selected_products = [$selected_products];
     }
 
-    $products = [];
-
+    $product_ids = [];
     foreach ($selected_products as $selected_product) {
         $product_id = $selected_product instanceof WP_Post ? (int) $selected_product->ID : (int) $selected_product;
 
-        if (!$product_id || !function_exists('wc_get_product')) {
+        if ($product_id > 0) {
+            $product_ids[] = $product_id;
+        }
+    }
+
+    $product_ids = array_values(array_unique($product_ids));
+    if (!$product_ids) {
+        return [];
+    }
+
+    if (function_exists('_prime_post_caches')) {
+        _prime_post_caches($product_ids, false, true);
+    } else {
+        update_meta_cache('post', $product_ids);
+    }
+
+    $image_ids = [];
+    foreach ($product_ids as $product_id) {
+        $image_id = (int) get_post_thumbnail_id($product_id);
+
+        if ($image_id > 0) {
+            $image_ids[] = $image_id;
+        }
+    }
+
+    if (function_exists('jullybride_prime_attachment_caches')) {
+        jullybride_prime_attachment_caches($image_ids);
+    }
+
+    $products = [];
+
+    foreach ($product_ids as $product_id) {
+        $post = get_post($product_id);
+        if (!$post instanceof WP_Post || $post->post_type !== 'product') {
             continue;
         }
 
-        $product = wc_get_product($product_id);
-
-        if (!$product) {
-            continue;
-        }
-
-        $image_id = (int) $product->get_image_id();
+        $image_id = (int) get_post_thumbnail_id($product_id);
         $image_url = $image_id ? wp_get_attachment_image_url($image_id, 'medium_large') : '';
 
         if (!$image_url && function_exists('wc_placeholder_img_src')) {
             $image_url = wc_placeholder_img_src('medium_large');
         }
 
+        $price = get_post_meta($product_id, '_price', true);
+
         $products[] = [
             'id' => $product_id,
-            'title' => $product->get_name(),
+            'title' => get_the_title($product_id),
             'url' => get_permalink($product_id),
             'image' => $image_url,
-            'price' => jullybride_format_price($product->get_price()),
+            'price' => jullybride_format_price($price),
             'type' => jullybride_product_type_label($product_id),
         ];
 

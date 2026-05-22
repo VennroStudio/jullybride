@@ -11,6 +11,11 @@ if (!defined('ABSPATH')) {
 </head>
 <body <?php body_class('jullybride-site'); ?>>
 <?php wp_body_open(); ?>
+<?php
+if (function_exists('jullybride_prime_acf_option_group')) {
+    jullybride_prime_acf_option_group('header');
+}
+?>
 <header class="jb-site-header" data-jb-header>
     <?php jullybride_template_part('header/top'); ?>
     <?php jullybride_template_part('header/brand'); ?>

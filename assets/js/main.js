@@ -47,6 +47,32 @@
     });
   };
 
+  const syncCatalogFilterValues = (form) => {
+    if (!form) return;
+
+    const fields = new Map();
+    form.querySelectorAll('[data-jb-filter-term]').forEach((input) => {
+      const fieldName = input.getAttribute('data-jb-filter-term');
+      if (!fieldName) return;
+
+      if (!fields.has(fieldName)) {
+        fields.set(fieldName, []);
+      }
+
+      fields.get(fieldName).push(input);
+    });
+
+    fields.forEach((inputs, fieldName) => {
+      const hidden = form.querySelector(`input[type="hidden"][name="${fieldName}"]`);
+      if (!hidden) return;
+
+      hidden.value = inputs
+        .filter((input) => input.checked)
+        .map((input) => input.value)
+        .join(',');
+    });
+  };
+
   const refreshCatalogFilterCounts = (() => {
     let controller = null;
     let timer = null;
@@ -62,6 +88,7 @@
 
         controller = new AbortController();
         const requestController = controller;
+        syncCatalogFilterValues(form);
         const body = new FormData(form);
         body.set('action', 'jullybride_catalog_filter_counts');
         body.set('category_id', form.getAttribute('data-jb-catalog-category') || '0');
@@ -92,6 +119,27 @@
       }, 120);
     };
   })();
+
+  const handleCatalogFilterInput = (event) => {
+    const target = event.target;
+
+    if (!(target instanceof Element)) {
+      return;
+    }
+
+    const form = target.closest('[data-jb-filters]');
+    if (!form) return;
+
+    const isFilterTerm = target.matches('[data-jb-filter-term]');
+    const isStock = target.matches('input[name="jb_in_stock"]');
+
+    if (!isFilterTerm && !isStock) {
+      return;
+    }
+
+    syncCatalogFilterValues(form);
+    refreshCatalogFilterCounts(form);
+  };
 
   document.addEventListener('click', (event) => {
     const citySwitcher = event.target.closest('[data-jb-city-switcher]');
@@ -149,24 +197,8 @@
     }
   });
 
-  document.addEventListener('change', (event) => {
-    const checkbox = event.target.closest('[data-jb-filter-term]');
-    const form = event.target.closest('[data-jb-filters]');
-
-    if (checkbox) {
-      const fieldName = checkbox.getAttribute('data-jb-filter-term');
-      const hidden = form ? form.querySelector(`input[type="hidden"][name="${fieldName}"]`) : null;
-
-      if (hidden && form) {
-        const checked = Array.from(form.querySelectorAll(`[data-jb-filter-term="${fieldName}"]:checked`)).map((item) => item.value);
-        hidden.value = checked.join(',');
-      }
-    }
-
-    if (form && (checkbox || event.target.matches('input[name="jb_in_stock"]'))) {
-      refreshCatalogFilterCounts(form);
-    }
-  });
+  document.addEventListener('input', handleCatalogFilterInput, true);
+  document.addEventListener('change', handleCatalogFilterInput, true);
 
   document.addEventListener('submit', (event) => {
     const form = event.target.closest('[data-jb-filters], .jb-catalog-sort-form');

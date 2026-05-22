@@ -13,6 +13,12 @@ $args = wp_parse_args($args ?? [], [
 $source = $args['source'];
 $field_name = (string) $args['field_name'];
 
+if ($source === 'option' && function_exists('jullybride_prime_acf_option_field')) {
+    jullybride_prime_acf_option_field($field_name);
+    jullybride_prime_acf_option_missing_subfields($field_name, ['link']);
+    jullybride_prime_acf_option_media($field_name, ['img', 'foto', 'video']);
+}
+
 if (!function_exists('have_rows') || !have_rows($field_name, $source)) {
     return;
 }
@@ -33,8 +39,8 @@ while (have_rows($field_name, $source)) :
                 <?php
                 while (have_rows('karusel')) :
                     the_row();
-                    $photo = get_sub_field('foto');
-                    $video = get_sub_field('video');
+                    $photo = get_sub_field('foto', false);
+                    $video = get_sub_field('video', false);
                     $photo_url = function_exists('jullybride_media_url') ? jullybride_media_url($photo, 'carousel-story') : '';
                     $photo_alt = is_array($photo) ? (string) ($photo['alt'] ?? '') : '';
                     $video_url = function_exists('jullybride_media_url') ? jullybride_media_url($video) : '';

@@ -15,6 +15,12 @@ $field_name = (string) $args['field_name'];
 $section_class = trim((string) $args['section_class']);
 $thumb_size = (string) $args['thumb_size'];
 
+if ($source === 'option' && function_exists('jullybride_prime_acf_option_field')) {
+    jullybride_prime_acf_option_field($field_name);
+    jullybride_prime_acf_option_missing_subfields($field_name, ['link']);
+    jullybride_prime_acf_option_media($field_name, ['img', 'foto', 'video']);
+}
+
 if (!function_exists('have_rows') || !have_rows($field_name, $source)) {
     return;
 }
@@ -33,9 +39,9 @@ if (!function_exists('have_rows') || !have_rows($field_name, $source)) {
                     while (have_rows($field_name, $source)) :
                         the_row();
                         $story_id = 'open-carusel-added-story_' . get_row_index();
-                        $image = get_sub_field('img');
+                        $image = get_sub_field('img', false);
                         $image_url = function_exists('jullybride_media_url') ? jullybride_media_url($image, $thumb_size) : '';
-                        $title = (string) get_sub_field('title');
+                        $title = (string) get_sub_field('title', false);
                         ?>
                         <li id="<?php echo esc_attr($story_id); ?>">
                             <a href="javascript:void(0)">

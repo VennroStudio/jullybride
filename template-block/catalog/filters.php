@@ -6,7 +6,6 @@ if (!defined('ABSPATH')) {
 $filter_widget = '';
 $sort_widget = '';
 $filters = jullybride_catalog_filter_definitions();
-$default_open_filters = array_slice((array) JULLYBRIDE_CATALOG_FILTER_PRIORITY, 0, 3);
 $reset_url = jullybride_catalog_reset_url();
 $current_order = isset($_GET['orderby']) ? sanitize_key(wp_unslash($_GET['orderby'])) : '';
 $current_category = jullybride_catalog_current_product_category();
@@ -31,7 +30,7 @@ $stock_count = count(array_intersect($stock_base_ids, $stock_ids));
                         <?php endif; ?>
 
                         <div class="jb-filter-scroll">
-                            <fieldset class="jb-filter jb-filter--stock <?php echo !empty($_GET['jb_in_stock']) ? 'is-open' : ''; ?>">
+                            <fieldset class="jb-filter jb-filter--stock">
                                 <legend class="jb-filter__legend">
                                     <button class="jb-filter__toggle" type="button" data-jb-filter-toggle>
                                         <span>Наличие</span>
@@ -63,9 +62,8 @@ $stock_count = count(array_intersect($stock_base_ids, $stock_ids));
                                     continue;
                                 }
 
-                                $is_open = $selected || in_array($param, $default_open_filters, true);
                                 ?>
-                                <fieldset class="jb-filter <?php echo $is_open ? 'is-open' : ''; ?>">
+                                <fieldset class="jb-filter">
                                     <legend class="jb-filter__legend">
                                         <button class="jb-filter__toggle" type="button" data-jb-filter-toggle>
                                             <span><?php echo esc_html((string) $filter['label']); ?></span>

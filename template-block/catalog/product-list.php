@@ -10,6 +10,22 @@ if (!$catalog_query instanceof WP_Query) {
     $catalog_query = new WP_Query(jullybride_catalog_query_args());
     $owns_query = true;
 }
+
+$catalog_products = [];
+if (function_exists('wc_get_product')) {
+    foreach ($catalog_query->posts ?: [] as $post) {
+        $product_id = $post instanceof WP_Post ? (int) $post->ID : (int) $post;
+        $product = $product_id ? wc_get_product($product_id) : null;
+
+        if ($product instanceof WC_Product) {
+            $catalog_products[$product_id] = $product;
+        }
+    }
+}
+
+if (function_exists('jullybride_prime_product_image_caches')) {
+    jullybride_prime_product_image_caches($catalog_products);
+}
 ?>
 <?php if ($catalog_query->have_posts()) : ?>
     <section class="products-list-box position-relative jb-striped-arch">
@@ -20,7 +36,8 @@ if (!$catalog_query instanceof WP_Query) {
                     <?php
                     $catalog_query->the_post();
                     $index++;
-                    $product = wc_get_product(get_the_ID());
+                    $product_id = get_the_ID();
+                    $product = $catalog_products[$product_id] ?? wc_get_product($product_id);
                     jullybride_template_part('components/product-card', [
                         'product' => $product,
                         'index' => $index,

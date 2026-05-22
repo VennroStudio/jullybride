@@ -30,6 +30,35 @@ function jullybride_product_image_ids(WC_Product $product): array
     )));
 }
 
+function jullybride_prime_attachment_caches(array $attachment_ids): void
+{
+    $attachment_ids = array_values(array_unique(array_filter(array_map('absint', $attachment_ids))));
+
+    if (!$attachment_ids) {
+        return;
+    }
+
+    if (function_exists('_prime_post_caches')) {
+        _prime_post_caches($attachment_ids, false, true);
+        return;
+    }
+
+    update_meta_cache('post', $attachment_ids);
+}
+
+function jullybride_prime_product_image_caches(array $products): void
+{
+    $attachment_ids = [];
+
+    foreach ($products as $product) {
+        if ($product instanceof WC_Product) {
+            $attachment_ids = array_merge($attachment_ids, jullybride_product_image_ids($product));
+        }
+    }
+
+    jullybride_prime_attachment_caches($attachment_ids);
+}
+
 function jullybride_format_price(int|float|string|null $price): string
 {
     if ($price === null || $price === '') {
@@ -41,7 +70,7 @@ function jullybride_format_price(int|float|string|null $price): string
 
 function jullybride_product_type_label(int $product_id): string
 {
-    return function_exists('get_field') ? (string) get_field('tip_tovara', $product_id) : '';
+    return (string) get_post_meta($product_id, 'tip_tovara', true);
 }
 
 function jullybride_clean_builder_content(string $content): string

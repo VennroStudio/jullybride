@@ -254,12 +254,10 @@ function jullybride_catalog_filter_definitions(): array
         return [];
     }
 
+    $taxonomies_with_terms = jullybride_catalog_taxonomies_with_product_terms($product_ids);
     $definitions = array_values(array_filter(
         jullybride_catalog_all_attribute_filter_definitions(),
-        static fn (array $definition): bool => jullybride_catalog_taxonomy_has_product_terms(
-            (string) ($definition['param'] ?? ''),
-            $product_ids
-        )
+        static fn (array $definition): bool => isset($taxonomies_with_terms[(string) ($definition['param'] ?? '')])
     ));
 
     $cache[$cache_key] = jullybride_catalog_sort_filter_definitions($definitions);
@@ -267,30 +265,43 @@ function jullybride_catalog_filter_definitions(): array
     return $cache[$cache_key];
 }
 
-function jullybride_catalog_taxonomy_has_product_terms(string $taxonomy, array $product_ids): bool
+function jullybride_catalog_taxonomies_with_product_terms(array $product_ids): array
 {
     global $wpdb;
 
+    $product_ids = array_values(array_unique(array_filter(array_map('absint', $product_ids))));
+    if (!$product_ids) {
+        return [];
+    }
+
+    $cache_key = md5(implode(',', $product_ids));
+    static $cache = [];
+
+    if (isset($cache[$cache_key])) {
+        return $cache[$cache_key];
+    }
+
+    $product_sql = implode(',', $product_ids);
+    $taxonomies = $wpdb->get_col(
+        "SELECT DISTINCT tt.taxonomy
+        FROM {$wpdb->term_relationships} tr
+        INNER JOIN {$wpdb->term_taxonomy} tt ON tt.term_taxonomy_id = tr.term_taxonomy_id
+        WHERE tr.object_id IN ({$product_sql})
+            AND tt.taxonomy LIKE 'pa\\_%'"
+    );
+
+    $cache[$cache_key] = array_fill_keys(array_map('strval', $taxonomies ?: []), true);
+
+    return $cache[$cache_key];
+}
+
+function jullybride_catalog_taxonomy_has_product_terms(string $taxonomy, array $product_ids): bool
+{
     if ($taxonomy === '' || !taxonomy_exists($taxonomy)) {
         return false;
     }
 
-    $product_ids = array_values(array_unique(array_filter(array_map('absint', $product_ids))));
-    if (!$product_ids) {
-        return false;
-    }
-
-    $product_sql = implode(',', $product_ids);
-    $count = (int) $wpdb->get_var($wpdb->prepare(
-        "SELECT COUNT(DISTINCT tr.term_taxonomy_id)
-        FROM {$wpdb->term_relationships} tr
-        INNER JOIN {$wpdb->term_taxonomy} tt ON tt.term_taxonomy_id = tr.term_taxonomy_id
-        WHERE tr.object_id IN ({$product_sql})
-            AND tt.taxonomy = %s",
-        $taxonomy
-    ));
-
-    return $count > 0;
+    return isset(jullybride_catalog_taxonomies_with_product_terms($product_ids)[$taxonomy]);
 }
 
 function jullybride_catalog_definition_params(array $definition): array
@@ -810,10 +821,46 @@ function jullybride_catalog_count_base_product_ids(string $excluded_param): arra
     return $cache[$cache_key];
 }
 
-function jullybride_catalog_apply_dynamic_term_counts(array &$terms_by_name, array $definition, array $product_ids): void
+function jullybride_catalog_attribute_relationships_for_products(array $product_ids): array
 {
     global $wpdb;
 
+    $product_ids = array_values(array_unique(array_filter(array_map('absint', $product_ids))));
+    if (!$product_ids) {
+        return [];
+    }
+
+    $cache_ids = $product_ids;
+    sort($cache_ids);
+    $cache_key = md5(implode(',', $cache_ids));
+    static $cache = [];
+
+    if (isset($cache[$cache_key])) {
+        return $cache[$cache_key];
+    }
+
+    $product_sql = implode(',', $product_ids);
+    $rows = $wpdb->get_results(
+        "SELECT tr.object_id, tr.term_taxonomy_id
+        FROM {$wpdb->term_relationships} tr
+        INNER JOIN {$wpdb->term_taxonomy} tt ON tt.term_taxonomy_id = tr.term_taxonomy_id
+        WHERE tr.object_id IN ({$product_sql})
+            AND tt.taxonomy LIKE 'pa\\_%'",
+        ARRAY_A
+    );
+
+    $relationships = [];
+    foreach ($rows ?: [] as $row) {
+        $relationships[(int) $row['term_taxonomy_id']][(int) $row['object_id']] = true;
+    }
+
+    $cache[$cache_key] = $relationships;
+
+    return $cache[$cache_key];
+}
+
+function jullybride_catalog_apply_dynamic_term_counts(array &$terms_by_name, array $definition, array $product_ids): void
+{
     foreach ($terms_by_name as &$term_data) {
         $term_data['count'] = 0;
     }
@@ -845,24 +892,17 @@ function jullybride_catalog_apply_dynamic_term_counts(array &$terms_by_name, arr
         return;
     }
 
-    $product_sql = implode(',', $product_ids);
-    $tt_sql = implode(',', array_map('absint', array_keys($tt_id_to_key)));
-    $rows = $wpdb->get_results(
-        "SELECT object_id, term_taxonomy_id
-        FROM {$wpdb->term_relationships}
-        WHERE object_id IN ({$product_sql})
-            AND term_taxonomy_id IN ({$tt_sql})",
-        ARRAY_A
-    );
-
     $objects_by_key = [];
-    foreach ($rows ?: [] as $row) {
-        $tt_id = (int) $row['term_taxonomy_id'];
-        if (!isset($tt_id_to_key[$tt_id])) {
+    $relationships = jullybride_catalog_attribute_relationships_for_products($product_ids);
+
+    foreach ($tt_id_to_key as $tt_id => $key) {
+        if (empty($relationships[$tt_id])) {
             continue;
         }
 
-        $objects_by_key[$tt_id_to_key[$tt_id]][(int) $row['object_id']] = true;
+        foreach ($relationships[$tt_id] as $object_id => $_) {
+            $objects_by_key[$key][(int) $object_id] = true;
+        }
     }
 
     foreach ($objects_by_key as $key => $objects) {
@@ -1115,6 +1155,10 @@ function jullybride_ajax_catalog_filter_counts(): void
         wp_send_json_error(['message' => 'WooCommerce недоступен.'], 400);
     }
 
+    $GLOBALS['jullybride_catalog_filter_category_id'] = isset($_POST['category_id'])
+        ? absint($_POST['category_id'])
+        : 0;
+
     $allowed_params = [
         'jb_in_stock',
         '_price',
@@ -1140,9 +1184,6 @@ function jullybride_ajax_catalog_filter_counts(): void
     }
 
     $_GET = $next_get;
-    $GLOBALS['jullybride_catalog_filter_category_id'] = isset($_POST['category_id'])
-        ? absint($_POST['category_id'])
-        : 0;
 
     $counts = [];
 
