@@ -3013,10 +3013,6 @@ body.page-template-template_contacts .jb-editorial-page {
   line-height: 1.45;
 }
 
-.jb-social-links--about {
-  justify-content: center;
-}
-
 @media (max-width: 900px) {
   .jb-about-features__grid {
     grid-template-columns: 1fr;

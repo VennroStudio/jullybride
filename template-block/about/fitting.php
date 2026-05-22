@@ -14,6 +14,5 @@ $bg_url = wp_get_attachment_image_url(17960, 'full');
             Бери подругу и приходи в Jully Bride искать платье мечты!
             Посмотри видео о том, как проходит выбор платья у нас.
         </p>
-        <?php jullybride_template_part('common/social-links', ['context' => 'about']); ?>
     </div>
 </section>

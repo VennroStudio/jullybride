@@ -171,10 +171,3 @@ function jullybride_format_footer_legal_links(mixed $links): array
         ];
     }, $links)));
 }
-
-function jullybride_social_links(): array
-{
-    $links = jullybride_option('social_links');
-
-    return is_array($links) ? $links : [];
-}
