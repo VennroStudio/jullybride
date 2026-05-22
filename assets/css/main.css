@@ -2004,6 +2004,14 @@ a {
   margin-bottom: 48px;
 }
 
+.jb-stock-important-cta {
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  background: #f9e5e9;
+  padding-top: 70px;
+}
+
 .jb-stock-single {
   color: #111;
 }

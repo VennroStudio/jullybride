@@ -25,6 +25,7 @@ $video_important = function_exists('get_field') ? (string) get_field('video_impo
 $text_stroke = function_exists('get_field') ? (string) get_field('text_stroke', $home_source_id) : '';
 
 jullybride_template_part('components/important-cta', [
+    'section_class' => 'box-important position-relative jb-stock-important-cta',
     'left_items' => $left_items,
     'media' => [
         'type' => 'video',
