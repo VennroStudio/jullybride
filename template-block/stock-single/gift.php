@@ -19,7 +19,7 @@ $description = (string) jullybride_stock_field('sale_gift_description', $post_id
 $button = (string) jullybride_stock_field('sale_gift_button', $post_id, 'ЗАБРАТЬ ПОДАРОК');
 ?>
 <section class="jb-promo-gift">
-    <?php jullybride_template_part('stock/marquee', ['text' => $marquee]); ?>
+    <?php jullybride_template_part('stock-single/marquee', ['text' => $marquee]); ?>
 
     <div class="jb-promo-gift__inner">
         <?php if ($image) : ?>

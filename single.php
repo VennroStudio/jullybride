@@ -1,16 +1,7 @@
 <?php
 get_header();
 
-if (get_post_type() === 'promo') {
-    ?>
-    <main class="jb-main jb-editorial-page jb-stock">
-        <div class="container">
-            <?php jullybride_breadcrumbs(); ?>
-            <?php jullybride_template_part('stock/single'); ?>
-        </div>
-    </main>
-    <?php
-} elseif (get_post_type() === 'post') {
+if (get_post_type() === 'post') {
     ?>
     <main class="jb-main jb-editorial-page jb-blog">
         <div class="container">

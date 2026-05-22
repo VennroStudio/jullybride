@@ -3,15 +3,6 @@ get_header();
 
 if (is_page('c')) {
     jullybride_template_part('catalog/layout');
-} elseif (is_page('promo')) {
-    ?>
-    <main class="jb-main jb-editorial-page jb-stock">
-        <div class="container">
-            <?php jullybride_breadcrumbs(); ?>
-            <?php jullybride_template_part('stock/archive'); ?>
-        </div>
-    </main>
-    <?php
 } elseif (is_page('pinkcamp')) {
     jullybride_template_part('camp/layout');
 } elseif (is_page(['franshiza', 'franshiza-2'])) {
