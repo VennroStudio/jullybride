@@ -653,29 +653,26 @@
       $carousel.owlCarousel({
         loop: true,
         center: true,
-        items: 3,
-        margin: 64,
+        autoWidth: true,
+        margin: 30,
         nav: true,
         dots: false,
         autoplay: true,
         autoplayTimeout: 5200,
         autoplayHoverPause: true,
-        navText: ['‹', '›'],
+        navText: ['←', '→'],
         responsive: {
           0: {
-            items: 1,
-            center: false,
-            margin: 20
+            center: true,
+            margin: 10
           },
           760: {
-            items: 2,
-            center: false,
-            margin: 32
+            center: true,
+            margin: 24
           },
           1100: {
-            items: 3,
             center: true,
-            margin: 64
+            margin: 30
           }
         }
       });

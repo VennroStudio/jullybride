@@ -7,7 +7,7 @@ $sale_ids = function_exists('wc_get_product_ids_on_sale') ? array_map('absint', 
 $query_args = [
     'post_type' => 'product',
     'post_status' => 'publish',
-    'posts_per_page' => 17,
+    'posts_per_page' => 18,
     'orderby' => 'post__in',
     'post__in' => $sale_ids ?: [0],
 ];

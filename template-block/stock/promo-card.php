@@ -7,7 +7,7 @@ require_once JULLYBRIDE_THEME_DIR . '/template-block/stock/helpers.php';
 
 $index = (int) ($args['index'] ?? 0);
 $class = 'jb-stock-promo-card jb-stock-promo-card--' . ($index + 1);
-$image = jullybride_stock_featured_image_url(get_the_ID(), $index === 1 ? 'jullybride-wide' : 'jullybride-card');
+$image = jullybride_stock_featured_image_url(get_the_ID(), 'jullybride-card');
 $is_clickable = (bool) jullybride_stock_field('sale_clickable', get_the_ID(), true);
 $tag = $is_clickable ? 'a' : 'div';
 $title = (string) jullybride_stock_field('sale_header', get_the_ID(), get_the_title());
@@ -15,16 +15,22 @@ $subtitle = (string) jullybride_stock_field('sale_header_2', get_the_ID(), get_t
 ?>
 <article class="<?php echo esc_attr($class); ?>">
     <<?php echo $tag; ?> class="jb-stock-promo-card__link" <?php echo $is_clickable ? 'href="' . esc_url(get_permalink()) . '"' : ''; ?> aria-label="<?php echo esc_attr(get_the_title()); ?>">
-        <?php if ($image) : ?>
-            <img src="<?php echo esc_url($image); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" loading="<?php echo $index < 3 ? 'eager' : 'lazy'; ?>">
-        <?php else : ?>
-            <span class="jb-stock-promo-card__placeholder"></span>
-        <?php endif; ?>
-        <span class="jb-stock-promo-card__overlay">
-            <strong><?php echo esc_html($title ?: get_the_title()); ?></strong>
-            <?php if ($subtitle) : ?>
-                <small><?php echo esc_html(wp_trim_words($subtitle, 12)); ?></small>
+        <span class="jb-stock-promo-card__media">
+            <?php if ($image) : ?>
+                <img src="<?php echo esc_url($image); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" loading="<?php echo $index < 3 ? 'eager' : 'lazy'; ?>">
+            <?php else : ?>
+                <span class="jb-stock-promo-card__placeholder"></span>
             <?php endif; ?>
+        </span>
+        <span class="jb-stock-promo-card__body">
+            <strong class="jb-stock-promo-card__title"><?php echo esc_html($title ?: get_the_title()); ?></strong>
+            <?php if ($subtitle) : ?>
+                <small class="jb-stock-promo-card__text"><?php echo esc_html(wp_trim_words($subtitle, 12)); ?></small>
+            <?php endif; ?>
+            <span class="jb-stock-promo-card__actions">
+                <span class="jb-stock-promo-card__more">Узнать подробнее</span>
+                <span class="jb-stock-promo-card__book">Записаться на примерку</span>
+            </span>
         </span>
     </<?php echo $tag; ?>>
 </article>

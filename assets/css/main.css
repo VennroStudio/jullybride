@@ -1926,8 +1926,14 @@ a {
 }
 
 .jb-stock-promos {
-  width: min(100%, 1180px);
-  margin: 0 auto 92px;
+  --jb-stock-promo-card-width: 520px;
+  --jb-stock-promo-card-height: 600px;
+  --jb-stock-promo-media-height: 360px;
+  position: relative;
+  width: min(1883px, 100vw);
+  max-width: none;
+  margin: 0 0 92px 50%;
+  transform: translateX(-50%);
 }
 
 .jb-stock-promos::after {
@@ -1937,51 +1943,67 @@ a {
 .jb-stock-promos__slider,
 .jb-stock-promos__slider.owl-carousel {
   display: block;
+  padding-bottom: 83px;
 }
 
 .jb-stock-promos__slider .owl-stage {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .jb-stock-promos__slider .owl-item {
+  opacity: .6;
   transition: opacity .28s ease;
+}
+
+.jb-stock-promos__slider .owl-item.center {
+  opacity: 1;
 }
 
 .jb-stock-promos__slider .owl-item:not(.center) {
   transform: none;
-  opacity: 1;
+}
+
+.jb-stock-promos__slider .owl-nav {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
 }
 
 .jb-stock-promos__slider .owl-nav button.owl-prev,
 .jb-stock-promos__slider .owl-nav button.owl-next {
-  position: absolute;
-  top: 50%;
+  position: static;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 54px;
-  height: 54px;
+  width: 33px;
+  height: 33px;
+  border: 2px solid #681f2a;
   border-radius: 50%;
-  background: rgba(0, 0, 0, .46);
-  color: #fff;
+  background: transparent;
+  color: #681f2a;
   font-family: Montserrat, Arial, sans-serif;
-  font-size: 42px;
+  font-size: 23px;
+  font-weight: 400;
   line-height: 1;
-  transform: translateY(-50%);
+  transform: none;
 }
 
 .jb-stock-promos__slider .owl-nav button.owl-prev {
-  left: 18px;
-}
-
-.jb-stock-promos__slider .owl-nav button.owl-next {
-  right: 18px;
+  background: #681f2a;
+  color: #f9e5e9;
 }
 
 .jb-stock-promos__slider .jb-stock-promo-card {
   grid-column: auto;
   grid-row: auto;
+  width: var(--jb-stock-promo-card-width);
+  height: var(--jb-stock-promo-card-height);
   max-height: none;
   margin: 0;
   overflow: visible;
@@ -1990,17 +2012,28 @@ a {
 .jb-stock-promos__slider .jb-stock-promo-card__link,
 .jb-stock-promos__slider .jb-stock-promo-card a {
   position: relative;
-  display: block;
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  width: var(--jb-stock-promo-card-width);
+  height: var(--jb-stock-promo-card-height);
   min-height: 0;
-  aspect-ratio: 1 / 1;
   overflow: hidden;
-  background: #f5cdcb;
-  color: #fff;
+  border-radius: 20px;
+  background: #f9f9f9;
+  color: #181818;
   text-decoration: none;
 }
 
-.jb-stock-promos__slider .jb-stock-promo-card__link img,
+.jb-stock-promo-card__media {
+  display: block;
+  flex: 0 0 var(--jb-stock-promo-media-height);
+  width: 100%;
+  height: var(--jb-stock-promo-media-height);
+  overflow: hidden;
+  border-radius: 20px 20px 0 0;
+}
+
+.jb-stock-promos__slider .jb-stock-promo-card__media img,
 .jb-stock-promos__slider .jb-stock-promo-card__placeholder {
   display: block;
   width: 100%;
@@ -2009,29 +2042,68 @@ a {
   object-fit: cover;
 }
 
-.jb-stock-promos__slider .owl-item.center .jb-stock-promo-card__link {
+.jb-stock-promo-card__body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
   min-height: 0;
+  padding: 72px 40px 40px;
+  background: #f9f9f9;
 }
 
-.jb-stock-promo-card__overlay {
-  position: absolute;
-  inset: auto 0 0;
-  padding: 104px 28px 34px;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, .66));
-}
-
-.jb-stock-promo-card__overlay strong {
+.jb-stock-promo-card__title,
+.jb-stock-promo-card__text {
   display: block;
-  font-size: 20px;
+}
+
+.jb-stock-promo-card__title {
+  color: #181818;
+  font-size: 18px;
   font-weight: 800;
-  line-height: 1.16;
+  line-height: 1.18;
 }
 
-.jb-stock-promo-card__overlay small {
-  display: block;
-  margin-top: 8px;
-  font-size: 14px;
-  line-height: 1.25;
+.jb-stock-promo-card__text {
+  margin-top: 12px;
+  color: #181818;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+.jb-stock-promo-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  margin-top: auto;
+}
+
+.jb-stock-promo-card__more {
+  color: #681f2a;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.1;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.jb-stock-promo-card__book {
+  display: inline-flex;
+  flex: 0 0 250px;
+  align-items: center;
+  justify-content: center;
+  width: 250px;
+  height: 57px;
+  border-radius: 999px;
+  background: #681f2a;
+  color: #f9e5e9;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .jb-stock-products {
@@ -2400,10 +2472,59 @@ a {
     padding: 56px 0 84px;
   }
 
-  .jb-stock-promo-card__link,
-  .jb-stock-promo-card__link img,
-  .jb-stock-promo-card__placeholder {
+  .jb-stock-promos {
+    --jb-stock-promo-card-width: 295px;
+    --jb-stock-promo-card-height: 400px;
+    --jb-stock-promo-media-height: 180px;
+    width: 100vw;
+    margin-bottom: 68px;
+  }
+
+  .jb-stock-promos__slider,
+  .jb-stock-promos__slider.owl-carousel {
+    padding-bottom: 63px;
+  }
+
+  .jb-stock-promos__slider .jb-stock-promo-card__link,
+  .jb-stock-promos__slider .jb-stock-promo-card a,
+  .jb-stock-promos__slider .jb-stock-promo-card__media img,
+  .jb-stock-promos__slider .jb-stock-promo-card__placeholder {
     min-height: 0;
+  }
+
+  .jb-stock-promo-card__body {
+    padding: 48px 24px 0;
+  }
+
+  .jb-stock-promo-card__title {
+    font-size: 16px;
+    line-height: 1.16;
+  }
+
+  .jb-stock-promo-card__text {
+    margin-top: 8px;
+    font-size: 12px;
+    line-height: 1.32;
+  }
+
+  .jb-stock-promo-card__actions {
+    display: block;
+    margin-top: auto;
+  }
+
+  .jb-stock-promo-card__more {
+    display: inline-block;
+    margin-bottom: 20px;
+    font-size: 12px;
+  }
+
+  .jb-stock-promo-card__book {
+    display: flex;
+    width: calc(100% + 48px);
+    height: 54px;
+    margin: 0 -24px;
+    border-radius: 0;
+    font-size: 11px;
   }
 
   .jb-stock-products h2,
