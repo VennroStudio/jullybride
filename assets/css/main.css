@@ -2651,17 +2651,6 @@ a {
   padding-bottom: 80px;
 }
 
-.jb-contacts-page::before {
-  content: "";
-  position: absolute;
-  top: 172px;
-  right: -190px;
-  width: 245px;
-  height: 510px;
-  pointer-events: none;
-  background: url("../images/contact-girl.png") top right / contain no-repeat;
-}
-
 .jb-contacts-page .jb-contacts-header {
   position: relative;
   width: min(100%, 1180px);

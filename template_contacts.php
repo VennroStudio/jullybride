@@ -15,6 +15,7 @@ get_header();
         </div>
     </div>
     <?php jullybride_template_part('contacts/contact-tabs'); ?>
+    <?php jullybride_template_part('components/rest-ribbon'); ?>
 </main>
 <?php
 get_footer();
