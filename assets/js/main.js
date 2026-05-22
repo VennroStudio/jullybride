@@ -141,6 +141,38 @@
     refreshCatalogFilterCounts(form);
   };
 
+  const setCatalogUrlParam = (param, value) => {
+    if (!param) return;
+
+    const url = new URL(window.location.href);
+    let nextValue = String(value || '').trim();
+
+    try {
+      nextValue = decodeURIComponent(nextValue);
+    } catch (error) {
+      // Keep the original slug if it is not URI-encoded.
+    }
+
+    if (nextValue) {
+      url.searchParams.set(param, nextValue);
+    } else {
+      url.searchParams.delete(param);
+    }
+
+    url.searchParams.delete('paged');
+    url.searchParams.delete('page');
+    window.location.href = url.toString();
+  };
+
+  const closePriceDropdowns = (except = null) => {
+    document.querySelectorAll('[data-jb-price-filter].is-open').forEach((root) => {
+      if (root === except) return;
+
+      root.classList.remove('is-open');
+      root.querySelector('[data-jb-price-content]')?.setAttribute('hidden', '');
+    });
+  };
+
   document.addEventListener('click', (event) => {
     const citySwitcher = event.target.closest('[data-jb-city-switcher]');
     const openMobile = event.target.closest('[data-jb-mobile-open]');
@@ -195,10 +227,68 @@
     if (event.target.closest('[data-jb-filters-close]')) {
       hide(document.querySelector('[data-jb-filters]'));
     }
+
+    const priceToggle = event.target.closest('[data-jb-price-toggle]');
+    if (priceToggle) {
+      event.preventDefault();
+      const root = priceToggle.closest('[data-jb-price-filter]');
+      const content = root?.querySelector('[data-jb-price-content]');
+      const isOpen = !root?.classList.contains('is-open');
+
+      closePriceDropdowns(root);
+      root?.classList.toggle('is-open', isOpen);
+
+      if (content) {
+        content.hidden = !isOpen;
+      }
+
+      return;
+    }
+
+    const priceApply = event.target.closest('[data-jb-price-apply]');
+    if (priceApply) {
+      event.preventDefault();
+      const root = priceApply.closest('[data-jb-price-filter]');
+      const min = root?.querySelector('[data-jb-price-min]')?.value.trim() || '';
+      const max = root?.querySelector('[data-jb-price-max]')?.value.trim() || '';
+      let value = '';
+
+      if (min && max) {
+        value = `${min}-${max}`;
+      } else if (min) {
+        value = min;
+      } else if (max) {
+        value = `0-${max}`;
+      }
+
+      setCatalogUrlParam('_price', value);
+      return;
+    }
+
+    const priceReset = event.target.closest('[data-jb-price-reset]');
+    if (priceReset) {
+      event.preventDefault();
+      setCatalogUrlParam('_price', '');
+      return;
+    }
+
+    if (!event.target.closest('[data-jb-price-filter]')) {
+      closePriceDropdowns();
+    }
   });
 
   document.addEventListener('input', handleCatalogFilterInput, true);
   document.addEventListener('change', handleCatalogFilterInput, true);
+
+  document.addEventListener('change', (event) => {
+    const target = event.target;
+
+    if (!(target instanceof HTMLSelectElement) || !target.matches('[data-jb-catalog-quick-filter]')) {
+      return;
+    }
+
+    setCatalogUrlParam(target.getAttribute('data-jb-catalog-quick-filter'), target.value);
+  }, true);
 
   document.addEventListener('submit', (event) => {
     const form = event.target.closest('[data-jb-filters], .jb-catalog-sort-form');

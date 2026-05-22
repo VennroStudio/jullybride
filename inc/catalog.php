@@ -766,6 +766,68 @@ function jullybride_catalog_price_product_ids(): array
     return array_map('absint', $wpdb->get_col($sql) ?: []);
 }
 
+function jullybride_catalog_price_bounds(array $product_ids): array
+{
+    global $wpdb;
+
+    $product_ids = array_values(array_unique(array_filter(array_map('absint', $product_ids))));
+    if (!$product_ids) {
+        return [0, 100000];
+    }
+
+    $cache_ids = $product_ids;
+    sort($cache_ids);
+    $cache_key = md5(implode(',', $cache_ids));
+    static $cache = [];
+
+    if (isset($cache[$cache_key])) {
+        return $cache[$cache_key];
+    }
+
+    $product_sql = implode(',', $product_ids);
+    $row = $wpdb->get_row(
+        "SELECT
+            MIN(CAST(meta_value AS DECIMAL(12,2))) AS min_price,
+            MAX(CAST(meta_value AS DECIMAL(12,2))) AS max_price
+        FROM {$wpdb->postmeta}
+        WHERE meta_key = '_price'
+            AND meta_value <> ''
+            AND post_id IN ({$product_sql})",
+        ARRAY_A
+    );
+
+    $min = isset($row['min_price']) ? (int) floor((float) $row['min_price']) : 0;
+    $max = isset($row['max_price']) ? (int) ceil((float) $row['max_price']) : 100000;
+
+    if ($max <= 0) {
+        $max = 100000;
+    }
+
+    $cache[$cache_key] = [$min, $max];
+
+    return $cache[$cache_key];
+}
+
+function jullybride_catalog_selected_price_values(): array
+{
+    if (empty($_GET['_price'])) {
+        return ['', ''];
+    }
+
+    preg_match_all('/\d+(?:[.,]\d+)?/', (string) wp_unslash($_GET['_price']), $matches);
+    $numbers = array_map(static fn (string $value): int => (int) round((float) str_replace(',', '.', $value)), $matches[0] ?? []);
+    $numbers = array_values(array_filter($numbers, static fn (int $value): bool => $value >= 0));
+
+    if (!$numbers) {
+        return ['', ''];
+    }
+
+    return [
+        (string) min($numbers),
+        count($numbers) > 1 ? (string) max($numbers) : '',
+    ];
+}
+
 function jullybride_catalog_intersect_id_sets(array $base_ids, array $sets): array
 {
     $current = array_fill_keys(array_map('absint', $base_ids), true);
