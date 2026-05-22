@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: Акции
+ * Template Name: JullyBride: Акции
  * Template Post Type: page
  */
 
@@ -13,9 +13,11 @@ get_header();
             the_post();
 
             jullybride_breadcrumbs();
-            jullybride_template_part('stock/archive', [
+            jullybride_template_part('stock/header', [
                 'title' => get_the_title(),
             ]);
+            jullybride_template_part('stock/hero-list');
+            jullybride_template_part('stock/sale-products');
         }
         ?>
     </div>

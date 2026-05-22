@@ -1,6 +1,6 @@
 <?php
 /*
-Template Name: JullyBride Главная
+Template Name: JullyBride: Главная
 */
 if (!defined('ABSPATH')) {
     exit;
