@@ -22,6 +22,12 @@ define('JULLYBRIDE_CATALOG_FILTER_PRIORITY', [
     'pa_style',
 ]);
 
+// Use the classic editor instead of Gutenberg in admin screens.
+add_filter('use_block_editor_for_post', '__return_false');
+add_filter('use_block_editor_for_post_type', '__return_false');
+add_filter('use_widgets_block_editor', '__return_false');
+add_filter('gutenberg_use_widgets_block_editor', '__return_false');
+
 require_once JULLYBRIDE_THEME_DIR . '/inc/post-types.php';
 require_once JULLYBRIDE_THEME_DIR . '/inc/setup-assets.php';
 require_once JULLYBRIDE_THEME_DIR . '/inc/template-helpers.php';
@@ -29,3 +35,4 @@ require_once JULLYBRIDE_THEME_DIR . '/inc/product-helpers.php';
 require_once JULLYBRIDE_THEME_DIR . '/inc/stories.php';
 require_once JULLYBRIDE_THEME_DIR . '/inc/footer-helpers.php';
 require_once JULLYBRIDE_THEME_DIR . '/inc/catalog.php';
+require_once JULLYBRIDE_THEME_DIR . '/inc/camp-checkout.php';
