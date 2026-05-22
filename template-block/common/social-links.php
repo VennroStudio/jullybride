@@ -3,7 +3,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-$links = jullybride_social_links();
+$links = isset($args['links']) && is_array($args['links']) ? $args['links'] : jullybride_social_links();
 $context = $args['context'] ?? 'default';
 $contact_icons = [
     'Telegram' => '<svg viewBox="18 18 24 24" aria-hidden="true"><path fill="currentColor" d="M30.17 18.375c6.421 0 11.624 5.203 11.624 11.625S36.592 41.625 30.17 41.625 18.544 36.422 18.544 30s5.204-11.625 11.625-11.625m5.671 7.969c.188-.75-.28-1.078-.797-.89L23.84 29.766c-.75.28-.75.75-.14.937l2.86.89 6.655-4.218c.328-.187.61-.047.375.14l-5.39 4.876-.188 2.953c.281 0 .422-.14.563-.282l1.406-1.359 2.906 2.156c.563.282.938.141 1.078-.515z"/></svg>',

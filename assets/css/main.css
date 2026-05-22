@@ -2689,21 +2689,29 @@ a {
 
 .jb-contact-panel__layout {
   display: grid;
-  grid-template-columns: minmax(220px, .82fr) minmax(240px, .9fr) minmax(420px, 1.45fr);
-  gap: clamp(42px, 5vw, 84px);
+  grid-template-columns: minmax(250px, 272px) minmax(280px, 308px) minmax(460px, 510px);
+  gap: clamp(50px, 3.9vw, 75px);
   align-items: start;
 }
 
 .jb-contact-panel__column {
   display: grid;
-  gap: 48px;
+  gap: 60px;
+}
+
+.jb-contact-panel__column--map {
+  justify-self: end;
+  width: 100%;
+  max-width: 510px;
 }
 
 .jb-contact-info h2 {
-  margin: 0 0 22px;
+  margin: 0 0 24px;
   font-family: Montserrat, sans-serif;
-  font-size: 16px;
+  color: #f5cdcb;
+  font-size: 20px;
   font-weight: 800;
+  line-height: 1.15;
 }
 
 .jb-contact-info h2:not(:first-child) {
@@ -2711,9 +2719,16 @@ a {
 }
 
 .jb-contact-info p {
-  margin: 0 0 15px;
-  font-size: 15px;
-  line-height: 1.5;
+  max-width: 320px;
+  margin: 0;
+  color: #f5cdcb;
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.38;
+}
+
+.jb-contact-info p + p {
+  margin-top: 24px;
 }
 
 .jb-contact-info a {
@@ -2721,25 +2736,33 @@ a {
   text-decoration: none;
 }
 
+.jb-contact-info a:hover {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
 .jb-contact-panel__choose {
   display: block;
-  width: min(180px, 100%);
-  margin-top: 12px;
+  width: min(214px, 100%);
+  margin-top: -4px;
+  filter: brightness(0) saturate(100%) invert(88%) sepia(19%) saturate(441%) hue-rotate(308deg) brightness(107%) contrast(92%);
 }
 
 .jb-social-links--contacts {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 13px;
+  justify-content: center;
+  gap: 34px;
 }
 
 .jb-social-links--contacts a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
   padding: 0;
   border: 0;
   color: #f5cdcb;
@@ -2760,19 +2783,21 @@ a {
 }
 
 .jb-contact-map {
+  box-sizing: border-box;
   display: grid;
   place-items: center;
-  min-height: 310px;
+  height: 287px;
+  min-height: 287px;
   overflow: hidden;
   border: 6px solid #f5cdcb;
-  border-radius: 26px;
+  border-radius: 29px;
   background: rgba(255, 255, 255, .52);
 }
 
 .jb-contact-map > ymaps,
 .jb-contact-map iframe {
   width: 100% !important;
-  height: 310px !important;
+  height: 287px !important;
 }
 
 .jb-contact-map a {
@@ -2789,25 +2814,16 @@ a {
 }
 
 .jb-contact-panel__social {
-  margin-top: 34px;
+  width: min(331px, 100%);
+  margin: 34px auto 0;
   text-align: center;
 }
 
-.jb-contact-panel__social p {
-  margin: 0 0 24px;
-  font-family: "Maki Sans", "Kosko", cursive;
-  font-size: clamp(28px, 2.6vw, 42px);
-  line-height: .9;
-}
-
-.jb-contact-panel__social p span,
-.jb-contact-panel__social p em {
+.jb-contact-panel__social-title {
   display: block;
-  font-style: normal;
-}
-
-.jb-contact-panel__social .jb-social-links--contacts {
-  justify-content: center;
+  width: min(331px, 100%);
+  height: auto;
+  margin: 0 auto 25px;
 }
 
 .jb-company-details {
@@ -3078,6 +3094,8 @@ a {
 
   .jb-contact-panel__column--map {
     grid-column: 1 / -1;
+    justify-self: stretch;
+    max-width: none;
   }
 }
 
@@ -3104,18 +3122,64 @@ a {
   }
 
   .jb-contact-panel__column {
-    gap: 28px;
+    gap: 36px;
+  }
+
+  .jb-contact-panel__column--middle {
+    order: 3;
+  }
+
+  .jb-contact-panel__column--map {
+    order: 2;
+    grid-column: auto;
+    width: calc(100vw - 40px);
+    max-width: none;
+    margin-left: calc(50% - 50vw + 20px);
+  }
+
+  .jb-contact-panel__column--left {
+    order: 1;
   }
 
   .jb-contact-info h2 {
-    margin-bottom: 14px;
+    margin-bottom: 23px;
+    font-size: 20px;
+    line-height: 1.15;
+  }
+
+  .jb-contact-info p {
+    max-width: 100%;
+    font-size: 17px;
+    line-height: 1.35;
+  }
+
+  .jb-contact-info p + p {
+    margin-top: 24px;
+  }
+
+  .jb-contact-panel__choose {
+    display: none;
   }
 
   .jb-contact-map,
   .jb-contact-map > ymaps,
   .jb-contact-map iframe {
-    min-height: 300px;
-    height: 300px !important;
+    min-height: 178px;
+    height: 178px !important;
+  }
+
+  .jb-contact-map {
+    border-width: 5px;
+    border-radius: 27px;
+  }
+
+  .jb-contact-panel__social {
+    width: min(331px, 100%);
+    margin-top: 27px;
+  }
+
+  .jb-social-links--contacts {
+    gap: 31px;
   }
 
   .jb-company-details {

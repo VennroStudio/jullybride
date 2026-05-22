@@ -8,6 +8,56 @@ $city = $args['city'] ?? [];
 if (!$city) {
     return;
 }
+
+$social_fallbacks = [
+    'Telegram' => 'https://t.me/jullybridesalon',
+    'VK' => 'https://vk.com/jullybride',
+    'Instagram' => 'https://instagram.com/jullybride',
+    'YouTube' => 'https://www.youtube.com/channel/UCo_Zo2x9fyN19uuxkWO_v-g',
+];
+$social_aliases = [
+    'Telegram' => 'Telegram',
+    'telegram' => 'Telegram',
+    'Телеграм' => 'Telegram',
+    'телеграм' => 'Telegram',
+    'VK' => 'VK',
+    'vk' => 'VK',
+    'ВКонтакте' => 'VK',
+    'вконтакте' => 'VK',
+    'Instagram' => 'Instagram',
+    'instagram' => 'Instagram',
+    'Инстаграм' => 'Instagram',
+    'инстаграм' => 'Instagram',
+    'YouTube' => 'YouTube',
+    'youtube' => 'YouTube',
+    'Ютуб' => 'YouTube',
+    'ютуб' => 'YouTube',
+];
+$social_urls = [];
+
+foreach (jullybride_social_links() as $link) {
+    if (!is_array($link)) {
+        continue;
+    }
+
+    $label = trim((string) ($link['label'] ?? ''));
+    $url = trim((string) ($link['url'] ?? ''));
+    $normalized_label = function_exists('mb_strtolower') ? mb_strtolower($label) : strtolower($label);
+    $key = $social_aliases[$label] ?? $social_aliases[$normalized_label] ?? '';
+
+    if ($key !== '' && $url !== '' && $url !== '#') {
+        $social_urls[$key] = $url;
+    }
+}
+
+$social_links = [];
+
+foreach ($social_fallbacks as $label => $fallback_url) {
+    $social_links[] = [
+        'label' => $label,
+        'url' => $social_urls[$label] ?? $fallback_url,
+    ];
+}
 ?>
 <section class="jb-contact-panel jb-contact-panel--<?php echo esc_attr($city['slug']); ?>">
     <div class="jb-contact-panel__layout">
@@ -50,8 +100,8 @@ if (!$city) {
                 <?php endif; ?>
             </div>
             <div class="jb-contact-panel__social">
-                <p><span>хочешь посекретничать?</span><em>ищи нас здесь:</em></p>
-                <?php jullybride_template_part('common/social-links', ['context' => 'contacts']); ?>
+                <img class="jb-contact-panel__social-title" src="<?php echo esc_url(jullybride_asset_uri('images/contact-social-title.svg')); ?>" alt="Хочешь посекретничать? Ищи нас здесь:">
+                <?php jullybride_template_part('common/social-links', ['context' => 'contacts', 'links' => $social_links]); ?>
             </div>
         </div>
     </div>
