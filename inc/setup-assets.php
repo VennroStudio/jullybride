@@ -17,13 +17,6 @@ function jullybride_setup(): void
     add_theme_support('wc-product-gallery-lightbox');
     add_theme_support('wc-product-gallery-slider');
 
-    register_nav_menus([
-        'primary' => __('Главное меню', 'jullybride'),
-        'mobile' => __('Мобильное меню', 'jullybride'),
-        'footer' => __('Меню в футере', 'jullybride'),
-        'legal' => __('Юридические ссылки', 'jullybride'),
-    ]);
-
     add_image_size('jullybride-card', 620, 860, true);
     add_image_size('jullybride-wide', 1440, 760, true);
     add_image_size('product_detail', 573, 860, true);

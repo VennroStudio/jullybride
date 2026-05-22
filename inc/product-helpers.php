@@ -72,38 +72,6 @@ function jullybride_home_source_id(): int
     return $front_page_id > 0 && get_post($front_page_id) instanceof WP_Post ? $front_page_id : 0;
 }
 
-function jullybride_product_available_sizes(int $product_id): array
-{
-    $product = wc_get_product($product_id);
-
-    if (!$product) {
-        return [];
-    }
-
-    if (!$product->is_type('variable')) {
-        return $product->is_in_stock() ? ['В наличии'] : [];
-    }
-
-    $sizes = [];
-    foreach ($product->get_children() as $variation_id) {
-        $variation = wc_get_product($variation_id);
-        if (!$variation || !$variation->is_in_stock()) {
-            continue;
-        }
-
-        foreach ($variation->get_attributes() as $taxonomy => $slug) {
-            if (!$slug) {
-                continue;
-            }
-
-            $term = taxonomy_exists($taxonomy) ? get_term_by('slug', $slug, $taxonomy) : null;
-            $sizes[] = $term instanceof WP_Term ? $term->name : (string) $slug;
-        }
-    }
-
-    return array_values(array_unique(array_filter($sizes)));
-}
-
 add_action('template_redirect', 'jullybride_track_recently_viewed_products', 20);
 function jullybride_track_recently_viewed_products(): void
 {
