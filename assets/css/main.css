@@ -630,6 +630,12 @@ a {
   font-size: 13px;
 }
 
+.jb-story-carousel-section {
+  position: relative;
+  z-index: 2;
+  padding: 45px 0 45px;
+}
+
 .products-list {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

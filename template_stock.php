@@ -9,7 +9,7 @@ get_header();
 jullybride_template_part('components/story-overlays');
 ?>
 <main class="jb-main jb-editorial-page jb-stock jb-stock-archive jb-striped-arch">
-    <?php jullybride_template_part('components/story-carousel', ['section_class' => 'product-top']); ?>
+    <?php jullybride_template_part('components/story-carousel', ['section_class' => 'jb-story-carousel-section']); ?>
 
     <div class="container">
         <?php
