@@ -10,6 +10,6 @@ if ($title === '') {
 }
 ?>
 <header class="jb-stock-header">
-    <h1 class="font-title"><?php echo esc_html($title); ?></h1>
+    <h1 class="jb-display-title font-title"><?php echo esc_html($title); ?></h1>
     <span class="jb-stock-header__note" aria-hidden="true"></span>
 </header>

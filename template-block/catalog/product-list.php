@@ -21,7 +21,7 @@ if (!$catalog_query instanceof WP_Query) {
                     $catalog_query->the_post();
                     $index++;
                     $product = wc_get_product(get_the_ID());
-                    jullybride_template_part('common/product-card-legacy', [
+                    jullybride_template_part('components/product-card', [
                         'product' => $product,
                         'index' => $index,
                     ]);

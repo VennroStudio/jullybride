@@ -30,7 +30,7 @@ if (!$products->have_posts()) {
             <?php
             $product = wc_get_product(get_the_ID());
             if ($product) {
-                jullybride_template_part('common/product-card-legacy', ['product' => $product, 'index' => $index]);
+                jullybride_template_part('components/product-card', ['product' => $product, 'index' => $index]);
                 $index++;
             }
             ?>

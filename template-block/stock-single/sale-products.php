@@ -34,14 +34,14 @@ if (!$products->have_posts()) {
 }
 ?>
 <section class="jb-stock-products jb-promo-sale-products">
-    <h2><?php echo esc_html($title); ?></h2>
+    <h2 class="jb-display-title font-title"><?php echo esc_html($title); ?></h2>
     <div class="row products-list">
         <?php $index = 0; ?>
         <?php while ($products->have_posts()) : $products->the_post(); ?>
             <?php
             $product = wc_get_product(get_the_ID());
             if ($product) {
-                jullybride_template_part('common/product-card-legacy', ['product' => $product, 'index' => $index]);
+                jullybride_template_part('components/product-card', ['product' => $product, 'index' => $index]);
                 $index++;
             }
             ?>

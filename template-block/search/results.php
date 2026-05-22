@@ -21,7 +21,7 @@ $products = new WP_Query([
                 <?php
                 $product = wc_get_product(get_the_ID());
                 if ($product) {
-                    jullybride_template_part('common/product-card-legacy', [
+                    jullybride_template_part('components/product-card', [
                         'product' => $product,
                         'index' => $index,
                         'class' => 'col-lg-3 col-md-4 col-6 products-list-item',

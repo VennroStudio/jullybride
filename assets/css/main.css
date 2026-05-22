@@ -326,6 +326,19 @@ a {
   letter-spacing: 0;
 }
 
+.jb-display-title,
+.jb-stock-header h1.jb-display-title,
+.jb-stock-products h2.jb-display-title {
+  margin: 0;
+  color: #000;
+  font-family: "Arsenica", Georgia, serif;
+  font-size: 40px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
 .font-cursive {
   font-family: "Marianna", cursive;
 }
@@ -1447,14 +1460,6 @@ a {
   line-height: 1.1;
 }
 
-.jb-stock-products h2 {
-  margin: 0 0 42px;
-  font-family: "Maki Sans", "Kosko", Montserrat, sans-serif;
-  font-size: clamp(38px, 5vw, 58px);
-  font-weight: 400;
-  line-height: 1;
-}
-
 .jb-related-posts__carousel {
   position: relative;
   display: flex;
@@ -1778,13 +1783,7 @@ a {
 }
 
 .jb-stock-archive .jb-stock-header h1 {
-  margin: 0;
-  font-family: "Arsenica", Georgia, serif;
-  font-size: 40px;
-  font-weight: 400;
-  line-height: 1;
-  letter-spacing: 0;
-  text-transform: uppercase;
+  max-width: calc(100% - min(355px, 27vw) - 40px);
 }
 
 .jb-stock-header__note {
@@ -1995,12 +1994,8 @@ a {
   padding: 76px 0 118px;
 }
 
-.jb-stock-products h2 {
-  margin: 0 0 48px;
-  font-family: "Maki Sans", "Kosko", Montserrat, Arial, sans-serif;
-  font-size: 48px;
-  font-weight: 400;
-  line-height: 1.05;
+.jb-stock-products h2.jb-display-title {
+  margin-bottom: 48px;
 }
 
 .jb-stock-single {
@@ -2311,6 +2306,10 @@ a {
     display: none;
   }
 
+  .jb-stock-archive .jb-stock-header h1 {
+    max-width: none;
+  }
+
   .jb-stock-promos__slider .owl-item:not(.center) {
     transform: none;
   }
@@ -2338,7 +2337,9 @@ a {
 }
 
 @media (max-width: 800px) {
-  .jb-stock-archive .jb-stock-header h1 {
+  .jb-display-title,
+  .jb-stock-header h1.jb-display-title,
+  .jb-stock-products h2.jb-display-title {
     font-size: 32px;
   }
 }
@@ -2353,7 +2354,9 @@ a {
     --jb-striped-arch-width: 150vw;
   }
 
-  .jb-stock-archive .jb-stock-header h1 {
+  .jb-display-title,
+  .jb-stock-header h1.jb-display-title,
+  .jb-stock-products h2.jb-display-title {
     font-size: 22px;
   }
 
@@ -2416,9 +2419,7 @@ a {
     font-size: 11px;
   }
 
-  .jb-stock-products h2,
-  .jb-promo-videos h2,
-  .jb-promo-sale-products h2 {
+  .jb-promo-videos h2 {
     font-size: 36px;
   }
 
