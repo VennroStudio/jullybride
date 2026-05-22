@@ -1,28 +1,17 @@
 <?php
 get_header();
-
-$is_service_page = is_page('wishlist');
 ?>
-<main class="jb-main jb-page<?php echo $is_service_page ? ' jb-service-page' : ''; ?>">
+<main class="jb-main jb-page">
     <div class="container">
         <?php jullybride_template_part('components/breadcrumbs'); ?>
-        <?php
-        if ($is_service_page) {
-            jullybride_template_part('page/service');
-        } else {
-            jullybride_template_part('page/hero');
-        }
+        <?php jullybride_template_part('page/hero'); ?>
 
-        if (!$is_service_page && !jullybride_render_flexible('page_blocks', 'page')) {
+        <?php
+        if (!jullybride_render_flexible('page_blocks', 'page')) {
             jullybride_template_part('page/content');
         }
         ?>
     </div>
-    <?php
-    if ($is_service_page) {
-        jullybride_template_part('common/important-cta');
-    }
-    ?>
 </main>
 
 <?php
