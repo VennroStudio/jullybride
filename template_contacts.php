@@ -4,8 +4,11 @@
  */
 
 get_header();
+
+jullybride_template_part('components/story-overlays');
 ?>
 <main class="jb-main jb-page">
+    <?php jullybride_template_part('components/story-carousel', ['section_class' => 'jb-story-carousel-section']); ?>
     <div class="container">
         <div class="jb-contacts-page">
             <?php
@@ -16,6 +19,7 @@ get_header();
     </div>
     <?php jullybride_template_part('contacts/contact-tabs'); ?>
     <?php jullybride_template_part('components/rest-ribbon'); ?>
+    <?php jullybride_template_part('contacts/gallery'); ?>
 </main>
 <?php
 get_footer();
