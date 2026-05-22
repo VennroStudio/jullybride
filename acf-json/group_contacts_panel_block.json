@@ -1,0 +1,378 @@
+{
+    "key": "group_contacts_panel_block",
+    "title": "Контакты: панель",
+    "fields": [
+        {
+            "key": "field_contacts_panel_cities_tab",
+            "label": "Города",
+            "name": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_contacts_panel_cities",
+            "label": "Города",
+            "name": "contacts_cities",
+            "type": "repeater",
+            "instructions": "Добавьте города и контактные данные для табов страницы контактов.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "collapsed": "field_contacts_panel_city_title",
+            "min": 0,
+            "max": 0,
+            "layout": "block",
+            "button_label": "Добавить город",
+            "sub_fields": [
+                {
+                    "key": "field_contacts_panel_city_title",
+                    "label": "Город",
+                    "name": "title",
+                    "type": "text",
+                    "instructions": "Название города для таба.",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "Например: Санкт-Петербург",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                },
+                {
+                    "key": "field_contacts_panel_city_slug",
+                    "label": "ID города",
+                    "name": "slug",
+                    "type": "text",
+                    "instructions": "Уникальный ID для таба латиницей, например spb, moscow, rostov.",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "spb",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                },
+                {
+                    "key": "field_contacts_panel_city_contacts",
+                    "label": "Контакты",
+                    "name": "contacts",
+                    "type": "group",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_contacts_panel_city_phone",
+                            "label": "Номер телефона",
+                            "name": "phone",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "+7 (812) 929-16-99",
+                            "prepend": "",
+                            "append": "",
+                            "maxlength": ""
+                        },
+                        {
+                            "key": "field_contacts_panel_city_address",
+                            "label": "Адрес",
+                            "name": "address",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "maxlength": "",
+                            "rows": 3,
+                            "new_lines": "br"
+                        },
+                        {
+                            "key": "field_contacts_panel_city_worktime",
+                            "label": "Режим работы",
+                            "name": "worktime",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "Пн-вс, с 11:00 до 22:00",
+                            "prepend": "",
+                            "append": "",
+                            "maxlength": ""
+                        },
+                        {
+                            "key": "field_contacts_panel_city_map",
+                            "label": "Карта: ссылка конструктора",
+                            "name": "map",
+                            "type": "url",
+                            "instructions": "Ссылка из конструктора Яндекс.Карт для script src. В коде выводится как встроенная карта.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "https:\/\/api-maps.yandex.ru\/services\/constructor\/1.0\/js\/?um=constructor%3A..."
+                        },
+                        {
+                            "key": "field_contacts_panel_city_map_link",
+                            "label": "Карта: ссылка для открытия",
+                            "name": "map_link",
+                            "type": "url",
+                            "instructions": "Обычная ссылка на Яндекс.Карты для запасной кнопки «Открыть в Яндекс Картах».",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "https:\/\/yandex.ru\/maps\/?text=..."
+                        },
+                        {
+                            "key": "field_contacts_panel_city_email",
+                            "label": "Email",
+                            "name": "email",
+                            "type": "email",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "info@jullybride.ru",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_contacts_panel_city_email_note",
+                            "label": "Подпись для Email",
+                            "name": "reply",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "Рассматриваем письма в течение 48 часов!",
+                            "maxlength": "",
+                            "rows": 3,
+                            "new_lines": "br"
+                        },
+                        {
+                            "key": "field_contacts_panel_city_details",
+                            "label": "Реквизиты",
+                            "name": "details",
+                            "type": "wysiwyg",
+                            "instructions": "Короткие реквизиты внутри панели города.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "tabs": "all",
+                            "toolbar": "basic",
+                            "media_upload": 0,
+                            "delay": 0
+                        },
+                        {
+                            "key": "field_contacts_panel_city_socials",
+                            "label": "Социальные сети",
+                            "name": "socials",
+                            "type": "group",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "layout": "block",
+                            "sub_fields": [
+                                {
+                                    "key": "field_contacts_panel_city_social_telegram",
+                                    "label": "Telegram",
+                                    "name": "telegram",
+                                    "type": "url",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "25",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "placeholder": ""
+                                },
+                                {
+                                    "key": "field_contacts_panel_city_social_vk",
+                                    "label": "VK",
+                                    "name": "vk",
+                                    "type": "url",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "25",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "placeholder": ""
+                                },
+                                {
+                                    "key": "field_contacts_panel_city_social_instagram",
+                                    "label": "Instagram",
+                                    "name": "instagram",
+                                    "type": "url",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "25",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "placeholder": ""
+                                },
+                                {
+                                    "key": "field_contacts_panel_city_social_youtube",
+                                    "label": "YouTube",
+                                    "name": "youtube",
+                                    "type": "url",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "25",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "placeholder": ""
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "field_contacts_panel_common_details_tab",
+            "label": "Общие реквизиты",
+            "name": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_contacts_panel_common_details",
+            "label": "Общие реквизиты",
+            "name": "contacts_company_details",
+            "type": "wysiwyg",
+            "instructions": "Текст для отдельного таба с общими реквизитами.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "tabs": "all",
+            "toolbar": "full",
+            "media_upload": 0,
+            "delay": 0
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "page_template",
+                "operator": "==",
+                "value": "template_contacts.php"
+            }
+        ]
+    ],
+    "menu_order": 10,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "Поля контактной панели страницы контактов.",
+    "show_in_rest": 0,
+    "modified": 1779454830
+}
