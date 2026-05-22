@@ -2651,6 +2651,10 @@ a {
   padding-bottom: 80px;
 }
 
+body.page-template-template_contacts .jb-editorial-page {
+  padding-bottom: 0;
+}
+
 .jb-contacts-page .jb-contacts-header {
   position: relative;
   width: min(100%, 1180px);

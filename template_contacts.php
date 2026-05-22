@@ -7,7 +7,7 @@ get_header();
 
 jullybride_template_part('components/story-overlays');
 ?>
-<main class="jb-main jb-page">
+<main class="jb-main jb-editorial-page">
     <?php jullybride_template_part('components/story-carousel', ['section_class' => 'jb-story-carousel-section']); ?>
     <div class="container">
         <div class="jb-contacts-page">
@@ -20,6 +20,7 @@ jullybride_template_part('components/story-overlays');
     <?php jullybride_template_part('contacts/contact-tabs'); ?>
     <?php jullybride_template_part('components/rest-ribbon'); ?>
     <?php jullybride_template_part('contacts/gallery'); ?>
+    <?php jullybride_template_part('contacts/important-cta'); ?>
 </main>
 <?php
 get_footer();

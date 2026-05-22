@@ -9,53 +9,23 @@ if (!$city) {
     return;
 }
 
-$social_fallbacks = [
-    'Telegram' => 'https://t.me/jullybridesalon',
-    'VK' => 'https://vk.com/jullybride',
-    'Instagram' => 'https://instagram.com/jullybride',
-    'YouTube' => 'https://www.youtube.com/channel/UCo_Zo2x9fyN19uuxkWO_v-g',
+$city_socials = isset($city['socials']) && is_array($city['socials']) ? $city['socials'] : [];
+$city_social_urls = [
+    'Telegram' => trim((string) ($city_socials['telegram'] ?? '')),
+    'VK' => trim((string) ($city_socials['vk'] ?? '')),
+    'Instagram' => trim((string) ($city_socials['instagram'] ?? '')),
+    'YouTube' => trim((string) ($city_socials['youtube'] ?? '')),
 ];
-$social_aliases = [
-    'Telegram' => 'Telegram',
-    'telegram' => 'Telegram',
-    'Телеграм' => 'Telegram',
-    'телеграм' => 'Telegram',
-    'VK' => 'VK',
-    'vk' => 'VK',
-    'ВКонтакте' => 'VK',
-    'вконтакте' => 'VK',
-    'Instagram' => 'Instagram',
-    'instagram' => 'Instagram',
-    'Инстаграм' => 'Instagram',
-    'инстаграм' => 'Instagram',
-    'YouTube' => 'YouTube',
-    'youtube' => 'YouTube',
-    'Ютуб' => 'YouTube',
-    'ютуб' => 'YouTube',
-];
-$social_urls = [];
+$social_links = [];
 
-foreach (jullybride_social_links() as $link) {
-    if (!is_array($link)) {
+foreach ($city_social_urls as $label => $url) {
+    if ($url === '' || $url === '#') {
         continue;
     }
 
-    $label = trim((string) ($link['label'] ?? ''));
-    $url = trim((string) ($link['url'] ?? ''));
-    $normalized_label = function_exists('mb_strtolower') ? mb_strtolower($label) : strtolower($label);
-    $key = $social_aliases[$label] ?? $social_aliases[$normalized_label] ?? '';
-
-    if ($key !== '' && $url !== '' && $url !== '#') {
-        $social_urls[$key] = $url;
-    }
-}
-
-$social_links = [];
-
-foreach ($social_fallbacks as $label => $fallback_url) {
     $social_links[] = [
         'label' => $label,
-        'url' => $social_urls[$label] ?? $fallback_url,
+        'url' => $url,
     ];
 }
 ?>
@@ -81,11 +51,11 @@ foreach ($social_fallbacks as $label => $fallback_url) {
             <div class="jb-contact-info">
                 <h2>Сотрудничество</h2>
                 <p><a href="mailto:<?php echo esc_attr($city['email']); ?>"><?php echo esc_html($city['email']); ?></a></p>
-                <p><?php echo esc_html($city['reply']); ?></p>
+                <p><?php echo wp_kses_post($city['reply']); ?></p>
             </div>
             <div class="jb-contact-info">
                 <h2>Реквизиты</h2>
-                <p><?php echo wp_kses_post($city['details']); ?></p>
+                <?php echo wp_kses_post(str_contains((string) $city['details'], '<p') ? $city['details'] : wpautop((string) $city['details'])); ?>
             </div>
         </div>
 
@@ -93,15 +63,17 @@ foreach ($social_fallbacks as $label => $fallback_url) {
             <div class="jb-contact-map">
                 <?php if (!empty($city['map'])) : ?>
                     <script type="text/javascript" charset="utf-8" async src="<?php echo esc_url($city['map']); ?>"></script>
-                <?php else : ?>
-                    <a href="<?php echo esc_url($city['map_link'] ?? '#'); ?>" target="_blank" rel="noopener">
+                <?php elseif (!empty($city['map_link'])) : ?>
+                    <a href="<?php echo esc_url($city['map_link']); ?>" target="_blank" rel="noopener">
                         Открыть в Яндекс Картах
                     </a>
                 <?php endif; ?>
             </div>
             <div class="jb-contact-panel__social">
-                <img class="jb-contact-panel__social-title" src="<?php echo esc_url(jullybride_asset_uri('images/contact-social-title.svg')); ?>" alt="Хочешь посекретничать? Ищи нас здесь:">
-                <?php jullybride_template_part('common/social-links', ['context' => 'contacts', 'links' => $social_links]); ?>
+                <?php if ($social_links) : ?>
+                    <img class="jb-contact-panel__social-title" src="<?php echo esc_url(jullybride_asset_uri('images/contact-social-title.svg')); ?>" alt="Хочешь посекретничать? Ищи нас здесь:">
+                    <?php jullybride_template_part('common/social-links', ['context' => 'contacts', 'links' => $social_links]); ?>
+                <?php endif; ?>
             </div>
         </div>
     </div>
