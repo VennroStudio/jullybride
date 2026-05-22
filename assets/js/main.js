@@ -192,22 +192,39 @@
     const header = document.querySelector('[data-jb-header]');
     if (!header) return;
 
-    const updateHeader = () => {
-      header.classList.toggle('is-compact', window.scrollY > 24);
-      const updateOffset = () => {
-        const bottom = Math.max(0, Math.round(header.getBoundingClientRect().bottom));
-        document.documentElement.style.setProperty('--jb-sticky-header-bottom', `${bottom}px`);
-        document.querySelector('.filter-box.is-open')?.style.setProperty('--jb-filter-top', `${bottom}px`);
-      };
-      updateOffset();
-      window.requestAnimationFrame(updateOffset);
+    const compactStart = 80;
+    const compactEnd = 12;
+    let isCompact = header.classList.contains('is-compact');
+    let frame = 0;
+
+    const updateOffset = () => {
+      const bottom = Math.max(0, Math.round(header.getBoundingClientRect().bottom));
+      document.documentElement.style.setProperty('--jb-sticky-header-bottom', `${bottom}px`);
+      document.querySelector('.filter-box.is-open')?.style.setProperty('--jb-filter-top', `${bottom}px`);
     };
 
-    updateHeader();
-    window.addEventListener('scroll', updateHeader, { passive: true });
-    window.addEventListener('resize', updateHeader, { passive: true });
-    document.addEventListener('scroll', updateHeader, { passive: true, capture: true });
-    window.setInterval(updateHeader, 250);
+    const updateHeader = () => {
+      frame = 0;
+      const scrollY = Math.max(window.scrollY, document.documentElement.scrollTop || 0);
+      const shouldCompact = isCompact ? scrollY > compactEnd : scrollY > compactStart;
+
+      if (shouldCompact !== isCompact) {
+        isCompact = shouldCompact;
+        header.classList.toggle('is-compact', isCompact);
+      }
+
+      updateOffset();
+    };
+
+    const scheduleHeaderUpdate = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(updateHeader);
+    };
+
+    scheduleHeaderUpdate();
+    header.addEventListener('transitionend', updateOffset);
+    window.addEventListener('scroll', scheduleHeaderUpdate, { passive: true });
+    window.addEventListener('resize', scheduleHeaderUpdate, { passive: true });
   };
 
   const setupMegaMenu = () => {
