@@ -1590,105 +1590,6 @@ a {
   margin-bottom: 54px;
 }
 
-.jb-stock-promos {
-  position: relative;
-  margin-bottom: 78px;
-}
-
-.jb-stock-promos::after {
-  right: 36px;
-  bottom: -128px;
-}
-
-.jb-stock-promos__grid {
-  display: grid;
-  grid-template-columns: minmax(180px, .72fr) minmax(320px, 1.45fr) minmax(180px, .72fr);
-  grid-template-rows: repeat(2, minmax(180px, auto));
-  gap: 90px;
-  align-items: center;
-}
-
-.jb-stock-promo-card {
-  overflow: hidden;
-}
-
-.jb-stock-promo-card a {
-  position: relative;
-  display: block;
-  min-height: 280px;
-  color: #fff;
-  text-decoration: none;
-}
-
-.jb-stock-promo-card img,
-.jb-stock-promo-card__placeholder {
-  display: block;
-  width: 100%;
-  height: 100%;
-  min-height: inherit;
-  object-fit: cover;
-}
-
-.jb-stock-promo-card__placeholder {
-  background: linear-gradient(135deg, #681f2a, #f5cdcb);
-}
-
-.jb-stock-promo-card--1 a {
-  min-height: 450px;
-}
-
-.jb-stock-promo-card--1 {
-  grid-column: 1;
-  grid-row: 1 / 3;
-}
-
-.jb-stock-promo-card--2 {
-  grid-column: 2;
-  grid-row: 1 / 3;
-}
-
-.jb-stock-promo-card--2 a {
-  min-height: 450px;
-}
-
-.jb-stock-promo-card--3,
-.jb-stock-promo-card--4 {
-  grid-column: 3;
-}
-
-.jb-stock-promo-card--3,
-.jb-stock-promo-card--4 {
-  max-height: 220px;
-}
-
-.jb-stock-promo-card--4 {
-  grid-row: 2;
-  margin-top: -70px;
-}
-
-.jb-stock-promo-card__overlay {
-  position: absolute;
-  inset: auto 0 0;
-  padding: 70px 28px 28px;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, .62));
-}
-
-.jb-stock-promo-card__overlay strong,
-.jb-stock-promo-card__overlay small {
-  display: block;
-}
-
-.jb-stock-promo-card__overlay strong {
-  font-size: 22px;
-  font-weight: 800;
-  line-height: 1.15;
-}
-
-.jb-stock-promo-card__overlay small {
-  margin-top: 10px;
-  font-size: 14px;
-}
-
 .jb-stock-products {
   margin-top: 62px;
 }
@@ -1749,12 +1650,7 @@ a {
 }
 
 @media (max-width: 1100px) {
-  .jb-stock-promos__grid {
-    gap: 30px;
-  }
-
   .jb-blog-grid::after,
-  .jb-stock-promos::after,
   .jb-article::after {
     width: 110px;
     height: 126px;
@@ -1774,31 +1670,8 @@ a {
     display: none;
   }
 
-  .jb-stock-promos__grid {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto;
-  }
-
-  .jb-stock-promo-card--1,
-  .jb-stock-promo-card--2,
-  .jb-stock-promo-card--3,
-  .jb-stock-promo-card--4 {
-    grid-column: auto;
-    grid-row: auto;
-  }
-
-  .jb-stock-promo-card--1 a,
-  .jb-stock-promo-card--2 a {
-    min-height: 360px;
-  }
-
-  .jb-stock-promo-card--4 {
-    margin-top: 0;
-  }
-
   .jb-article::after,
-  .jb-blog-grid::after,
-  .jb-stock-promos::after {
+  .jb-blog-grid::after {
     display: none;
   }
 }
@@ -1818,8 +1691,7 @@ a {
   }
 
   .jb-blog-grid,
-  .jb-related-posts__grid,
-  .jb-stock-promos__grid {
+  .jb-related-posts__grid {
     grid-template-columns: 1fr;
   }
 
@@ -1868,11 +1740,6 @@ a {
     grid-template-columns: 1fr;
   }
 
-  .jb-stock-promo-card a,
-  .jb-stock-promo-card--1 a,
-  .jb-stock-promo-card--2 a {
-    min-height: 340px;
-  }
 }
 
 .jb-search-page,
@@ -2040,6 +1907,10 @@ a {
   height: 100%;
   min-height: 0;
   object-fit: cover;
+}
+
+.jb-stock-promos__slider .jb-stock-promo-card__placeholder {
+  background: linear-gradient(135deg, #681f2a, #f5cdcb);
 }
 
 .jb-stock-promo-card__body {
