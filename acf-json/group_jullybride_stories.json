@@ -1,0 +1,178 @@
+{
+    "key": "group_jullybride_stories",
+    "title": "JullyBride: истории",
+    "fields": [
+        {
+            "key": "field_jullybride_stories_items",
+            "label": "Истории",
+            "name": "carusel-added-owl",
+            "type": "repeater",
+            "instructions": "Общий набор историй для главной, каталога и карточки товара.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "collapsed": "field_jullybride_stories_title",
+            "min": 0,
+            "max": 0,
+            "layout": "block",
+            "button_label": "Добавить историю",
+            "sub_fields": [
+                {
+                    "key": "field_jullybride_stories_title",
+                    "label": "Название",
+                    "name": "title",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "35",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": "",
+                    "parent_repeater": "field_jullybride_stories_items"
+                },
+                {
+                    "key": "field_jullybride_stories_img",
+                    "label": "Обложка",
+                    "name": "img",
+                    "type": "image",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "35",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "url",
+                    "library": "all",
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
+                    "mime_types": "",
+                    "preview_size": "thumbnail",
+                    "parent_repeater": "field_jullybride_stories_items"
+                },
+                {
+                    "key": "field_jullybride_stories_link",
+                    "label": "Ссылка",
+                    "name": "link",
+                    "type": "text",
+                    "instructions": "Старое поле сохранено для совместимости. В текущем выводе историй не используется.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "30",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "#",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": "",
+                    "parent_repeater": "field_jullybride_stories_items"
+                },
+                {
+                    "key": "field_jullybride_stories_slides",
+                    "label": "Слайды",
+                    "name": "karusel",
+                    "type": "repeater",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "collapsed": "",
+                    "min": 0,
+                    "max": 0,
+                    "layout": "row",
+                    "button_label": "Добавить слайд",
+                    "parent_repeater": "field_jullybride_stories_items",
+                    "sub_fields": [
+                        {
+                            "key": "field_jullybride_stories_slide_foto",
+                            "label": "Фото",
+                            "name": "foto",
+                            "type": "image",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "return_format": "array",
+                            "library": "all",
+                            "min_width": "",
+                            "min_height": "",
+                            "min_size": "",
+                            "max_width": "",
+                            "max_height": "",
+                            "max_size": "",
+                            "mime_types": "",
+                            "preview_size": "thumbnail",
+                            "parent_repeater": "field_jullybride_stories_slides"
+                        },
+                        {
+                            "key": "field_jullybride_stories_slide_video",
+                            "label": "Видео",
+                            "name": "video",
+                            "type": "file",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "return_format": "url",
+                            "library": "all",
+                            "min_size": "",
+                            "max_size": "",
+                            "mime_types": "mp4,webm,mov",
+                            "parent_repeater": "field_jullybride_stories_slides"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "jullybride-options-stories"
+            }
+        ]
+    ],
+    "menu_order": 2,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "Общие истории для сайта JullyBride.",
+    "show_in_rest": 0,
+    "modified": 1779420476
+}

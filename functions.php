@@ -26,5 +26,6 @@ require_once JULLYBRIDE_THEME_DIR . '/inc/post-types.php';
 require_once JULLYBRIDE_THEME_DIR . '/inc/setup-assets.php';
 require_once JULLYBRIDE_THEME_DIR . '/inc/template-helpers.php';
 require_once JULLYBRIDE_THEME_DIR . '/inc/product-helpers.php';
+require_once JULLYBRIDE_THEME_DIR . '/inc/stories.php';
 require_once JULLYBRIDE_THEME_DIR . '/inc/footer-helpers.php';
 require_once JULLYBRIDE_THEME_DIR . '/inc/catalog.php';

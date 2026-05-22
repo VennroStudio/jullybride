@@ -9,11 +9,8 @@ if (!defined('ABSPATH')) {
 get_header();
 ?>
 <main class="main-page content">
-    <a href="javascript:void(0)" class="app-overlay-close"></a>
-    <div class="app-overlay-overlay"></div>
-
     <?php
-    jullybride_template_part('home/story-overlays');
+    jullybride_template_part('components/story-overlays');
     jullybride_template_part('home/hero');
     jullybride_template_part('home/dress-tabs');
     jullybride_template_part('home/video-tour');

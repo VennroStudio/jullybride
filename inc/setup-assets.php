@@ -111,6 +111,7 @@ function jullybride_register_acf_options(): void
     foreach ([
         'header' => 'Шапка',
         'footer' => 'Футер',
+        'stories' => 'Истории',
     ] as $slug => $title) {
         acf_add_options_sub_page([
             'page_title' => 'JullyBride: ' . $title,

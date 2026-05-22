@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
 
 get_header();
 
-jullybride_template_part('product/story-overlays');
+jullybride_template_part('components/story-overlays');
 
 while (have_posts()) :
     the_post();
@@ -17,7 +17,7 @@ while (have_posts()) :
     }
     ?>
     <main class="main-page content">
-        <?php jullybride_template_part('product/story-carousel'); ?>
+        <?php jullybride_template_part('components/story-carousel', ['section_class' => 'product-top']); ?>
         <?php jullybride_template_part('product/breadcrumbs'); ?>
         <?php jullybride_template_part('product/header', ['product' => $product]); ?>
         <?php jullybride_template_part('product/accessories', ['product' => $product]); ?>

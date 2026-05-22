@@ -105,37 +105,9 @@ $home_media_url = static function (mixed $media, string $size = 'full'): string 
         ?>
     </div>
 
-    <?php if (function_exists('have_rows') && have_rows('carusel-added-owl')) : ?>
-        <div class="carusel-added container">
-            <div class="row">
-                <div class="col-1 d-md-flex d-none align-items-center">
-                    <a href="javascript:void(0)" class="arrow-prev carusel-nav" id="carusel-added-prev"></a>
-                </div>
-                <div class="col-12 col-md-10">
-                    <ul class="carusel-added-owl owl-carousel owl-theme" id="carusel-added-owl">
-                        <?php
-                        while (have_rows('carusel-added-owl')) :
-                            the_row();
-                            $story_id = 'open-carusel-added-story_' . get_row_index();
-                            $image = get_sub_field('img');
-                            $image_url = $home_media_url($image);
-                            $title = (string) get_sub_field('title');
-                            ?>
-                            <li id="<?php echo esc_attr($story_id); ?>">
-                                <a href="javascript:void(0)">
-                                    <?php if ($image_url) : ?>
-                                        <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($title); ?>">
-                                    <?php endif; ?>
-                                    <span><?php echo esc_html($title); ?></span>
-                                </a>
-                            </li>
-                        <?php endwhile; ?>
-                    </ul>
-                </div>
-                <div class="col-1 d-md-flex d-none justify-content-end align-items-center">
-                    <a href="javascript:void(0)" class="arrow-next carusel-nav" id="carusel-added-next"></a>
-                </div>
-            </div>
-        </div>
-    <?php endif; ?>
+    <?php
+    jullybride_template_part('components/story-carousel', [
+        'thumb_size' => 'full',
+    ]);
+    ?>
 </section>
