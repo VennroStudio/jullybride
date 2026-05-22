@@ -3,14 +3,14 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-require_once JULLYBRIDE_THEME_DIR . '/template-block/stock/helpers.php';
+require_once JULLYBRIDE_THEME_DIR . '/template-block/stock-single/helpers.php';
 
 $post_id = get_the_ID();
-$image = jullybride_stock_image_url('sale_img', $post_id, 'full', jullybride_stock_featured_image_url($post_id, 'full'));
-$title = (string) jullybride_stock_field('sale_header', $post_id, get_the_title());
-$subtitle = (string) jullybride_stock_field('sale_header_2', $post_id, '');
-$description = (string) jullybride_stock_field('sale_description', $post_id, get_the_excerpt());
-$button = (string) jullybride_stock_field('btn_label', $post_id, jullybride_option('booking_text', 'Записаться на примерку'));
+$image = jullybride_stock_single_image_url('sale_img', $post_id, 'full', jullybride_stock_single_featured_image_url($post_id, 'full'));
+$title = (string) jullybride_stock_single_field('sale_header', $post_id, get_the_title());
+$subtitle = (string) jullybride_stock_single_field('sale_header_2', $post_id, '');
+$description = (string) jullybride_stock_single_field('sale_description', $post_id, get_the_excerpt());
+$button = (string) jullybride_stock_single_field('btn_label', $post_id, jullybride_option('booking_text', 'Записаться на примерку'));
 ?>
 <section class="jb-promo-hero">
     <div class="jb-promo-hero__inner">
@@ -33,7 +33,7 @@ $button = (string) jullybride_stock_field('btn_label', $post_id, jullybride_opti
                 </div>
             <?php endif; ?>
 
-            <div class="jb-promo-countdown" data-jb-countdown="<?php echo esc_attr(jullybride_stock_countdown_target($post_id)); ?>">
+            <div class="jb-promo-countdown" data-jb-countdown="<?php echo esc_attr(jullybride_stock_single_countdown_target($post_id)); ?>">
                 <span><b>00</b><small>дней</small></span>
                 <span><b>00</b><small>часов</small></span>
                 <span><b>00</b><small>минут</small></span>

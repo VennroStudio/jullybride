@@ -3,20 +3,20 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-require_once JULLYBRIDE_THEME_DIR . '/template-block/stock/helpers.php';
+require_once JULLYBRIDE_THEME_DIR . '/template-block/stock-single/helpers.php';
 
 $post_id = get_the_ID();
-$enabled = (bool) jullybride_stock_field('sale_gift_enabled', $post_id, true);
+$enabled = (bool) jullybride_stock_single_field('sale_gift_enabled', $post_id, true);
 
 if (!$enabled) {
     return;
 }
 
-$marquee = (string) jullybride_stock_field('sale_gift_marquee', $post_id, 'WOW! ПОДАРОК!');
-$image = jullybride_stock_image_url('sale_gift_image', $post_id, 'full', content_url('uploads/2025/02/s.png'));
-$title = (string) jullybride_stock_field('sale_gift_title', $post_id, 'ЗАБЕРИ СВОЙ ПОДАРОК!');
-$description = (string) jullybride_stock_field('sale_gift_description', $post_id, 'Дорогая, это WOW! Мы запустили бота, где ты можешь выиграть более 20 wedy призов: скидки на платья, сертификаты на свадебных специалистов, наш фирменный мерч и главный приз — потрясающее вечернее платье из коллекции Diamond! Поторопись, подарков ограниченное количество!');
-$button = (string) jullybride_stock_field('sale_gift_button', $post_id, 'ЗАБРАТЬ ПОДАРОК');
+$marquee = (string) jullybride_stock_single_field('sale_gift_marquee', $post_id, 'WOW! ПОДАРОК!');
+$image = jullybride_stock_single_image_url('sale_gift_image', $post_id, 'full', content_url('uploads/2025/02/s.png'));
+$title = (string) jullybride_stock_single_field('sale_gift_title', $post_id, 'ЗАБЕРИ СВОЙ ПОДАРОК!');
+$description = (string) jullybride_stock_single_field('sale_gift_description', $post_id, 'Дорогая, это WOW! Мы запустили бота, где ты можешь выиграть более 20 wedy призов: скидки на платья, сертификаты на свадебных специалистов, наш фирменный мерч и главный приз — потрясающее вечернее платье из коллекции Diamond! Поторопись, подарков ограниченное количество!');
+$button = (string) jullybride_stock_single_field('sale_gift_button', $post_id, 'ЗАБРАТЬ ПОДАРОК');
 ?>
 <section class="jb-promo-gift">
     <?php jullybride_template_part('stock-single/marquee', ['text' => $marquee]); ?>

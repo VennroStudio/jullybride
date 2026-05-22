@@ -3,11 +3,11 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-require_once JULLYBRIDE_THEME_DIR . '/template-block/stock/helpers.php';
+require_once JULLYBRIDE_THEME_DIR . '/template-block/stock-single/helpers.php';
 
 $post_id = get_the_ID();
-$title = (string) jullybride_stock_field('sale_video_title', $post_id, 'Оh, girls! Смотрите, как это весело!');
-$videos = jullybride_stock_video_urls($post_id);
+$title = (string) jullybride_stock_single_field('sale_video_title', $post_id, 'Оh, girls! Смотрите, как это весело!');
+$videos = jullybride_stock_single_video_urls($post_id);
 $decor = content_url('uploads/2023/09/jully_video_cover-1.svg');
 ?>
 <section class="jb-promo-videos">

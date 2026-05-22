@@ -1,5 +1,7 @@
 <?php
 get_header();
+
+require_once JULLYBRIDE_THEME_DIR . '/template-block/stock-single/helpers.php';
 ?>
 <main class="jb-main jb-editorial-page jb-stock">
     <div class="container">
@@ -10,7 +12,7 @@ get_header();
                 <?php
                 jullybride_template_part('stock-single/hero');
                 jullybride_template_part('stock-single/marquee', [
-                    'text' => (string) jullybride_stock_field('sale_running_line', get_the_ID(), 'несколько слов'),
+                    'text' => (string) jullybride_stock_single_field('sale_running_line', get_the_ID(), 'несколько слов'),
                 ]);
                 jullybride_template_part('stock-single/video-gallery');
                 jullybride_template_part('stock-single/sale-products');

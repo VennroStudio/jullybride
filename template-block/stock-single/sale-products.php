@@ -3,10 +3,10 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-require_once JULLYBRIDE_THEME_DIR . '/template-block/stock/helpers.php';
+require_once JULLYBRIDE_THEME_DIR . '/template-block/stock-single/helpers.php';
 
 $sale_ids = function_exists('wc_get_product_ids_on_sale') ? array_map('absint', wc_get_product_ids_on_sale()) : [];
-$title = (string) jullybride_stock_field('sale_products_title', get_the_ID(), 'Те самые платья');
+$title = (string) jullybride_stock_single_field('sale_products_title', get_the_ID(), 'Те самые платья');
 
 if (!$sale_ids) {
     return;
