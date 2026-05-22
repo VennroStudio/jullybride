@@ -5,7 +5,15 @@ if (!defined('ABSPATH')) {
 
 function jullybride_footer_menu_items(string $field): array
 {
-    return jullybride_nav_menu_items_from_value(jullybride_option($field));
+    static $cache = [];
+
+    if (isset($cache[$field])) {
+        return $cache[$field];
+    }
+
+    $cache[$field] = jullybride_nav_menu_items_from_value(jullybride_option_raw($field));
+
+    return $cache[$field];
 }
 
 function jullybride_nav_menu_items_from_value(mixed $menu_value): array
@@ -14,6 +22,13 @@ function jullybride_nav_menu_items_from_value(mixed $menu_value): array
 
     if (!$menu) {
         return [];
+    }
+
+    static $cache = [];
+    $cache_key = (string) $menu->term_id;
+
+    if (isset($cache[$cache_key])) {
+        return $cache[$cache_key];
     }
 
     $items = wp_get_nav_menu_items($menu->term_id, [
@@ -46,7 +61,9 @@ function jullybride_nav_menu_items_from_value(mixed $menu_value): array
         return $formatted;
     };
 
-    return $format_items($children_by_parent[0] ?? []);
+    $cache[$cache_key] = $format_items($children_by_parent[0] ?? []);
+
+    return $cache[$cache_key];
 }
 
 function jullybride_get_nav_menu_object(mixed $menu_value): ?WP_Term
@@ -78,9 +95,16 @@ function jullybride_format_nav_menu_item(WP_Post $item): array
 
 function jullybride_footer_products(): array
 {
-    $selected_products = jullybride_option('footer_products', []);
+    static $cache = null;
+
+    if ($cache !== null) {
+        return $cache;
+    }
+
+    $selected_products = jullybride_option_raw('footer_products', []);
 
     if (!$selected_products) {
+        $cache = [];
         return [];
     }
 
@@ -99,6 +123,7 @@ function jullybride_footer_products(): array
 
     $product_ids = array_values(array_unique($product_ids));
     if (!$product_ids) {
+        $cache = [];
         return [];
     }
 
@@ -152,7 +177,9 @@ function jullybride_footer_products(): array
         }
     }
 
-    return $products;
+    $cache = $products;
+
+    return $cache;
 }
 
 function jullybride_legal_links(string $group = ''): array

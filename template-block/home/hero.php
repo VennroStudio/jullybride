@@ -26,6 +26,37 @@ $home_media_url = static function (mixed $media, string $size = 'full'): string 
 
     return is_string($media) ? $media : '';
 };
+
+$banners = [];
+$banner_image_ids = [];
+
+if (function_exists('have_rows') && have_rows('banners')) {
+    while (have_rows('banners')) {
+        the_row();
+
+        $image = get_sub_field('image', false);
+        $image_id = is_numeric($image) ? (int) $image : 0;
+
+        if ($image_id > 0) {
+            $banner_image_ids[] = $image_id;
+        }
+
+        $banners[] = [
+            'image' => $image,
+            'image_id' => $image_id,
+            'title' => (string) get_sub_field('title'),
+            'subtitle' => (string) get_sub_field('subtitle'),
+            'text_left' => (string) get_sub_field('text_left'),
+            'text_right' => (string) get_sub_field('text_right'),
+            'link' => jullybride_url((string) get_sub_field('link'), '#'),
+            'button_text' => (string) get_sub_field('button_text'),
+        ];
+    }
+}
+
+if (function_exists('jullybride_prime_attachment_caches')) {
+    jullybride_prime_attachment_caches($banner_image_ids);
+}
 ?>
 <section class="padding-bottom-80">
     <div class="main-slide">
@@ -33,24 +64,22 @@ $home_media_url = static function (mixed $media, string $size = 'full'): string 
             <div class="slide-duration_indicator"></div>
         </div>
 
-        <?php if (function_exists('have_rows') && have_rows('banners')) : ?>
+        <?php if ($banners) : ?>
             <div class="container">
                 <div class="row">
                     <div class="col-12">
                         <ul class="main-slide_list owl-carousel owl-theme" id="main-slide-carusel">
                             <?php
-                            $index = 0;
-                            while (have_rows('banners')) :
-                                the_row();
-                                $image = get_sub_field('image');
+                            foreach ($banners as $index => $banner) :
+                                $image = $banner['image'];
                                 $image_url = $home_media_url($image);
-                                $image_alt = is_array($image) ? (string) ($image['alt'] ?? '') : '';
-                                $title = (string) get_sub_field('title');
-                                $subtitle = (string) get_sub_field('subtitle');
-                                $text_left = (string) get_sub_field('text_left');
-                                $text_right = (string) get_sub_field('text_right');
-                                $link = jullybride_url((string) get_sub_field('link'), '#');
-                                $button_text = (string) get_sub_field('button_text');
+                                $image_alt = $banner['image_id'] > 0 ? (string) get_post_meta($banner['image_id'], '_wp_attachment_image_alt', true) : '';
+                                $title = $banner['title'];
+                                $subtitle = $banner['subtitle'];
+                                $text_left = $banner['text_left'];
+                                $text_right = $banner['text_right'];
+                                $link = $banner['link'];
+                                $button_text = $banner['button_text'];
                                 ?>
                                 <li class="row align-items-center">
                                     <div class="main-slide_top col-12">
@@ -86,8 +115,7 @@ $home_media_url = static function (mixed $media, string $size = 'full'): string 
                                     </div>
                                 </li>
                                 <?php
-                                $index++;
-                            endwhile;
+                            endforeach;
                             ?>
                         </ul>
                     </div>

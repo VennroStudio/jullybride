@@ -2,6 +2,50 @@
 if (!defined('ABSPATH')) {
     exit;
 }
+
+$couture_brands = [];
+$couture_gallery = [];
+$couture_attachment_ids = [];
+
+if (function_exists('have_rows') && have_rows('couture_brand_gallery')) {
+    while (have_rows('couture_brand_gallery')) {
+        the_row();
+
+        $img_brand = get_sub_field('img_brand', false);
+        $img_brand_id = is_numeric($img_brand) ? (int) $img_brand : 0;
+
+        if ($img_brand_id > 0) {
+            $couture_attachment_ids[] = $img_brand_id;
+        }
+
+        $couture_brands[] = [
+            'link_brand' => (string) get_sub_field('link_brand'),
+            'img_brand' => $img_brand,
+        ];
+    }
+}
+
+if (function_exists('have_rows') && have_rows('gallery_photo_couture')) {
+    while (have_rows('gallery_photo_couture')) {
+        the_row();
+
+        $image = get_sub_field('img', false);
+        $image_id = is_numeric($image) ? (int) $image : 0;
+
+        if ($image_id > 0) {
+            $couture_attachment_ids[] = $image_id;
+        }
+
+        $couture_gallery[] = [
+            'image' => $image,
+            'image_id' => $image_id,
+        ];
+    }
+}
+
+if (function_exists('jullybride_prime_attachment_caches')) {
+    jullybride_prime_attachment_caches($couture_attachment_ids);
+}
 ?>
             <section class="sect-couture">
                 <div class="container-fluid">
@@ -18,25 +62,20 @@ if (!defined('ABSPATH')) {
                                     <?=get_field('text_couture')?>
                                 </div>
                                 
-                                <?php if (have_rows('couture_brand_gallery')): ?>
+                                <?php if ($couture_brands): ?>
                                     <div class="row sect-couture-carusel">
                                         <div class="col-1 d-none align-items-center d-md-flex flex-column justify-content-center">
                                             <a href="javascript:void(0)" class="tabs-carusel_nav tabs-carusel_prev custom_btn" id="sect-couture-owl-prev"></a>
                                         </div>
                                         <div class="col-12 col-md-10">
                                             <ul class="owl-list sect-couture-owl owl-carousel owl-theme" id="sect-couture-owl">
-                                                <?php if (have_rows('couture_brand_gallery')): ?>
-                                                    <?php while (have_rows('couture_brand_gallery')): the_row(); 
-                                                        $link_brand = get_sub_field('link_brand');
-                                                        $img_brand = get_sub_field('img_brand');
-                                                    ?>
+                                                <?php foreach ($couture_brands as $brand): ?>
                                                     <li>
-                                                        <a href="<?=$link_brand?>">
-                                                            <img data-src="<?=$img_brand?>" class="owl-lazy" alt="" />
+                                                        <a href="<?=$brand['link_brand']?>">
+                                                            <img data-src="<?=esc_url(jullybride_media_url($brand['img_brand']))?>" class="owl-lazy" alt="" />
                                                         </a>
                                                     </li>
-                                                    <?php endwhile; ?>
-                                                <?php endif; ?>
+                                                <?php endforeach; ?>
                                             </ul>
                                         </div>
                                         <div class="col-1 d-none align-items-center d-md-flex flex-column justify-content-center">
@@ -53,39 +92,15 @@ if (!defined('ABSPATH')) {
                             <img class="sect-couture-img2 order-3 d-none d-md-block" src="<?php echo get_stylesheet_directory_uri(); ?>/assets/images/group-1231.svg" alt="" />
                         </div>
 
-                        <?php if (have_rows('gallery_photo_couture')): ?>
+                        <?php if ($couture_gallery): ?>
                             <div class="col-12 col-md-6 sect-couture_right-colunn">
                                 <a href="javascript:void(0)" class="sect-couture-nav sect-couture-owl2-prev" id="sect-couture-owl2-prev"></a>
                                 <a href="javascript:void(0)" class="sect-couture-nav sect-couture-owl2-next" id="sect-couture-owl2-next"></a>
                                 <ul class="owl-list sect-couture-owl2 owl-theme owl-carousel" id="sect-couture_right-colunn">
-                                    <?php if (have_rows('gallery_photo_couture')): ?>
-                                        <?php while (have_rows('gallery_photo_couture')): the_row(); 
-                                            $img = get_sub_field('img');
-                                            
-                                            // Определяем ID изображения (универсально для всех форматов ACF)
-                                            $attachment_id = 0;
-                                            
-                                            if (is_array($img) && !empty($img['ID'])) {
-                                                // Формат "Image Array" (рекомендуется в ACF)
-                                                $attachment_id = $img['ID'];
-                                            } elseif (is_numeric($img)) {
-                                                // Формат "Image ID"
-                                                $attachment_id = (int) $img;
-                                            } elseif (is_string($img)) {
-                                                // Формат "Image URL" — конвертируем в ID
-                                                $attachment_id = attachment_url_to_postid($img);
-                                            }
-                                            
-                                            // Получаем миниатюру размера gallery-couture
-                                            if ($attachment_id) {
-                                                $image = wp_get_attachment_image_src($attachment_id, 'full');
-                                                $img_url = $image[0] ?? $img; // fallback на оригинал, если миниатюра не сгенерирована
-                                                $alt = !empty($img['alt']) ? $img['alt'] : get_post_meta($attachment_id, '_wp_attachment_image_alt', true);
-                                            } else {
-                                                // Fallback: используем оригинальный URL (если не удалось получить ID)
-                                                $img_url = is_array($img) ? ($img['url'] ?? '') : $img;
-                                                $alt = is_array($img) ? ($img['alt'] ?? '') : '';
-                                            }
+                                    <?php foreach ($couture_gallery as $gallery_item): 
+                                            $attachment_id = (int) $gallery_item['image_id'];
+                                            $img_url = jullybride_media_url($gallery_item['image']);
+                                            $alt = $attachment_id > 0 ? (string) get_post_meta($attachment_id, '_wp_attachment_image_alt', true) : '';
                                         ?>
                                             <li>
                                                 <img data-src="<?= esc_url($img_url) ?>" 
@@ -93,8 +108,7 @@ if (!defined('ABSPATH')) {
                                                     alt="<?= esc_attr($alt) ?>"
                                                 />
                                             </li>
-                                        <?php endwhile; ?>
-                                    <?php endif; ?>
+                                    <?php endforeach; ?>
                                 </ul>
                             </div>
                         <?php endif; ?> 

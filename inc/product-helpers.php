@@ -30,6 +30,23 @@ function jullybride_product_image_ids(WC_Product $product): array
     )));
 }
 
+function jullybride_prime_product_caches(array $product_ids): void
+{
+    $product_ids = array_values(array_unique(array_filter(array_map('absint', $product_ids))));
+
+    if (!$product_ids) {
+        return;
+    }
+
+    if (function_exists('_prime_post_caches')) {
+        _prime_post_caches($product_ids, true, true);
+        return;
+    }
+
+    update_meta_cache('post', $product_ids);
+    update_object_term_cache($product_ids, 'product');
+}
+
 function jullybride_prime_attachment_caches(array $attachment_ids): void
 {
     $attachment_ids = array_values(array_unique(array_filter(array_map('absint', $attachment_ids))));

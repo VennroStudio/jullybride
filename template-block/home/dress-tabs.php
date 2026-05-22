@@ -139,6 +139,9 @@ $query_args = static function (array $item, string $main_category) use ($resolve
         'orderby' => 'date',
         'order' => 'DESC',
         'post_status' => 'publish',
+        'no_found_rows' => true,
+        'update_post_meta_cache' => true,
+        'update_post_term_cache' => true,
     ];
 
     $tax_query = ['relation' => 'AND'];

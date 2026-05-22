@@ -26,9 +26,28 @@ if (!$group || !is_callable($query_args)) {
                             <?php
                             $products = new WP_Query($query_args($item, $group['main_category'] ?? 'wedding'));
                             if ($products->have_posts()) :
+                                $product_ids = array_map('absint', wp_list_pluck($products->posts, 'ID'));
+
+                                if (function_exists('jullybride_prime_product_caches')) {
+                                    jullybride_prime_product_caches($product_ids);
+                                }
+
+                                $products_by_id = [];
+                                foreach ($product_ids as $product_id) {
+                                    $product = wc_get_product($product_id);
+
+                                    if ($product instanceof WC_Product) {
+                                        $products_by_id[$product_id] = $product;
+                                    }
+                                }
+
+                                if (function_exists('jullybride_prime_product_image_caches')) {
+                                    jullybride_prime_product_image_caches(array_values($products_by_id));
+                                }
+
                                 while ($products->have_posts()) :
                                     $products->the_post();
-                                    $product = wc_get_product(get_the_ID());
+                                    $product = $products_by_id[get_the_ID()] ?? null;
                                     jullybride_template_part('components/dress-tab-product-card', ['product' => $product]);
                                 endwhile;
                                 wp_reset_postdata();

@@ -2,9 +2,51 @@
 if (!defined('ABSPATH')) {
     exit;
 }
+
+$wanted_dynamic_items = [];
+$wanted_carousel_items = [];
+$wanted_attachment_ids = [];
+
+if (function_exists('have_rows') && have_rows('zashla_prosto_na_kofe')) {
+    while (have_rows('zashla_prosto_na_kofe')) {
+        the_row();
+
+        $image = get_sub_field('img', false);
+        $image_id = is_numeric($image) ? (int) $image : 0;
+
+        if ($image_id > 0) {
+            $wanted_attachment_ids[] = $image_id;
+        }
+
+        $wanted_dynamic_items[] = [
+            'type' => 'dynamic',
+            'img' => $image,
+            'sort' => (int) get_sub_field('sort'),
+        ];
+    }
+}
+
+if (function_exists('have_rows') && have_rows('carusel_v_galeree_izobrazhenij')) {
+    while (have_rows('carusel_v_galeree_izobrazhenij')) {
+        the_row();
+
+        $image = get_sub_field('img', false);
+        $image_id = is_numeric($image) ? (int) $image : 0;
+
+        if ($image_id > 0) {
+            $wanted_attachment_ids[] = $image_id;
+        }
+
+        $wanted_carousel_items[] = $image;
+    }
+}
+
+if (function_exists('jullybride_prime_attachment_caches')) {
+    jullybride_prime_attachment_caches($wanted_attachment_ids);
+}
 ?>
             <!-- Блок не виден в мобиле -->
-            <? if (have_rows('zashla_prosto_na_kofe')): ?>
+            <? if ($wanted_dynamic_items): ?>
                 <section class="wanted-stay d-none d-md-block">
                     <div class="container">
                         <div class="row">
@@ -20,16 +62,7 @@ if (!defined('ABSPATH')) {
                         $all_items = [];
 
                         // 1. Добавляем динамические элементы из Repeater'а
-                        if (have_rows('zashla_prosto_na_kofe')) {
-                            while (have_rows('zashla_prosto_na_kofe')) {
-                                the_row();
-                                $all_items[] = [
-                                    'type' => 'dynamic',
-                                    'img' => get_sub_field('img'),
-                                    'sort' => (int) get_sub_field('sort') // приводим к числу!
-                                ];
-                            }
-                        }
+                        $all_items = $wanted_dynamic_items;
 
                         // 2. Добавляем статичные элементы с их "виртуальными" sort-значениями
                         $all_items[] = [
@@ -56,7 +89,7 @@ if (!defined('ABSPATH')) {
                             <?foreach ($all_items as $item): ?>
                                 <? if ($item['type'] === 'dynamic'): ?>
                                     <div class="item" rel="<?=$item['sort']?>">
-                                        <img src="<?= esc_url($item['img']); ?>" alt="" loading="lazy">
+                                        <img src="<?= esc_url(jullybride_media_url($item['img'])); ?>" alt="" loading="lazy">
                                     </div>
 
                                 <? elseif ($item['type'] === 'static_1'): ?>
@@ -67,13 +100,13 @@ if (!defined('ABSPATH')) {
                                     </div>
 
                                 <? elseif ($item['type'] === 'static_carousel'): ?>
-                                    <? if (have_rows('carusel_v_galeree_izobrazhenij')): ?>
+                                    <? if ($wanted_carousel_items): ?>
                                         <div class="item" rel="<?=$item['sort']?>">
                                             <div class="owl-wrapper">
                                                 <ul class="owl-list owl-carousel owl-theme wanted-stay-owl" id="wanted-stay-owl">
-                                                    <? while (have_rows('carusel_v_galeree_izobrazhenij')): the_row(); ?>
-                                                        <li><img src="<?=get_sub_field('img')?>" alt=""></li>
-                                                    <?endwhile?>
+                                                    <? foreach ($wanted_carousel_items as $carousel_image): ?>
+                                                        <li><img src="<?=esc_url(jullybride_media_url($carousel_image))?>" alt=""></li>
+                                                    <?endforeach?>
                                                 </ul>
                                             </div> 
                                         </div>

@@ -5,7 +5,9 @@ if (!defined('ABSPATH')) {
 
 $field = (string) ($args['field'] ?? '');
 
-if (!$field || !function_exists('have_rows') || !have_rows($field)) {
+$rows = $field && function_exists('get_field') ? get_field($field) : [];
+
+if (!$field || !$rows || !is_array($rows)) {
     return;
 }
 
@@ -23,17 +25,55 @@ $card_args = [
     'badge_class' => (string) ($args['badge_class'] ?? 'nameplate-sale2'),
     'name_color' => (string) ($args['name_color'] ?? '#181818'),
 ];
+
+$product_ids = [];
+foreach ($rows as $row) {
+    $product_value = is_array($row) ? ($row['id'] ?? 0) : 0;
+
+    if ($product_value instanceof WC_Product) {
+        $product_ids[] = $product_value->get_id();
+    } elseif ($product_value instanceof WP_Post) {
+        $product_ids[] = (int) $product_value->ID;
+    } else {
+        $product_ids[] = (int) $product_value;
+    }
+}
+
+if (function_exists('jullybride_prime_product_caches')) {
+    jullybride_prime_product_caches($product_ids);
+}
+
+$products_by_id = [];
+foreach (array_values(array_unique(array_filter(array_map('absint', $product_ids)))) as $product_id) {
+    $product = wc_get_product($product_id);
+
+    if ($product instanceof WC_Product) {
+        $products_by_id[$product_id] = $product;
+    }
+}
+
+if (function_exists('jullybride_prime_product_image_caches')) {
+    jullybride_prime_product_image_caches(array_values($products_by_id));
+}
 ?>
 <div class="row margin-bottom-80">
     <div class="col-12">
         <?php echo wp_kses_post($before_carousel); ?>
         <div class="new-in-salon-carusel">
             <ul class="owl-carousel owl-theme owl-list" id="<?php echo esc_attr($carousel_id); ?>">
-                <?php while (have_rows($field)) : ?>
+                <?php foreach ($rows as $row) : ?>
                     <?php
-                    the_row();
-                    $product_id = (int) get_sub_field('id');
-                    $product = $product_id ? wc_get_product($product_id) : null;
+                    if (!is_array($row)) {
+                        continue;
+                    }
+
+                    $product_value = $row['id'] ?? 0;
+                    if ($product_value instanceof WC_Product) {
+                        $product = $product_value;
+                    } else {
+                        $product_id = $product_value instanceof WP_Post ? (int) $product_value->ID : (int) $product_value;
+                        $product = $products_by_id[$product_id] ?? null;
+                    }
 
                     if (!$product instanceof WC_Product) {
                         continue;
@@ -41,10 +81,10 @@ $card_args = [
 
                     jullybride_template_part('components/product-carousel-card', array_merge($card_args, [
                         'product' => $product,
-                        'show_badge' => (bool) get_sub_field('shildik'),
+                        'show_badge' => !empty($row['shildik']),
                     ]));
                     ?>
-                <?php endwhile; ?>
+                <?php endforeach; ?>
             </ul>
             <div class="tabs-carusel_dot new-in-salon-carusel_dot d-none d-md-table">
                 <a href="javascript:void(0)" class="<?php echo esc_attr($desktop_prev_class); ?>" id="<?php echo esc_attr($desktop_prev_id); ?>"></a>

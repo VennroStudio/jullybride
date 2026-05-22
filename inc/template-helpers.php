@@ -10,14 +10,44 @@ function jullybride_template_part(string $slug, array $args = []): void
 
 function jullybride_option(string $field, mixed $fallback = ''): mixed
 {
+    static $cache = [];
+
+    if (array_key_exists($field, $cache)) {
+        $value = $cache[$field];
+
+        return $value !== null && $value !== false && $value !== '' ? $value : $fallback;
+    }
+
     if (function_exists('get_field')) {
         $value = get_field($field, 'option');
+        $cache[$field] = $value;
+
         if ($value !== null && $value !== false && $value !== '') {
             return $value;
         }
     }
 
+    $cache[$field] = null;
+
     return $fallback;
+}
+
+function jullybride_option_raw(string $field, mixed $fallback = ''): mixed
+{
+    static $cache = [];
+
+    $field = trim($field);
+    if ($field === '') {
+        return $fallback;
+    }
+
+    if (!array_key_exists($field, $cache)) {
+        $cache[$field] = get_option('options_' . $field, null);
+    }
+
+    $value = $cache[$field];
+
+    return $value !== null && $value !== false && $value !== '' ? $value : $fallback;
 }
 
 function jullybride_acf_option_rows(string $field): array

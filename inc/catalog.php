@@ -974,23 +974,83 @@ function jullybride_catalog_apply_dynamic_term_counts(array &$terms_by_name, arr
     }
 }
 
+function jullybride_catalog_filter_terms_by_taxonomy(): array
+{
+    static $cache = null;
+
+    if ($cache !== null) {
+        return $cache;
+    }
+
+    $taxonomies = [];
+    foreach (jullybride_catalog_filter_definitions() as $definition) {
+        foreach ((array) ($definition['taxonomies'] ?? []) as $taxonomy) {
+            if (is_string($taxonomy) && taxonomy_exists($taxonomy)) {
+                $taxonomies[] = $taxonomy;
+            }
+        }
+    }
+
+    $taxonomies = array_values(array_unique($taxonomies));
+    if (!$taxonomies) {
+        $cache = [];
+        return [];
+    }
+
+    $terms = get_terms([
+        'taxonomy' => $taxonomies,
+        'hide_empty' => true,
+        'orderby' => 'name',
+        'order' => 'ASC',
+        'update_term_meta_cache' => false,
+    ]);
+
+    $cache = [];
+    if (!$terms || is_wp_error($terms)) {
+        return $cache;
+    }
+
+    foreach ($terms as $term) {
+        if ($term instanceof WP_Term) {
+            $cache[$term->taxonomy][] = $term;
+        }
+    }
+
+    return $cache;
+}
+
 function jullybride_catalog_filter_terms(array $definition, ?array $base_product_ids = null): array
 {
+    static $cache = [];
+
+    $base_key = 'global';
+    if (is_array($base_product_ids)) {
+        $base_ids = array_values(array_unique(array_filter(array_map('absint', $base_product_ids))));
+        sort($base_ids);
+        $base_key = implode(',', $base_ids);
+    }
+
+    $cache_key = md5(wp_json_encode([
+        (string) ($definition['param'] ?? ''),
+        array_values(array_map('strval', (array) ($definition['taxonomies'] ?? []))),
+        $base_key,
+        !empty($_GET['jb_in_stock']),
+    ]));
+
+    if (isset($cache[$cache_key])) {
+        return $cache[$cache_key];
+    }
+
     $terms_by_name = [];
+    $terms_by_taxonomy = jullybride_catalog_filter_terms_by_taxonomy();
 
     foreach (($definition['taxonomies'] ?? []) as $taxonomy) {
         if (!taxonomy_exists($taxonomy)) {
             continue;
         }
 
-        $terms = get_terms([
-            'taxonomy' => $taxonomy,
-            'hide_empty' => true,
-            'orderby' => 'name',
-            'order' => 'ASC',
-        ]);
-
-        if (!$terms || is_wp_error($terms)) {
+        $terms = $terms_by_taxonomy[$taxonomy] ?? [];
+        if (!$terms) {
             continue;
         }
 
@@ -1032,7 +1092,9 @@ function jullybride_catalog_filter_terms(array $definition, ?array $base_product
 
     uasort($terms_by_name, static fn (array $a, array $b): int => strnatcasecmp($a['name'], $b['name']));
 
-    return array_values($terms_by_name);
+    $cache[$cache_key] = array_values($terms_by_name);
+
+    return $cache[$cache_key];
 }
 
 function jullybride_catalog_expand_slugs_by_taxonomy(array $taxonomies, array $slugs): array

@@ -2,6 +2,35 @@
 if (!defined('ABSPATH')) {
     exit;
 }
+
+$reviews = [];
+$review_image_ids = [];
+
+if (function_exists('have_rows') && have_rows('reviews')) {
+    while (have_rows('reviews')) {
+        the_row();
+
+        $foto = get_sub_field('foto', false);
+        $foto_id = is_numeric($foto) ? (int) $foto : 0;
+
+        if ($foto_id > 0) {
+            $review_image_ids[] = $foto_id;
+        }
+
+        $reviews[] = [
+            'foto' => $foto,
+            'foto_id' => $foto_id,
+            'fio' => (string) get_sub_field('fio'),
+            'tekst' => (string) get_sub_field('tekst'),
+            'link' => (string) get_sub_field('link'),
+            'date' => (string) get_sub_field('date'),
+        ];
+    }
+}
+
+if (function_exists('jullybride_prime_attachment_caches')) {
+    jullybride_prime_attachment_caches($review_image_ids);
+}
 ?>
             <section class="your-turn">
                 <div class="your-turn_righ_top">
@@ -14,7 +43,7 @@ if (!defined('ABSPATH')) {
                     </ul>
                 </div>
 
-                <? if (have_rows('reviews')): ?>
+                <? if ($reviews): ?>
                     <div class="container">
                         <div class="row">
                             <div class="col-12">
@@ -24,12 +53,12 @@ if (!defined('ABSPATH')) {
                         </div>
                     </div>
                     <ul class="owl-list reviews-carusel owl-carousel owl-theme center_item" id="reviews-carusel">
-                        <? while (have_rows('reviews')): the_row(); 
-                            $foto = get_sub_field('foto');
-                            $fio = get_sub_field('fio');
-                            $tekst = get_sub_field('tekst');
-                            $link = get_sub_field('link');
-                            $date = get_sub_field('date');
+                        <? foreach ($reviews as $review):
+                            $foto = jullybride_media_url($review['foto']);
+                            $fio = $review['fio'];
+                            $tekst = $review['tekst'];
+                            $link = $review['link'];
+                            $date = $review['date'];
                         ?>
                             <li>
                                 <div class="reviews_item_wrap">
@@ -46,7 +75,7 @@ if (!defined('ABSPATH')) {
                                 <a href="<?=$link?>" class="reviews_item-more" target="_blank">Читать отзыв полностью</a>
                                 <span class="reviews_item-date d-block"><?=$date?></span>
                             </li>
-                        <?endwhile?>
+                        <?endforeach?>
                     </ul>
                     <div class="tabs-carusel_dot new-in-salon-carusel_dot reviews-carusel_dot d-none d-md-table">
                         <a href="javascript:void(0)" class="tabs-carusel_nav tabs-carusel_prev custom_btn" id="reviews-carusel_prev"></a>
