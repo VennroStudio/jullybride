@@ -171,82 +171,33 @@ $query_args = static function (array $item, string $main_category) use ($resolve
 
     return $args;
 };
-?>
-<section class="tabs-box">
-    <a href="#" class="tabs-box-svg1">
-        <img src="<?php echo esc_url(jullybride_asset_uri('images/kak-vybratь-to-samoe.svg')); ?>" alt="Как выбрать то самое?">
-    </a>
-    <img class="tabs-box-svg2 d-none d-md-block" src="<?php echo esc_url(jullybride_asset_uri('images/nashey-atmosfere-zaviduyut.svg')); ?>" alt="">
 
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <span class="section-subtitle d-block text-center">Выбери свое идеальное</span>
-                <h2 class="section-title text-center font-title">свадебное платье</h2>
-            </div>
-        </div>
-    </div>
-    <div class="container">
-        <ul class="tabs-list d-md-flex d-none align-items-center">
-            <?php foreach ($groups as $group_index => $group) : ?>
-                <li class="<?php echo $group_index === 0 ? 'active' : ''; ?>"><?php echo esc_html($group['label']); ?></li>
-            <?php endforeach; ?>
-        </ul>
-    </div>
-    <div class="slides-tabs">
-        <?php foreach ($groups as $group_index => $group) : ?>
-            <?php $catalog_url = $group_catalog_url($group); ?>
-            <span class="d-md-none d-block mobile-tab-wrap<?php echo $group_index === 0 ? ' active' : ''; ?>">
-                <span class="mobile-tab"><?php echo esc_html($group['label']); ?></span>
-            </span>
-            <div class="container taab">
-                <div class="row mobile-direction">
-                    <div class="col-md-10">
-                        <div class="tabs-content">
-                            <div class="tabs-carusel">
-                                <?php foreach ($group['items'] as $item_index => $item) : ?>
-                                    <?php $carousel_id = (int) $item['id']; ?>
-                                    <div class="tab-content<?php echo $item_index === 0 ? ' active' : ''; ?>">
-                                        <div class="mobile-dots d-flex d-md-none justify-content-between">
-                                            <a href="javascript:void(0)" id="mobile-dots-prev<?php echo esc_attr($carousel_id); ?>"></a>
-                                            <a href="javascript:void(0)" id="mobile-dots-next<?php echo esc_attr($carousel_id); ?>"></a>
-                                        </div>
-                                        <ul class="owl-carousel owl-theme tabs-carusel_list" id="tabs-carusel_<?php echo esc_attr($carousel_id); ?>">
-                                            <?php
-                                            $products = new WP_Query($query_args($item, $group['main_category'] ?? 'wedding'));
-                                            if ($products->have_posts()) :
-                                                while ($products->have_posts()) :
-                                                    $products->the_post();
-                                                    $product = wc_get_product(get_the_ID());
-                                                    jullybride_template_part('header/components/dress-tab-product-card', ['product' => $product]);
-                                                endwhile;
-                                                wp_reset_postdata();
-                                            endif;
-                                            ?>
-                                        </ul>
-                                        <div class="tabs-carusel_dot d-none d-md-table">
-                                            <a href="javascript:void(0)" class="tabs-carusel_nav tabs-carusel_prev" id="tabs-carusel_prev_<?php echo esc_attr($carousel_id); ?>"></a>
-                                            <a href="javascript:void(0)" class="tabs-carusel_nav tabs-carusel_next" id="tabs-carusel_next_<?php echo esc_attr($carousel_id); ?>"></a>
-                                        </div>
-                                    </div>
-                                <?php endforeach; ?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="<?php echo esc_attr($group['sidebar_class'] ?? 'col-12 col-md-2 position-relative'); ?>">
-                        <ul class="categories-list">
-                            <?php foreach ($group['items'] as $item_index => $item) : ?>
-                                <li class="<?php echo $item_index === 0 ? 'active ' : ''; ?>tab-trigger"><a href="javascript:void(0)"><?php echo esc_html($item['label']); ?></a></li>
-                            <?php endforeach; ?>
-                            <li class="d-md-none d-block"><a href="<?php echo esc_url($catalog_url); ?>">Смотреть все</a></li>
-                        </ul>
-                        <a href="<?php echo esc_url($catalog_url); ?>" class="button-main-main-bg theme-button d-md-block d-none text-center custom-btn">Перейти в каталог</a>
-                    </div>
-                </div>
-            </div>
-        <?php endforeach; ?>
-    </div>
-    <a href="#" class="tabs-box-svg3 d-none d-md-block">
-        <img src="<?php echo esc_url(jullybride_asset_uri('images/branchi-1.svg')); ?>" alt="">
-    </a>
-</section>
+$tabs = [];
+
+foreach ($groups as $group_index => $group) {
+    $tabs[] = [
+        'id' => 'dress-group-' . $group_index,
+        'label' => $group['label'],
+        'template' => 'home/dress-tabs-panel',
+        'args' => [
+            'group' => $group,
+            'catalog_url' => $group_catalog_url($group),
+            'query_args' => $query_args,
+        ],
+    ];
+}
+
+jullybride_template_part('components/tabs-section', [
+    'subtitle' => 'Выбери свое идеальное',
+    'title' => 'свадебное платье',
+    'tabs' => $tabs,
+    'before_html' => sprintf(
+        '<a href="#" class="tabs-box-svg1"><img src="%s" alt="Как выбрать то самое?"></a><img class="tabs-box-svg2 d-none d-md-block" src="%s" alt="">',
+        esc_url(jullybride_asset_uri('images/kak-vybratь-to-samoe.svg')),
+        esc_url(jullybride_asset_uri('images/nashey-atmosfere-zaviduyut.svg'))
+    ),
+    'after_html' => sprintf(
+        '<a href="#" class="tabs-box-svg3 d-none d-md-block"><img src="%s" alt=""></a>',
+        esc_url(jullybride_asset_uri('images/branchi-1.svg'))
+    ),
+]);

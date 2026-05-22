@@ -580,69 +580,6 @@
     document.querySelector('[data-jb-about-gallery-next]')?.addEventListener('click', () => scrollGallery(1));
   };
 
-  const setupContactTabs = () => {
-    document.querySelectorAll('[data-jb-contact-tabs]').forEach((tabs) => {
-      const radios = tabs.querySelectorAll('.jb-contact-tabs__radio');
-      const labels = tabs.querySelectorAll('.jb-contact-tabs__label');
-      const panels = tabs.querySelectorAll('[data-jb-contact-panel]');
-
-      const updateActiveCity = () => {
-        const activeRadio = [...radios].find((radio) => radio.checked);
-        if (!activeRadio) return;
-
-        const activeSlug = activeRadio.id.replace('jb-contact-city-', '');
-
-        labels.forEach((label) => {
-          const isActive = label.getAttribute('for') === activeRadio.id;
-          label.classList.toggle('is-active', isActive);
-          label.setAttribute('aria-selected', isActive ? 'true' : 'false');
-        });
-
-        panels.forEach((panel) => {
-          panel.hidden = panel.dataset.jbContactPanel !== activeSlug;
-        });
-      };
-
-      radios.forEach((radio) => radio.addEventListener('change', updateActiveCity));
-      updateActiveCity();
-    });
-  };
-
-  const setupContactAccordion = () => {
-    document.querySelectorAll('[data-jb-contact-accordion]').forEach((accordion) => {
-      accordion.querySelectorAll('details').forEach((details) => {
-        details.addEventListener('toggle', () => {
-          if (!details.open) return;
-
-          accordion.querySelectorAll('details[open]').forEach((other) => {
-            if (other !== details) {
-              other.open = false;
-            }
-          });
-        });
-      });
-    });
-  };
-
-  const setupContactGalleries = () => {
-    document.querySelectorAll('[data-jb-contact-gallery]').forEach((gallery) => {
-      const track = gallery.querySelector('[data-jb-contact-gallery-track]');
-      const prev = gallery.querySelector('[data-jb-contact-gallery-prev]');
-      const next = gallery.querySelector('[data-jb-contact-gallery-next]');
-      if (!track) return;
-
-      const scrollGallery = (direction) => {
-        const slide = track.querySelector('.jb-contact-gallery__item');
-        const gap = parseFloat(window.getComputedStyle(track).columnGap) || 0;
-        const step = slide ? slide.getBoundingClientRect().width + gap : track.clientWidth;
-        track.scrollBy({ left: direction * step, behavior: 'smooth' });
-      };
-
-      prev?.addEventListener('click', () => scrollGallery(-1));
-      next?.addEventListener('click', () => scrollGallery(1));
-    });
-  };
-
   const setupStockPromoCarousel = () => {
     if (!window.jQuery || !window.jQuery.fn || !window.jQuery.fn.owlCarousel) return;
 
@@ -717,6 +654,68 @@
     });
   };
 
+  const setupManagedTabs = () => {
+    document.querySelectorAll('[data-jb-tabs-managed]').forEach((section) => {
+      const triggers = Array.from(section.querySelectorAll('[data-jb-tabs-trigger]'));
+      const mobileTriggers = Array.from(section.querySelectorAll('[data-jb-tabs-mobile-trigger]'));
+      const panels = Array.from(section.querySelectorAll('[data-jb-tabs-panel]'));
+
+      if (!panels.length) return;
+
+      const setActive = (activeId) => {
+        triggers.forEach((trigger) => {
+          const isActive = trigger.dataset.jbTabsTrigger === activeId;
+          trigger.classList.toggle('active', isActive);
+          trigger.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+
+        mobileTriggers.forEach((trigger) => {
+          trigger.classList.toggle('active', trigger.dataset.jbTabsMobileTrigger === activeId);
+        });
+
+        panels.forEach((panel) => {
+          const isActive = panel.dataset.jbTabsPanel === activeId;
+          panel.classList.toggle('active', isActive);
+          panel.hidden = !isActive;
+          panel.style.position = isActive ? 'relative' : 'absolute';
+          panel.style.zIndex = isActive ? '1' : '-1000';
+          panel.style.display = isActive ? 'block' : '';
+        });
+      };
+
+      const initialId =
+        section.querySelector('[data-jb-tabs-trigger].active')?.dataset.jbTabsTrigger ||
+        panels.find((panel) => panel.classList.contains('active'))?.dataset.jbTabsPanel ||
+        panels[0]?.dataset.jbTabsPanel;
+
+      if (initialId) {
+        setActive(initialId);
+      }
+
+      section.addEventListener('click', (event) => {
+        const trigger = event.target.closest('[data-jb-tabs-trigger]');
+
+        if (!trigger || !section.contains(trigger)) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        setActive(trigger.dataset.jbTabsTrigger);
+      }, true);
+
+      section.addEventListener('click', (event) => {
+        const trigger = event.target.closest('[data-jb-tabs-mobile-trigger]');
+
+        if (!trigger || !section.contains(trigger)) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        setActive(trigger.dataset.jbTabsMobileTrigger);
+      }, true);
+    });
+  };
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       setupStickyHeader();
@@ -732,12 +731,10 @@
       setupFranchiseMerchCarousel();
       setupRelatedPostsCarousel();
       setupAboutGallery();
-      setupContactTabs();
-      setupContactAccordion();
-      setupContactGalleries();
       setupStockPromoCarousel();
       setupPromoCountdowns();
       setupPromoVideoCarousel();
+      setupManagedTabs();
     });
   } else {
     setupStickyHeader();
@@ -753,11 +750,9 @@
     setupFranchiseMerchCarousel();
     setupRelatedPostsCarousel();
     setupAboutGallery();
-    setupContactTabs();
-    setupContactAccordion();
-    setupContactGalleries();
     setupStockPromoCarousel();
     setupPromoCountdowns();
     setupPromoVideoCarousel();
+    setupManagedTabs();
   }
 })();
