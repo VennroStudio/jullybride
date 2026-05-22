@@ -9,7 +9,10 @@ get_header();
     <div class="container">
         <?php
         jullybride_breadcrumbs();
-        jullybride_template_part('page/about');
+        jullybride_template_part('about/video');
+        jullybride_template_part('about/features');
+        jullybride_template_part('about/gallery');
+        jullybride_template_part('about/fitting');
         ?>
     </div>
 </main>
