@@ -9,7 +9,7 @@ $products = new WP_Query([
     'post_type' => 'product',
     'post_status' => 'publish',
     's' => $search_query,
-    'posts_per_page' => 16,
+    'posts_per_page' => 15,
     'paged' => $paged,
 ]);
 ?>
@@ -24,7 +24,7 @@ $products = new WP_Query([
                     jullybride_template_part('components/product-card', [
                         'product' => $product,
                         'index' => $index,
-                        'class' => 'col-lg-3 col-md-4 col-6 products-list-item',
+                        'class' => 'col-lg-4 col-md-4 col-6 products-list-item',
                     ]);
                     $index++;
                 }
@@ -42,8 +42,22 @@ $products = new WP_Query([
             <?php return; ?>
         <?php endif; ?>
         <div class="jb-blog-grid jb-search-posts">
+            <?php $index = 0; ?>
             <?php while (have_posts()) : the_post(); ?>
-                <?php jullybride_template_part(get_post_type() === 'promo' ? 'common/stock-card' : 'blog/card'); ?>
+                <?php
+                $product = get_post_type() === 'product' ? wc_get_product(get_the_ID()) : null;
+
+                if ($product instanceof WC_Product) {
+                    jullybride_template_part('components/product-card', [
+                        'product' => $product,
+                        'index' => $index,
+                        'class' => 'col-lg-4 col-md-4 col-6 products-list-item',
+                    ]);
+                    $index++;
+                } else {
+                    jullybride_template_part('blog/card');
+                }
+                ?>
             <?php endwhile; ?>
         </div>
         <nav class="jb-pagination"><?php the_posts_pagination(); ?></nav>
