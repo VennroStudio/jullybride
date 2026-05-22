@@ -8,7 +8,6 @@ if (is_page('c')) {
 } elseif (is_page(['franshiza', 'franshiza-2'])) {
     jullybride_template_part('franchise/layout');
 } else {
-    $is_contacts_page = is_page('contacts');
     $is_about_page = is_page('o-kompanii');
     $is_service_page = is_page(['cart', 'checkout', 'wishlist']);
     ?>
@@ -16,9 +15,7 @@ if (is_page('c')) {
         <div class="container">
             <?php jullybride_breadcrumbs(); ?>
             <?php
-            if ($is_contacts_page) {
-                jullybride_template_part('page/contacts');
-            } elseif ($is_about_page) {
+            if ($is_about_page) {
                 jullybride_template_part('page/about');
             } elseif ($is_service_page) {
                 jullybride_template_part('page/service');
@@ -26,7 +23,7 @@ if (is_page('c')) {
                 jullybride_template_part('page/hero');
             }
 
-            if (!$is_contacts_page && !$is_about_page && !$is_service_page && !jullybride_render_flexible('page_blocks', 'page')) {
+            if (!$is_about_page && !$is_service_page && !jullybride_render_flexible('page_blocks', 'page')) {
                 jullybride_template_part('page/content');
             }
             ?>

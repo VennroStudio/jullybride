@@ -80,7 +80,7 @@ $cities = [
     </div>
     <div class="jb-contact-tabs__panels">
         <?php foreach ($cities as $index => $city) : ?>
-            <?php jullybride_template_part('page/contact-panel', ['city' => $city, 'active' => $index === 0]); ?>
+            <?php jullybride_template_part('contacts/contact-panel', ['city' => $city, 'active' => $index === 0]); ?>
         <?php endforeach; ?>
     </div>
 </section>
@@ -93,7 +93,7 @@ $cities = [
                 <span class="jb-contact-accordion__chevron" aria-hidden="true"></span>
             </summary>
             <div class="jb-contact-accordion__body">
-                <?php jullybride_template_part('page/contact-panel', ['city' => $city, 'active' => true, 'mode' => 'accordion']); ?>
+                <?php jullybride_template_part('contacts/contact-panel', ['city' => $city, 'active' => true, 'mode' => 'accordion']); ?>
             </div>
         </details>
     <?php endforeach; ?>

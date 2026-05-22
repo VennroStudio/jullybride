@@ -2662,16 +2662,25 @@ a {
   background: url("../images/contact-girl.png") top right / contain no-repeat;
 }
 
-.jb-contacts-hero {
-  margin-bottom: 48px;
+.jb-contacts-page .jb-contacts-header {
+  position: relative;
+  width: min(100%, 1180px);
+  margin: 26px 0 58px;
 }
 
-.jb-contacts-hero h1 {
-  margin: 0;
-  color: #000;
-  font-family: Montserrat, sans-serif;
-  font-size: clamp(28px, 2.4vw, 36px);
-  font-weight: 800;
+.jb-contacts-page .jb-contacts-header h1 {
+  max-width: calc(100% - min(301px, 24vw) - 40px);
+}
+
+.jb-contacts-header__note {
+  position: absolute;
+  top: -46px;
+  right: 0;
+  display: block;
+  width: min(301px, 24vw);
+  aspect-ratio: 301 / 154;
+  pointer-events: none;
+  background: url("../images/contacts-title-note.svg") center / contain no-repeat;
 }
 
 .jb-contact-tabs {
@@ -3176,6 +3185,18 @@ a {
   }
 
   .jb-contact-tabs {
+    display: none;
+  }
+
+  .jb-contacts-page .jb-contacts-header {
+    margin: 26px 0 34px;
+  }
+
+  .jb-contacts-page .jb-contacts-header h1 {
+    max-width: none;
+  }
+
+  .jb-contacts-header__note {
     display: none;
   }
 
