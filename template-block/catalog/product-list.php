@@ -12,7 +12,7 @@ if (!$catalog_query instanceof WP_Query) {
 }
 ?>
 <?php if ($catalog_query->have_posts()) : ?>
-    <section class="products-list-box position-relative">
+    <section class="products-list-box position-relative jb-striped-arch">
         <div class="container">
             <div class="row products-list" id="products-row">
                 <?php $index = 0; ?>

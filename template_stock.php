@@ -6,7 +6,7 @@
 
 get_header();
 ?>
-<main class="jb-main jb-editorial-page jb-stock">
+<main class="jb-main jb-editorial-page jb-stock jb-stock-archive jb-striped-arch">
     <div class="container">
         <?php
         while (have_posts()) {
