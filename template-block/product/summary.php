@@ -58,6 +58,7 @@ foreach ([
 $size_terms = taxonomy_exists('pa_razmer') ? wc_get_product_terms($product_id, 'pa_razmer') : [];
 $sizes_info = [];
 $variation_map = [];
+$has_variation_old_price = false;
 
 if ($product->is_type('variable')) {
     $available_variations = $product->get_available_variations();
@@ -65,6 +66,8 @@ if ($product->is_type('variable')) {
         $in_stock = false;
         $variation_id = 0;
         $sku = '';
+        $price = '';
+        $regular_price = '';
 
         foreach ($available_variations as $variation) {
             if (($variation['attributes']['attribute_pa_razmer'] ?? '') !== $term->slug) {
@@ -74,18 +77,27 @@ if ($product->is_type('variable')) {
             $variation_product = wc_get_product($variation['variation_id']);
             $variation_id = (int) $variation['variation_id'];
             $sku = $variation_product ? (string) $variation_product->get_sku() : '';
+            $price = $variation_product ? (string) $variation_product->get_price() : '';
+            $regular_price = $variation_product ? (string) $variation_product->get_regular_price() : '';
             $in_stock = $variation_product && $variation_product->is_in_stock();
+            $has_variation_old_price = $has_variation_old_price || ($regular_price !== '' && $price !== '' && (float) $regular_price > (float) $price);
             break;
         }
 
-        $sizes_info[] = ['term' => $term, 'in_stock' => $in_stock];
         if ($variation_id) {
-            $variation_map[$term->slug] = ['id' => $variation_id, 'sku' => $sku, 'size' => $term->slug];
+            $sizes_info[] = ['term' => $term, 'in_stock' => $in_stock];
+            $variation_map[$term->slug] = [
+                'id' => $variation_id,
+                'sku' => $sku,
+                'size' => $term->slug,
+                'price' => $price,
+                'regular_price' => $regular_price,
+                'formatted_price' => jullybride_format_price($price),
+                'formatted_regular_price' => $regular_price !== '' && $price !== '' && (float) $regular_price > (float) $price
+                    ? jullybride_format_price($regular_price)
+                    : '',
+            ];
         }
-    }
-} else {
-    foreach ($size_terms as $term) {
-        $sizes_info[] = ['term' => $term, 'in_stock' => $product->is_in_stock()];
     }
 }
 
@@ -96,6 +108,17 @@ foreach ($sizes_info as $size) {
         break;
     }
 }
+
+$display_price = $product->get_price();
+$display_regular_price = $product->get_regular_price();
+
+if ($active_size && isset($variation_map[$active_size])) {
+    $display_price = $variation_map[$active_size]['price'];
+    $display_regular_price = $variation_map[$active_size]['regular_price'];
+}
+
+$show_old_price = $display_regular_price !== '' && $display_price !== '' && (float) $display_regular_price > (float) $display_price;
+$old_price_can_appear = $show_old_price || $has_variation_old_price;
 ?>
 <?php if ($designer_links) : ?>
     <span class="product-header_collect d-block"><?php echo wp_kses_post(implode(' ', $designer_links)); ?></span>
@@ -110,11 +133,11 @@ foreach ($sizes_info as $size) {
         <?php if ($product->is_in_stock()) : ?>
             <span class="d-md-none product-header_stock d-block header_stock-mobile">В наличии</span>
         <?php endif; ?>
-        <?php if ($product->get_price() !== '') : ?>
-            <span class="product-header_price d-block"><?php echo esc_html(jullybride_format_price($product->get_price())); ?></span>
+        <?php if ($display_price !== '') : ?>
+            <span class="product-header_price d-block"><?php echo esc_html(jullybride_format_price($display_price)); ?></span>
         <?php endif; ?>
-        <?php if ($product->get_regular_price() && (float) $product->get_regular_price() > (float) $product->get_price()) : ?>
-            <span class="product-header_oldprice d-block"><?php echo esc_html(jullybride_format_price($product->get_regular_price())); ?></span>
+        <?php if ($old_price_can_appear) : ?>
+            <span class="product-header_oldprice d-block" <?php echo $show_old_price ? '' : 'hidden'; ?>><?php echo $show_old_price ? esc_html(jullybride_format_price($display_regular_price)) : ''; ?></span>
         <?php endif; ?>
     </div>
 </div>
@@ -123,7 +146,7 @@ foreach ($sizes_info as $size) {
     <span class="d-block product-header_stock d-none d-md-block">В наличии</span>
 <?php endif; ?>
 
-<?php if ($sizes_info) : ?>
+<?php if ($sizes_info && $variation_map) : ?>
     <div class="d-flex product-header_size">
         <span>Размер:</span>
         <ul class="d-flex owl-list product-header_size-list">
@@ -141,24 +164,94 @@ foreach ($sizes_info as $size) {
     </div>
 <?php endif; ?>
 
+<?php if ($variation_map) : ?>
 <script>
-window.jullybrideVariationMap = <?php echo wp_json_encode($variation_map); ?>;
-document.addEventListener('DOMContentLoaded', function () {
-    const sizeLinks = document.querySelectorAll('.product-header_size-list a[data-size]');
-    const skuElement = document.querySelector('.product-sku');
-    sizeLinks.forEach(function (link) {
-        link.addEventListener('click', function (event) {
-            event.preventDefault();
-            const data = window.jullybrideVariationMap?.[this.dataset.size];
-            sizeLinks.forEach(function (item) { item.classList.remove('active'); });
-            this.classList.add('active');
-            if (data && skuElement) {
-                skuElement.textContent = data.sku || skuElement.textContent;
+(function () {
+    window.jullybrideVariationMap = <?php echo wp_json_encode($variation_map); ?> || {};
+
+    function applyVariation(link) {
+        const data = window.jullybrideVariationMap[link.dataset.size];
+        if (!data) {
+            return;
+        }
+
+        const sizeLinks = document.querySelectorAll('.product-header_size-list a[data-size]');
+        const skuElement = document.querySelector('.product-sku');
+        const priceElement = document.querySelector('.product-header_price');
+        const oldPriceElement = document.querySelector('.product-header_oldprice');
+        const favoriteButton = document.querySelector('.product-header_btn .woosw-btn');
+        const bookingButton = document.querySelector('.product-header_btn .ms_booking');
+
+        sizeLinks.forEach(function (item) { item.classList.remove('active'); });
+        link.classList.add('active');
+
+        if (skuElement && data.sku) {
+            skuElement.textContent = data.sku;
+        }
+
+        if (priceElement && data.formatted_price) {
+            priceElement.textContent = data.formatted_price;
+        }
+
+        if (oldPriceElement) {
+            if (data.formatted_regular_price) {
+                oldPriceElement.textContent = data.formatted_regular_price;
+                oldPriceElement.hidden = false;
+            } else {
+                oldPriceElement.textContent = '';
+                oldPriceElement.hidden = true;
             }
-        });
-    });
-});
+        }
+
+        if (favoriteButton && data.id) {
+            favoriteButton.dataset.variationId = data.id;
+        }
+
+        if (bookingButton) {
+            bookingButton.dataset.size = data.size || '';
+            if (data.id) {
+                bookingButton.dataset.variationId = data.id;
+            }
+        }
+    }
+
+    function initSizeSwitcher() {
+        if (!document.body.dataset.jullybrideSizeSwitcherBound) {
+            document.body.dataset.jullybrideSizeSwitcherBound = '1';
+            document.addEventListener('click', function (event) {
+                const target = event.target && event.target.closest
+                    ? event.target.closest('.product-header_size-list a')
+                    : null;
+
+                if (!target) {
+                    return;
+                }
+
+                event.preventDefault();
+                if (!target.dataset.size) {
+                    return;
+                }
+
+                applyVariation(target);
+            }, true);
+        }
+
+        const activeLink = document.querySelector('.product-header_size-list a[data-size].active');
+        if (activeLink) {
+            applyVariation(activeLink);
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () {
+            initSizeSwitcher();
+        }, { once: true });
+    } else {
+        initSizeSwitcher();
+    }
+})();
 </script>
+<?php endif; ?>
 
 <?php if ($product->get_sku()) : ?>
     <span class="d-block product-header_article">Артикул: <span class="product-sku"><?php echo esc_html($product->get_sku()); ?></span></span>
