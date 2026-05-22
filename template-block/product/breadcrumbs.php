@@ -6,8 +6,7 @@ if (!defined('ABSPATH')) {
 <section class="breadcrubs-custom">
     <div class="container">
         <div class="row">
-            <div class="col-12"><?php jullybride_breadcrumbs(); ?></div>
+            <div class="col-12"><?php jullybride_template_part('components/breadcrumbs'); ?></div>
         </div>
     </div>
 </section>
-

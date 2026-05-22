@@ -17,7 +17,7 @@ jullybride_template_part('components/story-overlays');
         ?>
         <div class="container">
             <?php
-            jullybride_breadcrumbs();
+            jullybride_template_part('components/breadcrumbs');
             jullybride_template_part('stock/header', [
                 'title' => get_the_title(),
             ]);

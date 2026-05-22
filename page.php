@@ -8,7 +8,7 @@ if (is_page('c')) {
     ?>
     <main class="jb-main jb-page<?php echo $is_service_page ? ' jb-service-page' : ''; ?>">
         <div class="container">
-            <?php jullybride_breadcrumbs(); ?>
+            <?php jullybride_template_part('components/breadcrumbs'); ?>
             <?php
             if ($is_service_page) {
                 jullybride_template_part('page/service');

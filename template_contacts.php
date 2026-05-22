@@ -12,7 +12,7 @@ jullybride_template_part('components/story-overlays');
     <div class="container">
         <div class="jb-contacts-page">
             <?php
-            jullybride_breadcrumbs();
+            jullybride_template_part('components/breadcrumbs');
             jullybride_template_part('contacts/header', ['title' => get_the_title()]);
             ?>
         </div>

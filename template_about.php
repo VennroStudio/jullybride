@@ -8,7 +8,7 @@ get_header();
 <main class="jb-main jb-page jb-about-page">
     <div class="container">
         <?php
-        jullybride_breadcrumbs();
+        jullybride_template_part('components/breadcrumbs');
         jullybride_template_part('about/video');
         jullybride_template_part('about/features');
         jullybride_template_part('about/gallery');

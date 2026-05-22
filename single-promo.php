@@ -5,7 +5,7 @@ require_once JULLYBRIDE_THEME_DIR . '/template-block/stock-single/helpers.php';
 ?>
 <main class="jb-main jb-editorial-page jb-stock">
     <div class="container">
-        <?php jullybride_breadcrumbs(); ?>
+        <?php jullybride_template_part('components/breadcrumbs'); ?>
 
         <?php while (have_posts()) : the_post(); ?>
             <article class="jb-single-stock jb-stock-single">

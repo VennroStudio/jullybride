@@ -44,11 +44,6 @@ function jullybride_render_flexible(string $field_name, string $block_group, int
     return true;
 }
 
-function jullybride_breadcrumbs(): void
-{
-    jullybride_template_part('common/breadcrumbs');
-}
-
 function jullybride_logo_url(string $variant = 'dark'): string
 {
     $file = $variant === 'light' ? 'jullybride_logo_white_clear.png' : 'jullybride_logo_clear.png';
