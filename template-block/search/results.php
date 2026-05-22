@@ -3,6 +3,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+global $wp_query;
+
 $paged = max(1, absint(get_query_var('paged')), absint(get_query_var('page')));
 $search_query = get_search_query();
 $products = new WP_Query([
@@ -31,9 +33,13 @@ $products = new WP_Query([
                 ?>
             <?php endwhile; ?>
         </div>
-        <nav class="jb-pagination">
-            <?php echo paginate_links(['total' => $products->max_num_pages]); ?>
-        </nav>
+        <?php
+        jullybride_template_part('components/pagination', [
+            'query' => $products,
+            'current' => $paged,
+            'next_id' => '',
+        ]);
+        ?>
         <?php wp_reset_postdata(); ?>
     <?php else : ?>
         <?php wp_reset_postdata(); ?>
@@ -60,6 +66,11 @@ $products = new WP_Query([
                 ?>
             <?php endwhile; ?>
         </div>
-        <nav class="jb-pagination"><?php the_posts_pagination(); ?></nav>
+        <?php
+        jullybride_template_part('components/pagination', [
+            'query' => $wp_query,
+            'next_id' => '',
+        ]);
+        ?>
     <?php endif; ?>
 </section>
