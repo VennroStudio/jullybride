@@ -1759,7 +1759,7 @@ a {
 }
 
 .jb-stock-archive {
-  --jb-stock-arch-top: clamp(78px, 6.8vw, 70px);
+  --jb-stock-arch-top: clamp(350px, 6.8vw, 130px);
   --jb-striped-arch-width: min(1920px, 100vw);
   --jb-striped-arch-z-index: 0;
   padding-bottom: 110px;
@@ -1777,19 +1777,31 @@ a {
   margin: 0 auto 58px;
 }
 
-.jb-stock-archive .jb-stock-header::after {
-  content: "";
-  position: absolute;
-  top: -30px;
-  right: 0;
-  width: min(386px, 31vw);
-  height: 126px;
-  pointer-events: none;
-  background: url("../images/nadpisi.svg") center / contain no-repeat;
+.jb-stock-archive .jb-stock-header h1 {
+  margin: 0;
+  font-family: "Arsenica", Georgia, serif;
+  font-size: 40px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
 }
 
-.jb-stock-archive .jb-stock-header h1 {
-  font-size: 36px;
+.jb-stock-header__note {
+  position: absolute;
+  top: -34px;
+  right: 0;
+  display: block;
+  width: min(355px, 27vw);
+  aspect-ratio: 355 / 130;
+  pointer-events: none;
+}
+
+.jb-stock-header__note::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("../images/stock-title-note.svg") center / contain no-repeat;
 }
 
 .jb-stock-promos {
@@ -2295,7 +2307,7 @@ a {
 }
 
 @media (max-width: 1100px) {
-  .jb-stock-archive .jb-stock-header::after {
+  .jb-stock-header__note {
     display: none;
   }
 
@@ -2325,6 +2337,12 @@ a {
   }
 }
 
+@media (max-width: 800px) {
+  .jb-stock-archive .jb-stock-header h1 {
+    font-size: 32px;
+  }
+}
+
 @media (max-width: 760px) {
   .jb-stock.jb-editorial-page {
     padding-top: 36px;
@@ -2336,7 +2354,7 @@ a {
   }
 
   .jb-stock-archive .jb-stock-header h1 {
-    font-size: 30px;
+    font-size: 22px;
   }
 
   .jb-stock-products {
